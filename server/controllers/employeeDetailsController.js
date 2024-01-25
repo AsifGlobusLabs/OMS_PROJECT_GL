@@ -21,7 +21,7 @@ exports.addEmployee = (req, res) => {
   const newEmployee = req.body;
 
   const query = "INSERT INTO tb_employee SET ?";
-  db.query(query, newEmployee, (err, result) => {
+  db.query(query, newEmployee, (err, results) => {
     if (err) {
       console.error("Error executing query:", err);
       res.status(500).json({ error: "Internal Server Error" });
@@ -48,7 +48,9 @@ exports.getLastEmployeeId = (req, res) => {
       return;
     }
     const lastEmployeeId = results[0].EmployeeID;
-    res.json({ lastEmployeeId });
+    // console.log(lastEmployeeId);
+    // // res.json({ lastEmployeeId });
+    res.status(200).json(lastEmployeeId);
   });
 };
 
