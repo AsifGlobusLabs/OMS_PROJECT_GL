@@ -2,8 +2,6 @@ const express = require("express");
 const router = express.Router();
 const employeeGroupController = require("../controllers/employeeGroupDetailsController");
 
-// Define routes related to employees
-
 // Get all employee groups
 router.get("/", employeeGroupController.getAllEmployeeGroups);
 

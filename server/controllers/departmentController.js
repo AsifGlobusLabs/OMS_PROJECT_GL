@@ -9,7 +9,7 @@ exports.getAllDepartments = (req, res) => {
       console.error("Error executing query:", err);
       res.status(500).json({ error: "Internal Server Error" });
     } else {
-      res.json(results);
+      res.status(200).json(results);
     }
   });
 };
@@ -20,12 +20,12 @@ exports.addDepartment = (req, res) => {
   const newDepartment = req.body;
 
   const query = "INSERT INTO tb_department SET ?";
-  db.query(query, newDepartment, (err, result) => {
+  db.query(query, newDepartment, (err, results) => {
     if (err) {
       console.error("Error executing query:", err);
       res.status(500).json({ error: "Internal Server Error" });
     } else {
-      res.json({ message: "Department added successfully" });
+      res.status(200).json({ message: "Department added successfully" });
     }
   });
 };
@@ -37,20 +37,20 @@ exports.updateDepartment = (req, res) => {
   const updatedDepartment = req.body;
   const query = "UPDATE tb_department SET ? WHERE DepartmentID = ?";
 
-  db.query(query, [updatedDepartment, departmentId], (err, result) => {
+  db.query(query, [updatedDepartment, departmentId], (err, results) => {
     if (err) {
       console.error("Error executing query:", err);
       res.status(500).json({ error: "Internal Server Error" });
     } else {
-      if (result.affectedRows === 0) {
+      if (results.affectedRows === 0) {
         res.status(404).json({ error: "Department not found" });
         return;
-      } else if (result.affectedRows > 0 && result.changedRows === 0) {
-        res.status(201).json("Department's data is up to date already");
+      } else if (results.affectedRows > 0 && results.changedRows === 0) {
+        res.status(200).json("Department's data is up to date already");
         return;
       } else {
-        res.json({ message: "Department updated successfully" });
-        console.log(result);
+        res.status(200).json({ message: "Department updated successfully" });
+        console.log(results);
       }
     }
   });
@@ -61,16 +61,16 @@ exports.updateDepartment = (req, res) => {
 exports.deleteDepartment = (req, res) => {
   const departmentId = req.params.DepartmentID;
   const query = "DELETE FROM tb_department WHERE DepartmentID = ?";
-  db.query(query, [departmentId], (err, result) => {
+  db.query(query, [departmentId], (err, results) => {
     if (err) {
       console.error("Error executing query:", err);
       res.status(500).json({ error: "Internal Server Error" });
     } else {
-      if (result.affectedRows === 0) {
+      if (results.affectedRows === 0) {
         res.status(404).json({ error: "Department not found" });
         return;
       } else {
-        res.json({ message: "Department's data deleted successfully" });
+        res.status(200).json({ message: "Department's data deleted successfully" });
       }
     }
   });

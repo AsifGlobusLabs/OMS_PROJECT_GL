@@ -9,7 +9,7 @@ exports.getAllDesignations = (req, res) => {
       console.error("Error executing query:", err);
       res.status(500).json({ error: "Internal Server Error" });
     } else {
-      res.json(results);
+      res.status(200).json(results);
     }
   });
 };
@@ -20,12 +20,12 @@ exports.addDesignation = (req, res) => {
   const newDesignation = req.body;
 
   const query = "INSERT INTO tb_designation SET ?";
-  db.query(query, newDesignation, (err, result) => {
+  db.query(query, newDesignation, (err, results) => {
     if (err) {
       console.error("Error executing query:", err);
       res.status(500).json({ error: "Internal Server Error" });
     } else {
-      res.json({ message: "Designation added successfully" });
+      res.status(200).json({ message: "Designation added successfully" });
     }
   });
 };
@@ -37,20 +37,20 @@ exports.updateDesignation = (req, res) => {
   const updatedDesignation = req.body;
   const query = "UPDATE tb_designation SET ? WHERE DesignationID = ?";
 
-  db.query(query, [updatedDesignation, designationId], (err, result) => {
+  db.query(query, [updatedDesignation, designationId], (err, results) => {
     if (err) {
       console.error("Error executing query:", err);
       res.status(500).json({ error: "Internal Server Error" });
     } else {
-      if (result.affectedRows === 0) {
+      if (results.affectedRows === 0) {
         res.status(404).json({ error: "Designation not found" });
         return;
-      } else if (result.affectedRows > 0 && result.changedRows === 0) {
-        res.status(201).json("Designation's data is up to date already");
+      } else if (results.affectedRows > 0 && results.changedRows === 0) {
+        res.status(200).json("Designation's data is up to date already");
         return;
       } else {
-        res.json({ message: "Designation updated successfully" });
-        console.log(result);
+        res.status(200).json({ message: "Designation updated successfully" });
+        console.log(results);
       }
     }
   });
@@ -61,16 +61,16 @@ exports.updateDesignation = (req, res) => {
 exports.deleteDesignation = (req, res) => {
   const designationId = req.params.DesignationID;
   const query = "DELETE FROM tb_designation WHERE DesignationID = ?";
-  db.query(query, [designationId], (err, result) => {
+  db.query(query, [designationId], (err, results) => {
     if (err) {
       console.error("Error executing query:", err);
       res.status(500).json({ error: "Internal Server Error" });
     } else {
-      if (result.affectedRows === 0) {
+      if (results.affectedRows === 0) {
         res.status(404).json({ error: "Designation not found" });
         return;
       } else {
-        res.json({ message: "Designation's data deleted successfully" });
+        res.status(200).json({ message: "Designation's data deleted successfully" });
       }
     }
   });
