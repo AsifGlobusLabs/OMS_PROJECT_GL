@@ -103,7 +103,7 @@ function RegisterPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const apiUrl = "http://localhost:5000/assignments/";
+        const apiUrl = "http://localhost:3306/api/employeeGroup";
         const response = await fetch(apiUrl, {
           method: "GET",
           headers: {
@@ -200,23 +200,35 @@ function RegisterPage() {
                     </InputGroup>
                   </Form.Group>
 
+                 
+               
                   <Form.Group as={Col} md="6">
-                    <Form.Label>Employee Group ID</Form.Label>
-                    <InputGroup hasValidation>
-                      <Form.Control
-                        type="text"
-                        placeholder="Employee Group ID"
-                        aria-describedby="inputGroupPrepend"
-                        required
-                        value={EmployeeGroupID}
-                        onChange={(e) => setEmployeeGroupID(e.target.value)}
-                      />
-                      <Form.Control.Feedback type="invalid">
-                        Please Enter Employee ID.
-                      </Form.Control.Feedback>
-                    </InputGroup>
+                
+                    <Form.Label htmlFor="EmployeeGroupID">
+                    Employee Group ID
+                    </Form.Label>
+                  
+                    <Form.Select
+                      aria-label="Default select example"
+                      value={EmployeeGroupID}
+                      onChange={(e) => setEmployeeGroupID(e.target.value)}
+                     
+                    >
+                      <option>Select Employee Group ID</option>
+                       {data.map((item) => (
+                        
+                      <option  key={item._id}>{item.EmployeeGroupID} - {item.GroupName}</option>
+
+                      ))}
+
+                    </Form.Select>
+                 
                   </Form.Group>
+               
                 </Row>
+
+                
+
                 <Row className="mb-3">
                   <Form.Group as={Col} md="6">
                     <Form.Label>First name</Form.Label>
