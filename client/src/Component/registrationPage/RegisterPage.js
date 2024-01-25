@@ -99,7 +99,6 @@ function RegisterPage() {
     setValidated(true);
   };
 
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -113,9 +112,8 @@ function RegisterPage() {
         });
 
         const result = await response.json();
-        
+
         setData(result);
-        
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -125,8 +123,6 @@ function RegisterPage() {
 
     fetchData();
   }, []);
-
-
 
   return (
     <div className="main-container p-0" style={{ width: "100vw" }}>
@@ -200,34 +196,24 @@ function RegisterPage() {
                     </InputGroup>
                   </Form.Group>
 
-                 
-               
                   <Form.Group as={Col} md="6">
-                
                     <Form.Label htmlFor="EmployeeGroupID">
-                    Employee Group ID
+                      Employee Group ID
                     </Form.Label>
-                  
                     <Form.Select
                       aria-label="Default select example"
-                      value={EmployeeGroupID}
+                      
                       onChange={(e) => setEmployeeGroupID(e.target.value)}
-                     
                     >
                       <option>Select Employee Group ID</option>
-                       {data.map((item) => (
-                        
-                      <option  key={item._id}>{item.EmployeeGroupID} - {item.GroupName}</option>
-
+                      {data.map((item) => (
+                        <option key={item._id} value={item.EmployeeGroupID}>
+                          {item.EmployeeGroupID} - {item.GroupName}
+                        </option>
                       ))}
-
                     </Form.Select>
-                 
                   </Form.Group>
-               
                 </Row>
-
-                
 
                 <Row className="mb-3">
                   <Form.Group as={Col} md="6">
