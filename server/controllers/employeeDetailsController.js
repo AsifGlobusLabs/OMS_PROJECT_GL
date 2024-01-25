@@ -10,7 +10,7 @@ exports.getAllEmployees = (req, res) => {
       res.status(500).json({ error: "Internal Server Error" });
       return;
     }
-    res.json(results);
+    res.status(200).json(results);
     console.log(results);
   });
 };
@@ -26,7 +26,7 @@ exports.addEmployee = (req, res) => {
       console.error("Error executing query:", err);
       res.status(500).json({ error: "Internal Server Error" });
     } else {
-      res.json({ message: "Employee added successfully" });
+      res.status(201).json({ message: "Employee added successfully" });
     }
   });
 };
@@ -48,9 +48,7 @@ exports.getLastEmployeeId = (req, res) => {
       return;
     }
     const lastEmployeeId = results[0].EmployeeID;
-    // console.log(lastEmployeeId);
-    // // res.json({ lastEmployeeId });
-    res.status(200).json(lastEmployeeId);
+    res.status(200).json({ lastEmployeeId:lastEmployeeId });
   });
 };
 
@@ -61,20 +59,20 @@ exports.updateEmployee = (req, res) => {
   const updatedEmployee = req.body;
   const query = "UPDATE tb_employee SET ? WHERE EmployeeID = ?";
 
-  db.query(query, [updatedEmployee, EmployeeID], (err, result) => {
+  db.query(query, [updatedEmployee, EmployeeID], (err, results) => {
     if (err) {
       console.error("Error executing query:", err);
       res.status(500).json({ error: "Internal Server Error" });
     } else {
-      if (result.affectedRows === 0) {
+      if (results.affectedRows === 0) {
         res.status(404).json({ error: "Employee not found" });
         return;
-      } else if (result.affectedRows > 0 && result.changedRows === 0) {
-        res.status(201).json("Data is up to date already");
+      } else if (results.affectedRows > 0 && result.changedRows === 0) {
+        res.status(200).json("Data is up to date already");
         return;
       } else {
-        res.json({ message: "Employee updated successfully" });
-        console.log(result);
+        res.status(200).json({ message: "Employee updated successfully" });
+        console.log(results);
       }
     }
   });
@@ -85,12 +83,12 @@ exports.updateEmployee = (req, res) => {
 exports.deleteEmployee = (req, res) => {
   const employeeId = req.params.EmployeeID;
   const query = "DELETE FROM tb_employee WHERE EmployeeID = ?";
-  db.query(query, [employeeId], (err, result) => {
+  db.query(query, [employeeId], (err, results) => {
     if (err) {
       console.error("Error executing query:", err);
       res.status(500).json({ error: "Internal Server Error" });
     } else {
-      if (result.affectedRows === 0) {
+      if (results.affectedRows === 0) {
         res.status(404).json({ error: "Employee not found" });
         return;
       } else {
