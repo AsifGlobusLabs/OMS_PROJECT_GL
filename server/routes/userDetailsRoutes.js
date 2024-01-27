@@ -17,4 +17,7 @@ router.delete("/delete/:UserID", userDetailsController.deleteUserDetails);
 // login user through their details
 router.post("/login", userDetailsController.loginUser);
 
+// getting last user id
+router.get("/lastUserId", userDetailsController.getLastUserId);
+
 module.exports = router;
