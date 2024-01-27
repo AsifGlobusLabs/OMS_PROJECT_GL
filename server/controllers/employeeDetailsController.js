@@ -92,7 +92,7 @@ exports.deleteEmployee = (req, res) => {
         res.status(404).json({ error: "Employee not found" });
         return;
       } else {
-        res.json({ message: "Employee's data deleted successfully" });
+        res.status(200).json({ message: "Employee's data deleted successfully" });
       }
     }
   });

@@ -5,12 +5,12 @@ const db = require("../db");
 exports.addEmployeeGroup = (req, res) => {
   const newEmployeeGroup = req.body;
   const query = "INSERT INTO tb_employeegroup SET ?";
-  db.query(query, newEmployeeGroup, (err, result) => {
+  db.query(query, newEmployeeGroup, (err, results) => {
     if (err) {
       console.error("Error executing query : ", err);
       res.status(500).json({ error: "Internal server error" });
     } else {
-      res.json({ message: "Employee group added successfully" });
+      res.status(201).json({ message: "Employee group added successfully" });
     }
   });
 };
@@ -25,7 +25,7 @@ exports.getAllEmployeeGroups = (req, res) => {
       res.status(500).json({ error: "Internal Server Error" });
       return;
     }
-    res.json(results);
+    res.status(200).json(results);
     console.log(results);
   });
 };
@@ -39,20 +39,20 @@ exports.updateEmployeeGroup = (req, res) => {
   db.query(
     query,
     [updatedEmployeeGroupData, employeeGroupId],
-    (err, result) => {
+    (err, results) => {
       if (err) {
         console.error("Error executing query:", err);
         res.status(500).json({ error: "Internal Server Error" });
       } else {
-        if (result.affectedRows === 0) {
+        if (results.affectedRows === 0) {
           res.status(404).json({ error: "Employee not found" });
           return;
-        } else if (result.affectedRows > 0 && result.changedRows === 0) {
+        } else if (results.affectedRows > 0 && results.changedRows === 0) {
           res.status(200).json("Data is up to date already");
           return;
         } else {
-          res.json({ message: "Employee updated successfully" });
-          console.log(result);
+          res.status(200).json({ message: "Employee updated successfully" });
+          console.log(results);
         }
       }
     }
@@ -64,16 +64,16 @@ exports.updateEmployeeGroup = (req, res) => {
 exports.deleteEmployeeGroup = (req, res) => {
   const employeeGroupId = req.params.EmployeeGroupID;
   const query = "DELETE FROM tb_employeegroup WHERE EmployeeGroupID = ?";
-  db.query(query, [employeeGroupId], (err, result) => {
+  db.query(query, [employeeGroupId], (err, results) => {
     if (err) {
       console.error("Error executing query:", err);
       res.status(500).json({ error: "Internal Server Error" });
     } else {
-      if (result.affectedRows === 0) {
+      if (results.affectedRows === 0) {
         res.status(404).json({ error: "Employee group not found" });
         return;
       } else {
-        res.json({ message: "Employee's data deleted successfully" });
+        res.status(200).json({ message: "Employee's data deleted successfully" });
       }
     }
   });
