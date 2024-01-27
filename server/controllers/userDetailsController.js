@@ -52,10 +52,20 @@ exports.getAllUserDetails = (req, res) => {
 
 // updating user details
 
-exports.updateUserDetails = (req, res) => {
+exports.updateUserDetails = async (req, res) => {
   const userId = req.params.UserID;
   const updatedUserDetails = req.body;
+
+  // Hash the password if it is provided in the request body
+  if (updatedUserDetails.Password) {
+    updatedUserDetails.Password = await bcrypt.hash(
+      updatedUserDetails.Password,
+      10
+    );
+  }
+
   const query = "UPDATE tb_userdetails SET ? WHERE UserID = ?";
+
   db.query(query, [updatedUserDetails, userId], (err, results) => {
     if (err) {
       console.error("Error executing query : ", err);
@@ -117,8 +127,14 @@ exports.loginUser = async (req, res) => {
         if (passwordMatch) {
           // Passwords match, generate JWT token
           const token = jwt.sign(
-            { UserId: user.UserID, EmployeeID: user.EmployeeID, Role:user.Role },
-            process.env.SECRET_KEY || SECRET_KEY,{ expiresIn: "1h" });
+            {
+              UserId: user.UserID,
+              EmployeeID: user.EmployeeID,
+              Role: user.Role,
+            },
+            process.env.SECRET_KEY || SECRET_KEY,
+            { expiresIn: "1h" }
+          );
           res.cookie("token", token, { httpOnly: true });
 
           // Avoid logging sensitive information
@@ -145,5 +161,27 @@ exports.loginUser = async (req, res) => {
         res.status(404).json({ error: "User not found" });
       }
     }
+  });
+};
+
+
+// getting latest or last User id
+
+exports.getLastUserId = (req, res) => {
+  const query =
+    "SELECT UserID FROM tb_userdetails ORDER BY UserID DESC LIMIT 1";
+
+  db.query(query, (error, results) => {
+    if (error) {
+      console.error("Error executing query:", error);
+      res.status(500).json({ error: "Internal Server Error" });
+      return;
+    }
+    if (results.length === 0) {
+      res.status(404).json({ error: "No employees found" });
+      return;
+    }
+    const lastUserId = results[0].UserID;
+    res.status(200).json({ lastUserId:lastUserId });
   });
 };
