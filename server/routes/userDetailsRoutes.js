@@ -14,4 +14,7 @@ router.patch("/update/:UserID", userDetailsController.updateUserDetails);
 // delete user details
 router.delete("/delete/:UserID", userDetailsController.deleteUserDetails);
 
+// login user through their details
+router.post("/login", userDetailsController.loginUser);
+
 module.exports = router;
