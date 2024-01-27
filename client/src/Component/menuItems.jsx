@@ -7,7 +7,7 @@ import SettingsIcon from "@mui/icons-material/Settings";
 
 export const menuItems = [
   { text: "Home", icon: <HomeIcon />, path: "/"},
-  { text: "Product", icon: <CategoryIcon />, path: "/product" },
-  { text: "Add Product", icon: <AddCircleIcon />, path: "/addproduct" },
+  { text: "Assignment", icon: <CategoryIcon />, path: "/assignment" },
+  { text: "Task", icon: <AddCircleIcon />, path: "/task" },
   { text: "Settings", icon: <SettingsIcon />, path: "/settings" },
 ];

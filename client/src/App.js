@@ -1,12 +1,12 @@
 import React from 'react'
 import {Routes,Route} from "react-router-dom"
-import Product from './Page/Product'
-import AddProduct from './Page/AddProduct'
 import Settings from './Page/Settings'
 import Home from './Page/Home/Home'
 import RegisterPage from './Component/registrationPage/RegisterPage'
 import Login from './Component/loginPage/Login'
 import Signup from './Component/signup/Signup'
+import Assignment from './Page/Assignment/Assignment'
+import Task from './Page/Task/Task'
 
 
 export default function App() {
@@ -15,8 +15,8 @@ export default function App() {
   
     <Routes>
         <Route path='/' element={<Home/>}></Route>
-        <Route path='/product' element={<Product />}></Route>
-        <Route path='/addproduct' element={<AddProduct />}></Route>
+        <Route path='/assignment' element={<Assignment/>}></Route>
+        <Route path='/task' element={<Task/>}></Route>
         <Route path='/settings' element={<Settings />}></Route>
         <Route path='/registerpage' element={<RegisterPage/>}></Route>
         <Route path='/loginpage' element={<Login/>}></Route>

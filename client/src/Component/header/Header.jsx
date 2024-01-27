@@ -69,7 +69,7 @@ export default function Header({ open, handleDrawerOpen }) {
             <span
               style={{ fontSize: "12px", marginLeft: "3px", fontWeight: 600 }}
             >
-              LOGIN
+              SIGN-IN
             </span>
             </div>
            </Link>

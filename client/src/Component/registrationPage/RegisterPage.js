@@ -200,7 +200,9 @@ function RegisterPage() {
         }}
       >
         <div className="logo">
+        <Link to={"/"}>
           <img src={logo} alt="logo"></img>
+          </Link>
         </div>
 
         <Link
@@ -213,19 +215,19 @@ function RegisterPage() {
           <div
             style={{
               color: "white",
-              paddingRight: "15px",
+              paddingRight: "25px",
               display: "flex",
               alignItems: "center",
             }}
           >
             <i
-              className="fa-solid fa-user-plus"
-              style={{ fontSize: "19px", color: "white" }}
+              className="fa-solid fa-user"
+              style={{ fontSize: "16px", color: "white" }}
             ></i>
             <span
               style={{ fontSize: "12px", marginLeft: "3px", fontWeight: 600 }}
             >
-              SIGNUP
+              SIGN-UP
             </span>
           </div>
         </Link>
