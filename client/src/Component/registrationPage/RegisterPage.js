@@ -1,128 +1,193 @@
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
 import Row from "react-bootstrap/Row";
-import { Link } from "react-router-dom";
 import "./RegisterPage.css";
 import logo from "../../assets/images/Gl-Logo.png";
-import { useEffect, useState } from "react";
+
+
 
 function RegisterPage() {
   const [validated, setValidated] = useState(false);
+  const [employeeGroupdata, setEmployeeGroupData] = useState([]);
+  const [departmentData, setDepartmentData]= useState([]);
+  const [deginationData, setDeginationData]= useState([]);
 
-  const [EmployeeID, setEmployeeID] = useState("");
-  const [FirstName, setFirstName] = useState("");
-  const [LastName, setLastName] = useState("");
-  const [DateOfBirth, setDateOfBirth] = useState("");
-  const [Gender, setGender] = useState("");
-  const [ContactNumber, setContactNumber] = useState("");
-  const [Email, setEmail] = useState("");
-  const [Address, setAddress] = useState("");
-  const [JoinDate, setJoinDate] = useState("");
-  const [EmploymentStatus, setEmploymentStatus] = useState("");
-  const [DepartmentID, setDepartmentID] = useState("");
-  const [DesignationID, setDesignationID] = useState("");
-  const [EmployeeGroupID, setEmployeeGroupID] = useState("");
-  // const [file, setFile] = useState(null);
+  const [formData, setFormData] = useState({
+    EmployeeID: "",
+    FirstName: "",
+    LastName: "",
+    DateOfBirth: "",
+    Gender: "", // Assuming you have a variable called Gender
+    ContactNumber: "",
+    Email: "",
+    Address: "",
+    JoinDate: "",
+    EmploymentStatus: "",
+    DepartmentID: "",
+    DesignationID: "",
+    EmployeeGroupID: "",
+  });
 
   const [isLoading, setIsLoading] = useState(false);
-  const [response, setResponse] = useState(null);
 
-  const [data, setData] = useState([]);
-
-  const handleSubmit = async (e) => {
-    // e.preventDefault();
-    const form = e.currentTarget;
-    if (form.checkValidity() === false) {
-      e.preventDefault();
-      e.stopPropagation();
-    }
-    setValidated(true);
-    // Set loading state to true while waiting for the API response
-    setIsLoading(true);
-
-    try {
-      const apiUrl = "http://localhost:3306/api/employee"; // Replace with your actual API endpoint
-      const response = await fetch(apiUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          EmployeeID,
-          FirstName,
-          LastName,
-          DateOfBirth,
-          Gender,
-          ContactNumber,
-          Email,
-          Address,
-          JoinDate,
-          EmploymentStatus,
-          DepartmentID,
-          DesignationID,
-          EmployeeGroupID,
-        }),
-      });
-
-      // Assuming your API returns JSON, you can parse it like this
-      const data = await response.json();
-
-      // Update state with the API response
-      setResponse(data);
-    } catch (error) {
-      console.error("Error submitting form:", error);
-      alert("registration failed");
-    } finally {
-      // Set loading state back to false, whether the request was successful or not
-      setIsLoading(false);
-
-      if (response && response.success) {
-        window.location.reload();
-      }
-
-      setEmployeeID("");
-      setFirstName("");
-      setLastName("");
-      setDateOfBirth("");
-      setGender("");
-      setContactNumber("");
-      setEmail("");
-      setAddress("");
-      setJoinDate("");
-      setEmploymentStatus("");
-      setDepartmentID("");
-      setDesignationID("");
-      setEmployeeGroupID("");
-    }
-    setValidated(true);
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
+  const handleSubmit = async (event) => {
+    const form = event.currentTarget;
+
+    if (form.checkValidity() === false) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+
+    setValidated(true);
+
+    if (form.checkValidity() === true) {
       try {
-        const apiUrl = "http://localhost:3306/api/employeeGroup";
+        setIsLoading(true);
+
+        const apiUrl = "http://localhost:3306/api/employee"; // Replace with your actual API endpoint
         const response = await fetch(apiUrl, {
-          method: "GET",
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          credentials: "include",
+          body: JSON.stringify(formData),
         });
 
-        const result = await response.json();
-
-        setData(result);
+        if (response.ok) {
+          console.log("Registration successful!");
+          // Optionally, you can redirect the user or perform other actions after successful registration
+        } else {
+          console.error("Registration failed:", response.statusText);
+        }
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error submitting data:", error);
       } finally {
         setIsLoading(false);
       }
+    }
+  };
+
+
+// -----lastEmployeeId--------
+  useEffect(() => {
+    const fetchLastJobNo = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:3306/api/employee/lastEmployeeId",
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (response.ok) {
+          const data = await response.json();
+          console.log(data);
+
+          // Extract the numeric part from "GL001" by removing "GL"
+          const numericPart = parseInt(data.lastEmployeeId.slice(2), 10);
+          console.log(numericPart, "jjj");
+
+          if (!isNaN(numericPart)) {
+            // Increment the last JobNo by 1 and update the formData state
+            const nextJobNo = numericPart + 1;
+            console.log(nextJobNo);
+            setFormData({
+              ...formData,
+              EmployeeID: `GL${nextJobNo.toString().padStart(3, "0")}`,
+            });
+           
+          } else {
+            console.error("Invalid numeric part:", data.lastEmployeeId);
+          }
+        } else {
+          console.error("Failed to fetch last JobNo");
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
     };
 
-    fetchData();
+    // Call the fetchLastJobNo function when the component mounts
+    fetchLastJobNo();
   }, []);
+
+
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const apiUrl = "http://localhost:3306/api/employeeGroup";
+  //       const response = await fetch(apiUrl, {
+  //         method: "GET",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //       });
+
+  //       const result = await response.json();
+  //       setData(result);
+  //     } catch (error) {
+  //       console.error("Error fetching data:", error);
+  //     } finally {
+  //       setIsLoading(false);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, []);
+  
+
+  
+  const fetchData = async (apiUrl, setterFunction) => {
+    try {
+        setIsLoading(true); // Set loading state to true before fetching data
+        const response = await fetch(apiUrl, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+          
+        });
+  
+        const result = await response.json();
+        setterFunction(result);
+    } catch (error) {
+        console.error("Error fetching data:", error);
+    } finally {
+        setIsLoading(false); // Set loading state to false after fetching data (regardless of success or failure)
+    }
+  };
+  //----employeeGroupdata---
+  useEffect(() => {
+    fetchData("http://localhost:3306/api/employeeGroup", setEmployeeGroupData);
+  }, []);
+  
+  // ----departmentData---
+  useEffect(() => {
+    fetchData("http://localhost:3306/api/department", setDepartmentData);
+  }, []);
+  
+  // ----deginationData----
+  useEffect(() => {
+    fetchData("http://localhost:3306/api/designation", setDeginationData);
+  }, []);
+  
+
 
   return (
     <div className="main-container p-0" style={{ width: "100vw" }}>
@@ -139,8 +204,8 @@ function RegisterPage() {
         </div>
 
         <Link
-          to={"/loginpage"}
-          target="_blank"
+          to={"/signuppage"}
+          
           style={{
             textDecoration: "none",
           }}
@@ -154,13 +219,13 @@ function RegisterPage() {
             }}
           >
             <i
-              className="fa-solid fa-right-to-bracket"
+              className="fa-solid fa-user-plus"
               style={{ fontSize: "19px", color: "white" }}
             ></i>
             <span
               style={{ fontSize: "12px", marginLeft: "3px", fontWeight: 600 }}
             >
-              LOGIN
+              SIGNUP
             </span>
           </div>
         </Link>
@@ -168,7 +233,7 @@ function RegisterPage() {
 
       <div className="register-container">
         <div className="register-section">
-          <h4>SIGN-UP</h4>
+          <h4>REGISTRATION FORM</h4>
           <div className="register">
             <div className="right-register">
               <div className="right-img"></div>
@@ -186,9 +251,10 @@ function RegisterPage() {
                         type="text"
                         placeholder="Employee ID"
                         aria-describedby="inputGroupPrepend"
+                        name="EmployeeID"
+                        value={formData.EmployeeID}
+                        onChange={handleInputChange}
                         required
-                        value={EmployeeID}
-                        onChange={(e) => setEmployeeID(e.target.value)}
                       />
                       <Form.Control.Feedback type="invalid">
                         Please Enter Employee ID.
@@ -200,14 +266,19 @@ function RegisterPage() {
                     <Form.Label htmlFor="EmployeeGroupID">
                       Employee Group ID
                     </Form.Label>
+
                     <Form.Select
                       aria-label="Default select example"
-                      
-                      onChange={(e) => setEmployeeGroupID(e.target.value)}
+                      name="EmployeeGroupID"
+                      value={formData.EmployeeGroupID}
+                      onChange={handleInputChange}
+                      required
                     >
-                      <option>Select Employee Group ID</option>
-                      {data.map((item) => (
-                        <option key={item._id} value={item.EmployeeGroupID}>
+                      <option>
+                        Select Employee Group ID
+                      </option>
+                      {employeeGroupdata.map((item) => (
+                        <option key={item._id}>
                           {item.EmployeeGroupID} - {item.GroupName}
                         </option>
                       ))}
@@ -219,22 +290,24 @@ function RegisterPage() {
                   <Form.Group as={Col} md="6">
                     <Form.Label>First name</Form.Label>
                     <Form.Control
-                      required
                       type="text"
                       placeholder="First name"
-                      value={FirstName}
-                      onChange={(e) => setFirstName(e.target.value)}
+                      name="FirstName"
+                      value={formData.FirstName}
+                      onChange={handleInputChange}
+                      required
                     />
                     <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                   </Form.Group>
                   <Form.Group as={Col} md="6">
                     <Form.Label>Last name</Form.Label>
                     <Form.Control
-                      required
                       type="text"
                       placeholder="Last name"
-                      value={LastName}
-                      onChange={(e) => setLastName(e.target.value)}
+                      name="LastName"
+                      value={formData.LastName}
+                      onChange={handleInputChange}
+                      require
                     />
                     <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                   </Form.Group>
@@ -244,11 +317,12 @@ function RegisterPage() {
                   <Form.Group as={Col} md="6">
                     <Form.Label>Date of Birth</Form.Label>
                     <Form.Control
-                      required
                       type="date"
                       placeholder="DOB"
-                      value={DateOfBirth}
-                      onChange={(e) => setDateOfBirth(e.target.value)}
+                      name="DateOfBirth"
+                      value={formData.DateOfBirth}
+                      onChange={handleInputChange}
+                      required
                     />
                   </Form.Group>
 
@@ -258,22 +332,22 @@ function RegisterPage() {
                       <Form.Check
                         inline
                         label="Male"
-                        name="group1"
+                        name="Gender"
                         type="radio"
                         value="M"
-                        checked={Gender === "M"}
-                        onChange={(e) => setGender(e.target.value)}
-                        isInvalid={validated && !Gender}
+                        checked={formData.Gender === "M"}
+                        onChange={handleInputChange}
+                        isInvalid={validated && !formData.Gender}
                       />
                       <Form.Check
                         inline
                         label="Female"
-                        name="group1"
+                        name="Gender"
                         type="radio"
                         value="F"
-                        checked={Gender === "F"}
-                        onChange={(e) => setGender(e.target.value)}
-                        isInvalid={validated && !Gender}
+                        checked={formData.Gender === "F"}
+                        onChange={handleInputChange}
+                        isInvalid={validated && !formData.Gender}
                       />
                       <Form.Control.Feedback type="invalid">
                         Please select a gender.
@@ -286,11 +360,12 @@ function RegisterPage() {
                   <Form.Group as={Col} md="6">
                     <Form.Label>Email</Form.Label>
                     <Form.Control
-                      required
                       type="email"
                       placeholder="Enter Email"
-                      value={Email}
-                      onChange={(e) => setEmail(e.target.value)}
+                      name="Email"
+                      value={formData.Email}
+                      onChange={handleInputChange}
+                      required
                     />
                     <Form.Control.Feedback>
                       Please Enter Email
@@ -299,11 +374,12 @@ function RegisterPage() {
                   <Form.Group as={Col} md="6">
                     <Form.Label>Phone Number</Form.Label>
                     <Form.Control
-                      required
                       type="number"
                       placeholder="Phone Number"
-                      value={ContactNumber}
-                      onChange={(e) => setContactNumber(e.target.value)}
+                      name="ContactNumber"
+                      value={formData.ContactNumber}
+                      onChange={handleInputChange}
+                      required
                     />
                     <Form.Control.Feedback>
                       Please Enter Phone Number
@@ -316,10 +392,11 @@ function RegisterPage() {
                     <Form.Label>Address</Form.Label>
                     <Form.Control
                       type="text"
-                      placeholder="Address.."
+                      placeholder="Address"
+                      name="Address"
+                      value={formData.Address}
+                      onChange={handleInputChange}
                       required
-                      value={Address}
-                      onChange={(e) => setAddress(e.target.value)}
                     />
                     <Form.Control.Feedback type="invalid">
                       Please provide a Address.
@@ -331,11 +408,12 @@ function RegisterPage() {
                   <Form.Group as={Col} md="6">
                     <Form.Label htmlFor="Date">Join Date</Form.Label>
                     <Form.Control
-                      required
                       type="date"
-                      id="Date"
-                      value={JoinDate}
-                      onChange={(e) => setJoinDate(e.target.value)}
+                      placeholder="Join Date"
+                      name="JoinDate"
+                      value={formData.JoinDate}
+                      onChange={handleInputChange}
+                      required
                     />
                   </Form.Group>
 
@@ -344,9 +422,11 @@ function RegisterPage() {
                       Employement Status
                     </Form.Label>
                     <Form.Select
-                      aria-label="Default select example"
-                      value={EmploymentStatus}
-                      onChange={(e) => setEmploymentStatus(e.target.value)}
+                      aria-label="Employment Status"
+                      name="EmploymentStatus"
+                      value={formData.EmploymentStatus}
+                      onChange={handleInputChange}
+                      required
                     >
                       <option>select Status</option>
                       <option>Active</option>
@@ -356,35 +436,56 @@ function RegisterPage() {
                 </Row>
                 <Row className="mb-3">
                   <Form.Group as={Col} md="6">
-                    <Form.Label>Department ID</Form.Label>
-                    <Form.Control
+                    <Form.Label htmlFor="DepartmentID">
+                      Department ID
+                    </Form.Label>
+
+                    <Form.Select
+                      aria-label="Default select example"
+                      name="DepartmentID"
+                      value={formData.DepartmentID}
+                      onChange={handleInputChange}
                       required
-                      type="text"
-                      placeholder="Department ID"
-                      value={DepartmentID}
-                      onChange={(e) => setDepartmentID(e.target.value)}
-                    />
+                    >
+                      <option>
+                      Select Department ID
+                      </option>
+                      {departmentData.map((item) => (
+                        <option key={item._id}>
+                          {item.DepartmentID} - {item.DepartmentName}
+                        </option>
+                      ))}
+                    </Form.Select>
                     <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                   </Form.Group>
+                 
+                 
+
                   <Form.Group as={Col} md="6">
-                    <Form.Label>Designation ID</Form.Label>
-                    <Form.Control
+                    <Form.Label htmlFor="DesignationID">
+                      Designation ID
+                    </Form.Label>
+
+                    <Form.Select
+                      aria-label="Default select example"
+                      name="DesignationID"
+                      value={formData.DesignationID}
+                      onChange={handleInputChange}
                       required
-                      type="text"
-                      placeholder="Designation ID"
-                      value={DesignationID}
-                      onChange={(e) => setDesignationID(e.target.value)}
-                    />
+                    >
+                      <option>
+                      Select Designation ID
+                      </option>
+                      {deginationData.map((item) => (
+                        <option key={item._id}>
+                          {item.DesignationID} - {item.DesignationName}
+                        </option>
+                      ))}
+                    </Form.Select>
                     <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                   </Form.Group>
                 </Row>
 
-                {/* <Row className="mb-3">
-            <Form.Group as={Col} md="12" controlId="myFile" style={{display:"flex", textAlign:"center"}}>
-            <Form.Label htmlFor="myFile" style={{marginRight:"20px"}}>Upload Photo</Form.Label>
-             <input type="file" id="myFile" name="myFile"/>
-            </Form.Group>
-            </Row> */}
                 <div
                   style={{
                     display: "flex",
