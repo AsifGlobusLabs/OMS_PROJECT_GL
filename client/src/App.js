@@ -6,6 +6,7 @@ import Settings from './Page/Settings'
 import Home from './Page/Home/Home'
 import RegisterPage from './Component/registrationPage/RegisterPage'
 import Login from './Component/loginPage/Login'
+import Signup from './Component/signup/Signup'
 
 
 export default function App() {
@@ -19,6 +20,7 @@ export default function App() {
         <Route path='/settings' element={<Settings />}></Route>
         <Route path='/registerpage' element={<RegisterPage/>}></Route>
         <Route path='/loginpage' element={<Login/>}></Route>
+        <Route path='/signuppage' element={<Signup/>}></Route>
 
     </Routes>
  
