@@ -13,14 +13,15 @@ const db = mysql.createConnection({
 
 db.connect((err) => {
   if (err) {
-    console.error("MySQL connection error:", err);
+    console.error('Error connecting to MySQL:', err.stack);
+    return;
   } else {
     console.log("Connected to MySQL database");
   }
 });
 
-db.on("reconnect", (connection) => {
-  console.log("Reconnected to MySQL");
+db.on('error', (err) => {
+  console.error('MySQL connection error:', err);
 });
 
 module.exports = db;
