@@ -1,6 +1,6 @@
 
 /* register form  */
-.register-header {
+.signup-header {
     height: 60px;
     background-color: #5c7c77;
     margin: 0;
@@ -8,7 +8,7 @@
     align-items: center;
   }
   
-  .register-container {
+  .signup-container {
   width: 100%;
   height: auto;
   padding: 20px 30px 10px 30px;
@@ -16,30 +16,30 @@
   
   }
   
-  .register-section{
+  .signup-section{
     width: 100%;
-  padding: 5px 15px 10px 15px;
+  padding: 5px 15px 50px 15px;
   box-shadow: 2px 2px 17px rgba(128, 128, 128, 0.575);
   background-color: rgba(210, 233, 210, 0.753);
   /* background-color: rgb(82, 71, 71); */
   }
   
-  .register-section h4{
+  .signup-section h4{
   text-align: center;
     padding: 10px;
   color: #1B4242;
   }
   
-  .register {
+  .signup{
     display: flex;
     align-items: center;
   /* background-color: blue; */
   
   }
   
-  .right-register {
+  .right-signup {
     width: 40%;
-    height: 80vh;
+    /* height: 80vh; */
     display: flex;
     flex-direction: column;
     justify-content: space-around;
@@ -53,12 +53,12 @@
   
   .right-img {
     width: 100%;
-    /* height: 60vh; */
+    height: 60vh;
     /* margin: 10px; */
     /* background-color: rgb(189, 76, 110); */
   }
   
-  .left-register {
+  .left-signup{
     width: 60%;
     height: auto;
     padding: 10px 10px 10px 50px;
@@ -68,7 +68,7 @@
   align-items: center;
   /* background-color: rgb(195, 233, 24); */
   }
-  .left-register form{
+  .left-signup form{
     /* background-color: #1B4242; */
     width: 100%;
     padding: 5px;
