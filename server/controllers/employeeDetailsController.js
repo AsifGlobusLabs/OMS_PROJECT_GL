@@ -11,7 +11,6 @@ exports.getAllEmployees = (req, res) => {
       return;
     }
     res.status(200).json(results);
-    console.log(results);
   });
 };
 
@@ -72,7 +71,6 @@ exports.updateEmployee = (req, res) => {
         return;
       } else {
         res.status(200).json({ message: "Employee updated successfully" });
-        console.log(results);
       }
     }
   });

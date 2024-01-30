@@ -50,7 +50,6 @@ exports.updateDepartment = (req, res) => {
         return;
       } else {
         res.status(200).json({ message: "Department updated successfully" });
-        console.log(results);
       }
     }
   });

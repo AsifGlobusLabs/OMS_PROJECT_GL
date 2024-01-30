@@ -79,7 +79,6 @@ exports.updateUserDetails = async (req, res) => {
         return;
       } else {
         res.status(200).json({ message: "User details updated successfully" });
-        console.log(results);
       }
     }
   });

@@ -50,7 +50,6 @@ exports.updateDesignation = (req, res) => {
         return;
       } else {
         res.status(200).json({ message: "Designation updated successfully" });
-        console.log(results);
       }
     }
   });
