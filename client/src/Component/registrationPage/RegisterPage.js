@@ -1,27 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import Button from "react-bootstrap/Button";
-import Col from "react-bootstrap/Col";
-import Form from "react-bootstrap/Form";
-import InputGroup from "react-bootstrap/InputGroup";
-import Row from "react-bootstrap/Row";
+import { Button, Col, Form, InputGroup, Row } from "react-bootstrap";
 import "./RegisterPage.css";
 import logo from "../../assets/images/Gl-Logo.png";
 
-
-
 function RegisterPage() {
   const [validated, setValidated] = useState(false);
-  const [employeeGroupdata, setEmployeeGroupData] = useState([]);
   const [departmentData, setDepartmentData]= useState([]);
   const [deginationData, setDeginationData]= useState([]);
-
   const [formData, setFormData] = useState({
     EmployeeID: "",
     FirstName: "",
     LastName: "",
     DateOfBirth: "",
-    Gender: "", // Assuming you have a variable called Gender
+    Gender: "", 
     ContactNumber: "",
     Email: "",
     Address: "",
@@ -29,48 +21,33 @@ function RegisterPage() {
     EmploymentStatus: "",
     DepartmentID: "",
     DesignationID: "",
-    EmployeeGroupID: "",
   });
-
   const [isLoading, setIsLoading] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
   const handleSubmit = async (event) => {
     const form = event.currentTarget;
-
     if (form.checkValidity() === false) {
       event.preventDefault();
       event.stopPropagation();
     }
-
     setValidated(true);
 
     if (form.checkValidity() === true) {
       try {
         setIsLoading(true);
-
-        const apiUrl = "http://localhost:3306/api/employee"; // Replace with your actual API endpoint
+        const apiUrl = "http://localhost:3306/api/employee";
         const response = await fetch(apiUrl, {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify(formData),
         });
-
-        if (response.ok) {
-          console.log("Registration successful!");
-          // Optionally, you can redirect the user or perform other actions after successful registration
-        } else {
-          console.error("Registration failed:", response.statusText);
-        }
+        if (response.ok) console.log("Registration successful!");
+        else console.error("Registration failed:", response.statusText);
       } catch (error) {
         console.error("Error submitting data:", error);
       } finally {
@@ -79,172 +56,55 @@ function RegisterPage() {
     }
   };
 
-
-// -----lastEmployeeId--------
   useEffect(() => {
     const fetchLastJobNo = async () => {
       try {
-        const response = await fetch(
-          "http://localhost:3306/api/employee/lastEmployeeId",
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-
+        const response = await fetch("http://localhost:3306/api/employee/lastEmployeeId", { method: "GET", headers: { "Content-Type": "application/json" }});
         if (response.ok) {
           const data = await response.json();
-          console.log(data);
-
-          // Extract the numeric part from "GL001" by removing "GL"
           const numericPart = parseInt(data.lastEmployeeId.slice(2), 10);
-          console.log(numericPart, "jjj");
-
           if (!isNaN(numericPart)) {
-            // Increment the last JobNo by 1 and update the formData state
             const nextJobNo = numericPart + 1;
-            console.log(nextJobNo);
-            setFormData({
-              ...formData,
-              EmployeeID: `GL${nextJobNo.toString().padStart(3, "0")}`,
-            });
-           
-          } else {
-            console.error("Invalid numeric part:", data.lastEmployeeId);
-          }
-        } else {
-          console.error("Failed to fetch last JobNo");
-        }
-      } catch (error) {
-        console.error("Error:", error);
-      }
+            setFormData({ ...formData, EmployeeID: `GL${nextJobNo.toString().padStart(3, "0")}` });
+          } else console.error("Invalid numeric part:", data.lastEmployeeId);
+        } else console.error("Failed to fetch last JobNo");
+      } catch (error) { console.error("Error:", error); }
     };
-
-    // Call the fetchLastJobNo function when the component mounts
     fetchLastJobNo();
   }, []);
 
-
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const apiUrl = "http://localhost:3306/api/employeeGroup";
-  //       const response = await fetch(apiUrl, {
-  //         method: "GET",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //       });
-
-  //       const result = await response.json();
-  //       setData(result);
-  //     } catch (error) {
-  //       console.error("Error fetching data:", error);
-  //     } finally {
-  //       setIsLoading(false);
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, []);
-  
-
-  
-  const fetchData = async (apiUrl, setterFunction) => {
-    try {
-        setIsLoading(true); // Set loading state to true before fetching data
-        const response = await fetch(apiUrl, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-            },
-          
-        });
-  
+  useEffect(() => {
+    const fetchData = async (apiUrl, setterFunction) => {
+      try {
+        setIsLoading(true);
+        const response = await fetch(apiUrl, { method: "GET", headers: { "Content-Type": "application/json" }});
         const result = await response.json();
         setterFunction(result);
-    } catch (error) {
-        console.error("Error fetching data:", error);
-    } finally {
-        setIsLoading(false); // Set loading state to false after fetching data (regardless of success or failure)
-    }
-  };
-  //----employeeGroupdata---
-  useEffect(() => {
-    fetchData("http://localhost:3306/api/employeeGroup", setEmployeeGroupData);
-  }, []);
-  
-  // ----departmentData---
-  useEffect(() => {
+      } catch (error) { console.error("Error fetching data:", error); }
+      finally { setIsLoading(false); }
+    };
     fetchData("http://localhost:3306/api/department", setDepartmentData);
-  }, []);
-  
-  // ----deginationData----
-  useEffect(() => {
     fetchData("http://localhost:3306/api/designation", setDeginationData);
   }, []);
-  
-
 
   return (
     <div className="main-container p-0" style={{ width: "100vw" }}>
-      <div
-        className="register-header p-2"
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
-        <div className="logo">
-        <Link to={"/"}>
-          <img src={logo} alt="logo"></img>
-          </Link>
-        </div>
-
-        <Link
-          to={"/signuppage"}
-          
-          style={{
-            textDecoration: "none",
-          }}
-        >
-          <div
-            style={{
-              color: "white",
-              paddingRight: "25px",
-              display: "flex",
-              alignItems: "center",
-            }}
-          >
-            <i
-              className="fa-solid fa-user"
-              style={{ fontSize: "16px", color: "white" }}
-            ></i>
-            <span
-              style={{ fontSize: "12px", marginLeft: "3px", fontWeight: 600 }}
-            >
-              SIGN-UP
-            </span>
+      <div className="register-header p-2" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <div className="logo"><Link to={"/"}><img src={logo} alt="logo" /></Link></div>
+        <Link to={"/signuppage"} style={{ textDecoration: "none" }}>
+          <div style={{ color: "white", paddingRight: "25px", display: "flex", alignItems: "center" }}>
+            <i className="fa-solid fa-user" style={{ fontSize: "16px", color: "white" }}></i>
+            <span style={{ fontSize: "12px", marginLeft: "3px", fontWeight: 600 }}>SIGN-UP</span>
           </div>
         </Link>
       </div>
-
       <div className="register-container">
         <div className="register-section">
           <h4>REGISTRATION FORM</h4>
           <div className="register">
-            <div className="right-register">
-              <div className="right-img"></div>
-            </div>
-
-            {/* ----------------form----------------- */}
+            <div className="right-register"><div className="right-img"></div></div>
             <div className="left-register">
-              {/* <Form noValidate validated={validated} onSubmit={handleSubmit}> */}
-              <Form noValidate validated={validated} onSubmit={handleSubmit}>
+            <Form noValidate validated={validated} onSubmit={handleSubmit}>
                 <Row className="mb-3">
                   <Form.Group as={Col} md="6">
                     <Form.Label>Employee ID</Form.Label>
@@ -263,29 +123,7 @@ function RegisterPage() {
                       </Form.Control.Feedback>
                     </InputGroup>
                   </Form.Group>
-
-                  <Form.Group as={Col} md="6">
-                    <Form.Label htmlFor="EmployeeGroupID">
-                      Employee Group ID
-                    </Form.Label>
-
-                    <Form.Select
-                      aria-label="Default select example"
-                      name="EmployeeGroupID"
-                      value={formData.EmployeeGroupID}
-                      onChange={handleInputChange}
-                      required
-                    >
-                      <option>
-                        Select Employee Group ID
-                      </option>
-                      {employeeGroupdata.map((item) => (
-                        <option key={item._id}>
-                          {item.EmployeeGroupID} - {item.GroupName}
-                        </option>
-                      ))}
-                    </Form.Select>
-                  </Form.Group>
+              
                 </Row>
 
                 <Row className="mb-3">
