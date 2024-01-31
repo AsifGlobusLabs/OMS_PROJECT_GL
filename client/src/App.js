@@ -8,6 +8,7 @@ import Signup from './Component/signup/Signup'
 import Assignment from './Page/Assignment/Assignment'
 import Task from './Page/Task/Task'
 import TeamMember from './Page/Team/TeamMember'
+import CreateTeam from './Page/Team/CreateTeam'
 
 
 export default function App() {
@@ -23,6 +24,7 @@ export default function App() {
         <Route path='/registerpage' element={<RegisterPage/>}></Route>
         <Route path='/loginpage' element={<Login/>}></Route>
         <Route path='/signuppage' element={<Signup/>}></Route>
+        <Route path='/createteam' element={<CreateTeam/>}></Route>
 
     </Routes>
  

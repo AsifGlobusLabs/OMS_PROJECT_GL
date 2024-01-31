@@ -9,6 +9,7 @@ import { useEffect } from 'react';
 import { useState } from 'react';
 import "./Team.css";
 import profile from "./profile.webp"
+import { Link } from 'react-router-dom';
 
 export default function AllTeamMembers() {
     const [data, setData] = useState([]);
@@ -37,7 +38,7 @@ export default function AllTeamMembers() {
   return (
     <div className='card-container'>
     {data.map((item) => (
-    <Card sx={{ width: 220, margin:"10px" , padding:"10px"}}>
+    <Card sx={{ width: 200, margin:"10px" , padding:"10px"}}>
       <CardActionArea>
         <div style={{display:"flex", justifyContent:"center"}}>
         <CardMedia
@@ -45,7 +46,7 @@ export default function AllTeamMembers() {
           
           image={profile}       
           alt='profile'
-          sx={{height:"120px", width:"120px"}}
+          sx={{height:"100px", width:"100px"}}
         />
         </div>
        
@@ -61,9 +62,11 @@ export default function AllTeamMembers() {
         
       </CardActionArea>
    <CardActions>
+    <Link to={"/createteam"}>
         <Button size="small" color="primary">
-          create Team<AddCircleIcon/>
+          create Team
         </Button>
+        </Link>
       </CardActions>
     </Card>
       ))}
