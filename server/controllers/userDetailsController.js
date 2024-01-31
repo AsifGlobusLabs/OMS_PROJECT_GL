@@ -7,34 +7,29 @@ const jwt = require("jsonwebtoken");
 // inserting user details
 
 exports.addUserDetails = async (req, res) => {
-  const { UserID, EmployeeID, Role, Username, Password, confirm_password } =
-    req.body;
+  const { EmployeeID, Role, Username, Password, confirm_password } = req.body;
 
   if (Password !== confirm_password) {
     return res.status(400).json({ error: "Passwords do not match" });
   }
+
   try {
     const hashedPassword = await bcrypt.hash(Password, 10);
-    const query =
-      "INSERT INTO tb_userdetails (UserID, EmployeeID, Role, Username, Password) VALUES (?, ?, ?, ?, ?)";
-    db.query(
-      query,
-      [UserID, EmployeeID, Role, Username, hashedPassword],
-      (err, results) => {
-        if (err) {
-          console.error("Error executing query:", err);
-          res.status(500).json({ error: "Internal server error" });
-        } else {
-          console.log("User registered successfully");
-          res.status(201).json({ message: "User registered successfully" });
-        }
+    const query = "INSERT INTO tb_userdetails (EmployeeID, Role, Username, Password) VALUES (?, ?, ?, ?)";
+    db.query(query, [EmployeeID, Role, Username, hashedPassword], (err, results) => {
+      if (err) {
+        console.error("Error executing query:", err);
+        return res.status(500).json({ error: "Internal server error" });
       }
-    );
-  } catch (hashError) {
-    console.error("Error hashing password:", hashError);
+      console.log("User registered successfully");
+      res.status(201).json({ message: "User registered successfully" });
+    });
+  } catch (error) {
+    console.error("Error hashing password:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
 
 // getting all user details
 
@@ -53,7 +48,7 @@ exports.getAllUserDetails = (req, res) => {
 // updating user details
 
 exports.updateUserDetails = async (req, res) => {
-  const userId = req.params.UserID;
+  const employeeId = req.params.EmployeeID;
   const updatedUserDetails = req.body;
 
   // Hash the password if it is provided in the request body
@@ -64,21 +59,21 @@ exports.updateUserDetails = async (req, res) => {
     );
   }
 
-  const query = "UPDATE tb_userdetails SET ? WHERE UserID = ?";
+  const query = "UPDATE tb_userdetails SET ? WHERE EmployeeID = ?";
 
-  db.query(query, [updatedUserDetails, userId], (err, results) => {
+  db.query(query, [updatedUserDetails, employeeId], (err, results) => {
     if (err) {
       console.error("Error executing query : ", err);
       res.status(500).json({ error: "Internal server error" });
     } else {
       if (results.affectedRows === 0) {
-        res.status(404).json({ error: "User not found" });
+        res.status(404).json({ error: "Employee not found" });
         return;
       } else if (results.affectedRows > 0 && results.changedRows === 0) {
-        res.status(200).json({ message: "User Data is up to date already" });
+        res.status(200).json({ message: "Employee's Data is up to date already" });
         return;
       } else {
-        res.status(200).json({ message: "User details updated successfully" });
+        res.status(200).json({ message: "Employee details updated successfully" });
       }
     }
   });
@@ -87,32 +82,32 @@ exports.updateUserDetails = async (req, res) => {
 // Deleting user details
 
 exports.deleteUserDetails = (req, res) => {
-  const userId = req.params.UserID;
-  const query = "DELETE FROM tb_userdetails WHERE UserID = ?";
-  db.query(query, [userId], (err, results) => {
+  const employeeId = req.params.EmployeeID;
+  const query = "DELETE FROM tb_userdetails WHERE EmployeeID = ?";
+  db.query(query, [employeeId], (err, results) => {
     if (err) {
       console.error("Error executing query:", err);
       res.status(500).json({ error: "Internal Server Error" });
     } else {
       if (results.affectedRows === 0) {
-        res.status(404).json({ error: "User details not found" });
+        res.status(404).json({ error: "Employee details not found" });
         return;
       } else {
         res
           .status(200)
-          .json({ message: "Selected user details deleted successfully" });
+          .json({ message: "Selected employee details deleted successfully" });
       }
     }
   });
 };
 
 exports.loginUser = async (req, res) => {
-  const { UserID, Password } = req.body;
+  const { EmployeeID, Password } = req.body;
 
   // Fetch user from the database based on the email
-  const query = "SELECT * FROM tb_userdetails WHERE UserID = ?";
+  const query = "SELECT * FROM tb_userdetails WHERE EmployeeID = ?";
 
-  db.query(query, [UserID], async (err, results) => {
+  db.query(query, [EmployeeID], async (err, results) => {
     if (err) {
       console.error("Error during login:", err);
       res.status(500).json({ error: "Internal Server Error" });
@@ -127,7 +122,7 @@ exports.loginUser = async (req, res) => {
           // Passwords match, generate JWT token
           const token = jwt.sign(
             {
-              UserId: user.UserID,
+              Username: user.Username,
               EmployeeID: user.EmployeeID,
               Role: user.Role,
             },
@@ -142,7 +137,6 @@ exports.loginUser = async (req, res) => {
           res.json({
             message: "Login successful",
             user: {
-              UserID: user.UserID,
               EmployeeID: user.EmployeeID,
               Username: user.Username,
               Role: user.Role,
@@ -156,31 +150,10 @@ exports.loginUser = async (req, res) => {
         }
       } else {
         // User not found
-        console.log("User not found");
-        res.status(404).json({ error: "User not found" });
+        console.log("Employee not found");
+        res.status(404).json({ error: "Employee not found" });
       }
     }
   });
 };
 
-
-// getting latest or last User id
-
-exports.getLastUserId = (req, res) => {
-  const query =
-    "SELECT UserID FROM tb_userdetails ORDER BY UserID DESC LIMIT 1";
-
-  db.query(query, (error, results) => {
-    if (error) {
-      console.error("Error executing query:", error);
-      res.status(500).json({ error: "Internal Server Error" });
-      return;
-    }
-    if (results.length === 0) {
-      res.status(404).json({ error: "No employees found" });
-      return;
-    }
-    const lastUserId = results[0].UserID;
-    res.status(200).json({ lastUserId:lastUserId });
-  });
-};

@@ -9,15 +9,12 @@ router.get("/", userDetailsController.getAllUserDetails);
 router.post("/", userDetailsController.addUserDetails);
 
 // update user details
-router.patch("/update/:UserID", userDetailsController.updateUserDetails);
+router.patch("/update/:EmployeeID", userDetailsController.updateUserDetails);
 
 // delete user details
-router.delete("/delete/:UserID", userDetailsController.deleteUserDetails);
+router.delete("/delete/:EmployeeID", userDetailsController.deleteUserDetails);
 
 // login user through their details
 router.post("/login", userDetailsController.loginUser);
-
-// getting last user id
-router.get("/lastUserId", userDetailsController.getLastUserId);
 
 module.exports = router;

@@ -7,6 +7,9 @@ const employeeController = require("../controllers/employeeDetailsController");
 // Get all employees
 router.get("/", employeeController.getAllEmployees);
 
+// Get all data of employees
+router.get("/allData", employeeController.getAllDataOfEmployees);
+
 // Add a new employee
 router.post("/", employeeController.addEmployee);
 
