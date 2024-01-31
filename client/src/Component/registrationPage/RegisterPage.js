@@ -6,8 +6,8 @@ import logo from "../../assets/images/Gl-Logo.png";
 
 function RegisterPage() {
   const [validated, setValidated] = useState(false);
-  const [departmentData, setDepartmentData]= useState([]);
-  const [deginationData, setDeginationData]= useState([]);
+  const [departmentData, setDepartmentData] = useState([]);
+  const [deginationData, setDeginationData] = useState([]);
   const [formData, setFormData] = useState({
     EmployeeID: "",
     FirstName: "",
@@ -24,9 +24,7 @@ function RegisterPage() {
   });
   const [isLoading, setIsLoading] = useState(false);
 
-
-
-  console.log(formData.EmployeeID, "fjfjfj")
+  console.log(formData.EmployeeID, "fjfjfj");
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -60,12 +58,14 @@ function RegisterPage() {
     }
   };
 
-
-//last number data 
+  //last number data
   useEffect(() => {
     const fetchLastJobNo = async () => {
       try {
-        const response = await fetch("http://localhost:3306/api/employee/lastEmployeeId", { method: "GET", headers: { "Content-Type": "application/json" }});
+        const response = await fetch(
+          "http://localhost:3306/api/employee/lastEmployeeId",
+          { method: "GET", headers: { "Content-Type": "application/json" } }
+        );
         if (response.ok) {
           const data = await response.json();
           console.log("Received data:", data); // Log received data for debugging
@@ -73,32 +73,39 @@ function RegisterPage() {
           console.log("Parsed numeric part:", numericPart); // Log parsed numeric part
           if (!isNaN(numericPart)) {
             const nextJobNo = numericPart + 1;
-            setFormData({ ...formData, EmployeeID: `EMP${nextJobNo.toString().padStart(3, "0")}` });
+            setFormData({
+              ...formData,
+              EmployeeID: `EMP${nextJobNo.toString().padStart(3, "0")}`,
+            });
           } else {
             console.error("Invalid numeric part:", data.lastEmployeeId);
           }
         } else {
           console.error("Failed to fetch last JobNo");
         }
-      } catch (error) { 
-        console.error("Error:", error); 
+      } catch (error) {
+        console.error("Error:", error);
       }
     };
     fetchLastJobNo();
-}, []);
+  }, []);
 
-
-
-// Department and Designation DATA GET
+  // Department and Designation DATA GET
   useEffect(() => {
     const fetchData = async (apiUrl, setterFunction) => {
       try {
         setIsLoading(true);
-        const response = await fetch(apiUrl, { method: "GET", headers: { "Content-Type": "application/json" }});
+        const response = await fetch(apiUrl, {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        });
         const result = await response.json();
         setterFunction(result);
-      } catch (error) { console.error("Error fetching data:", error); }
-      finally { setIsLoading(false); }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setIsLoading(false);
+      }
     };
     fetchData("http://localhost:3306/api/department", setDepartmentData);
     fetchData("http://localhost:3306/api/designation", setDeginationData);
@@ -106,12 +113,37 @@ function RegisterPage() {
 
   return (
     <div className="main-container p-0" style={{ width: "100vw" }}>
-      <div className="register-header p-2" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <div className="logo"><Link to={"/"}><img src={logo} alt="logo" /></Link></div>
+      <div
+        className="register-header p-2"
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <div className="logo">
+          <Link to={"/"}>
+            <img src={logo} alt="logo" />
+          </Link>
+        </div>
         <Link to={"/signuppage"} style={{ textDecoration: "none" }}>
-          <div style={{ color: "white", paddingRight: "25px", display: "flex", alignItems: "center" }}>
-            <i className="fa-solid fa-user" style={{ fontSize: "16px", color: "white" }}></i>
-            <span style={{ fontSize: "12px", marginLeft: "3px", fontWeight: 600 }}>SIGN-UP</span>
+          <div
+            style={{
+              color: "white",
+              paddingRight: "25px",
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <i
+              className="fa-solid fa-user"
+              style={{ fontSize: "16px", color: "white" }}
+            ></i>
+            <span
+              style={{ fontSize: "12px", marginLeft: "3px", fontWeight: 600 }}
+            >
+              SIGN-UP
+            </span>
           </div>
         </Link>
       </div>
@@ -119,9 +151,11 @@ function RegisterPage() {
         <div className="register-section">
           <h4>REGISTRATION FORM</h4>
           <div className="register">
-            <div className="right-register"><div className="right-img"></div></div>
+            <div className="right-register">
+              <div className="right-img"></div>
+            </div>
             <div className="left-register">
-            <Form noValidate validated={validated} onSubmit={handleSubmit}>
+              <Form noValidate validated={validated} onSubmit={handleSubmit}>
                 <Row className="mb-3">
                   <Form.Group as={Col} md="6">
                     <Form.Label>Employee ID</Form.Label>
@@ -140,7 +174,6 @@ function RegisterPage() {
                       </Form.Control.Feedback>
                     </InputGroup>
                   </Form.Group>
-
                 </Row>
 
                 <Row className="mb-3">
@@ -304,9 +337,7 @@ function RegisterPage() {
                       onChange={handleInputChange}
                       required
                     >
-                      <option>
-                      Select Department ID
-                      </option>
+                      <option>Select Department ID</option>
                       {departmentData.map((item) => (
                         <option key={item._id}>
                           {item.DepartmentID} - {item.DepartmentName}
@@ -328,9 +359,7 @@ function RegisterPage() {
                       onChange={handleInputChange}
                       required
                     >
-                      <option>
-                      Select Designation ID
-                      </option>
+                      <option>Select Designation ID</option>
                       {deginationData.map((item) => (
                         <option key={item._id}>
                           {item.DesignationID} - {item.DesignationName}
