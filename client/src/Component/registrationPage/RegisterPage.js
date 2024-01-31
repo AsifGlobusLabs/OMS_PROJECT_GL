@@ -24,8 +24,6 @@ function RegisterPage() {
   });
   const [isLoading, setIsLoading] = useState(false);
 
-  console.log(formData.EmployeeID, "fjfjfj");
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
@@ -329,7 +327,7 @@ function RegisterPage() {
                     <Form.Label htmlFor="DepartmentID">
                       Department ID
                     </Form.Label>
-
+                    {/* 
                     <Form.Select
                       aria-label="Default select example"
                       name="DepartmentID"
@@ -343,7 +341,23 @@ function RegisterPage() {
                           {item.DepartmentID} - {item.DepartmentName}
                         </option>
                       ))}
+                    </Form.Select> */}
+
+                    <Form.Select
+                      aria-label="Default select example"
+                      name="DepartmentID"
+                      value={formData.DepartmentID}
+                      onChange={handleInputChange}
+                      required
+                    >
+                      <option value="">Select Department ID</option>
+                      {departmentData.map((item) => (
+                        <option key={item._id} value={item.DepartmentID}>
+                          {item.DepartmentID} - {item.DepartmentName}
+                        </option>
+                      ))}
                     </Form.Select>
+
                     <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                   </Form.Group>
 
@@ -352,7 +366,7 @@ function RegisterPage() {
                       Designation ID
                     </Form.Label>
 
-                    <Form.Select
+                    {/* <Form.Select
                       aria-label="Default select example"
                       name="DesignationID"
                       value={formData.DesignationID}
@@ -365,7 +379,23 @@ function RegisterPage() {
                           {item.DesignationID} - {item.DesignationName}
                         </option>
                       ))}
+                    </Form.Select> */}
+
+                    <Form.Select
+                      aria-label="Default select example"
+                      name="DesignationID"
+                      value={formData.DesignationID}
+                      onChange={handleInputChange}
+                      required
+                    >
+                      <option value="">Select Designation ID</option>
+                      {deginationData.map((item) => (
+                        <option key={item._id} value={item.DesignationID}>
+                          {item.DesignationID} - {item.DesignationName}
+                        </option>
+                      ))}
                     </Form.Select>
+
                     <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                   </Form.Group>
                 </Row>
