@@ -14,6 +14,20 @@ exports.getAllEmployees = (req, res) => {
   });
 };
 
+// Getting all data of employees 
+
+exports.getAllDataOfEmployees = (req, res) => {
+  const query = "SELECT tb_employee.* , tb_userdetails.Role, tb_userdetails.Username FROM tb_employee INNER JOIN tb_userdetails ON tb_employee.EmployeeID = tb_userdetails.EmployeeID";
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error("Error executing query:", err);
+      res.status(500).json({ error: "Internal Server Error" });
+      return;
+    }
+    res.status(200).json(results);
+  });
+};
+
 // Inserting employees data
 
 exports.addEmployee = (req, res) => {
