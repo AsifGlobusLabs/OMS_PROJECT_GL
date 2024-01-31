@@ -13,7 +13,7 @@ function RegisterPage() {
     FirstName: "",
     LastName: "",
     DateOfBirth: "",
-    Gender: "", 
+    Gender: "",
     ContactNumber: "",
     Email: "",
     Address: "",
@@ -23,6 +23,10 @@ function RegisterPage() {
     DesignationID: "",
   });
   const [isLoading, setIsLoading] = useState(false);
+
+
+
+  console.log(formData.EmployeeID, "fjfjfj")
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -56,23 +60,36 @@ function RegisterPage() {
     }
   };
 
+
+//last number data 
   useEffect(() => {
     const fetchLastJobNo = async () => {
       try {
         const response = await fetch("http://localhost:3306/api/employee/lastEmployeeId", { method: "GET", headers: { "Content-Type": "application/json" }});
         if (response.ok) {
           const data = await response.json();
-          const numericPart = parseInt(data.lastEmployeeId.slice(2), 10);
+          console.log("Received data:", data); // Log received data for debugging
+          const numericPart = parseInt(data.lastEmployeeId.slice(3), 10);
+          console.log("Parsed numeric part:", numericPart); // Log parsed numeric part
           if (!isNaN(numericPart)) {
             const nextJobNo = numericPart + 1;
-            setFormData({ ...formData, EmployeeID: `GL${nextJobNo.toString().padStart(3, "0")}` });
-          } else console.error("Invalid numeric part:", data.lastEmployeeId);
-        } else console.error("Failed to fetch last JobNo");
-      } catch (error) { console.error("Error:", error); }
+            setFormData({ ...formData, EmployeeID: `EMP${nextJobNo.toString().padStart(3, "0")}` });
+          } else {
+            console.error("Invalid numeric part:", data.lastEmployeeId);
+          }
+        } else {
+          console.error("Failed to fetch last JobNo");
+        }
+      } catch (error) { 
+        console.error("Error:", error); 
+      }
     };
     fetchLastJobNo();
-  }, []);
+}, []);
 
+
+
+// Department and Designation DATA GET
   useEffect(() => {
     const fetchData = async (apiUrl, setterFunction) => {
       try {
@@ -123,7 +140,7 @@ function RegisterPage() {
                       </Form.Control.Feedback>
                     </InputGroup>
                   </Form.Group>
-              
+
                 </Row>
 
                 <Row className="mb-3">
@@ -298,8 +315,6 @@ function RegisterPage() {
                     </Form.Select>
                     <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                   </Form.Group>
-                 
-                 
 
                   <Form.Group as={Col} md="6">
                     <Form.Label htmlFor="DesignationID">
