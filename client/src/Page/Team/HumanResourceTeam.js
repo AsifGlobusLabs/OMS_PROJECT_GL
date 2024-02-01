@@ -9,6 +9,7 @@ import { useEffect } from 'react';
 import { useState } from 'react';
 import "./Team.css";
 import profile from "./profile.webp"
+import { Link } from 'react-router-dom';
 
 export default function HumanResourceTeam() {
   const [data, setData] = useState([]);
@@ -40,31 +41,37 @@ export default function HumanResourceTeam() {
   return (
       <div className='card-container'>
           {filteredData.map((item) => (
-              <Card sx={{ width: 220, margin: "10px", padding: "10px" }} key={item.EmployeeID}>
-                  <CardActionArea>
-                      <div style={{ display: "flex", justifyContent: "center" }}>
-                          <CardMedia
-                              component="img"
-                              image={profile}
-                              alt='profile'
-                              sx={{ height: "120px", width: "120px" }}
-                          />
-                      </div>
-                      <CardContent>
-                          <Typography gutterBottom variant="h6" component="div">
-                              {item.FirstName} {item.LastName}
-                          </Typography>
-                          <Typography variant="body2" color="text.secondary">
-                              {item.EmployeeID}
-                          </Typography>
-                      </CardContent>
-                  </CardActionArea>
-                  <CardActions>
-                      <Button size="small" color="primary">
-                          create Team<AddCircleIcon />
-                      </Button>
-                  </CardActions>
-              </Card>
+             <Card sx={{ width: 200, margin:"10px" , padding:"10px"}}>
+             <CardActionArea>
+               <div style={{display:"flex", justifyContent:"center"}}>
+               <CardMedia
+                 component="img"
+                 
+                 image={profile}       
+                 alt='profile'
+                 sx={{height:"100px", width:"100px"}}
+               />
+               </div>
+              
+              
+               <CardContent sx={{textAlign:"center"}}>
+                 <Typography gutterBottom variant="h6" component="div">
+                 {item.FirstName} {item.LastName}
+                 </Typography>
+                 <Typography variant="body2" color="text.secondary">
+                   {item.EmployeeID}
+                 </Typography>
+               </CardContent>
+               
+             </CardActionArea>
+          <CardActions sx={{display:"flex", justifyContent:"center"}}>
+           <Link to={"/createteam"}>
+               <Button size="small" color="primary" >
+                 create Team
+               </Button>
+               </Link>
+             </CardActions>
+           </Card>
           ))}
       </div>
   );
