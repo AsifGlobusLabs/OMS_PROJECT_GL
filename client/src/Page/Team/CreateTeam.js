@@ -13,6 +13,9 @@ const CreateTeam = () => {
   const [error, setError] = useState(null);
 
 
+  console.log(item, "fjhfhfh")
+
+
 // console.log(item, "hekkii");
   useEffect(() => {
     const fetchData = async () => {
