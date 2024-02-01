@@ -87,9 +87,10 @@ const authenticateUser = async (req, res, next) => {
                 res.status(401).json({ error: "Unauthorized" });
                 return;
                 }
+                console.log(results);
             // You might want to store the user information in the request object
                 req.authenticatedUser = results[0];
-                console.log(req.authenticateUser);
+                console.log(req.authenticatedUser);
             });
 
         } catch (verificationError) {
