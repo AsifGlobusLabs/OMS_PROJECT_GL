@@ -65,7 +65,7 @@ export default function HumanResourceTeam() {
                
              </CardActionArea>
           <CardActions sx={{display:"flex", justifyContent:"center"}}>
-           <Link to={"/createteam"}>
+          <Link to={`/createteam/${item.EmployeeID}`} key={item.EmployeeID}>
                <Button size="small" color="primary" >
                  create Team
                </Button>
