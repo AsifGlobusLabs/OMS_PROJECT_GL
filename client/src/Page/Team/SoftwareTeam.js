@@ -17,7 +17,7 @@ export default function SoftwareTeam() {
   useEffect(() => {
       const fetchData = async () => {
           try {
-              const apiUrl = "http://localhost:3306/api/employee";
+              const apiUrl = "http://localhost:3306/api/employee/allData";
               const response = await fetch(apiUrl, {
                   method: "GET",
                   headers: {
