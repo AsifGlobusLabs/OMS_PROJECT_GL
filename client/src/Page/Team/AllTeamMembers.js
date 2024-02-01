@@ -51,7 +51,7 @@ export default function AllTeamMembers() {
         </div>
        
        
-        <CardContent>
+        <CardContent sx={{textAlign:"center"}}>
           <Typography gutterBottom variant="h6" component="div">
           {item.FirstName} {item.LastName}
           </Typography>
@@ -61,9 +61,9 @@ export default function AllTeamMembers() {
         </CardContent>
         
       </CardActionArea>
-   <CardActions>
-    <Link to={"/createteam"}>
-        <Button size="small" color="primary">
+   <CardActions sx={{display:"flex", justifyContent:"center"}}>
+    <Link to={`/createteam/${item.EmployeeID}`} key={item.EmployeeID}>
+        <Button size="small" color="primary" >
           create Team
         </Button>
         </Link>
