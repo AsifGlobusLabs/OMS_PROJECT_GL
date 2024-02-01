@@ -24,7 +24,7 @@ export default function App() {
         <Route path='/registerpage' element={<RegisterPage/>}></Route>
         <Route path='/loginpage' element={<Login/>}></Route>
         <Route path='/signuppage' element={<Signup/>}></Route>
-        <Route path='/createteam' element={<CreateTeam/>}></Route>
+        <Route path='/createteam/:EmployeeID' element={<CreateTeam/>}></Route>
 
     </Routes>
  

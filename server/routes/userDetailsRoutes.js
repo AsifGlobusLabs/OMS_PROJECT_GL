@@ -18,4 +18,7 @@ router.delete("/delete/:EmployeeID", userDetailsController.deleteUserDetails);
 // login user through their details
 router.post("/login", userDetailsController.loginUser);
 
+// logout user 
+router.get("/logout", userDetailsController.logoutUser);
+
 module.exports = router;

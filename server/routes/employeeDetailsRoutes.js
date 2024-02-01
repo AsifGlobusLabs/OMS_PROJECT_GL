@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const auth = require("../midderware/auth");
 const employeeController = require("../controllers/employeeDetailsController");
 
 // Define routes related to employees
@@ -8,7 +9,10 @@ const employeeController = require("../controllers/employeeDetailsController");
 router.get("/", employeeController.getAllEmployees);
 
 // Get all data of employees
-router.get("/allData", employeeController.getAllDataOfEmployees);
+router.get("/allData",auth,employeeController.getAllDataOfEmployees);
+
+// Get all data of employees by their employee id
+router.get("/allData/:EmployeeID",employeeController.getAllDataOfEmployeesByEmployeeId);
 
 // Add a new employee
 router.post("/", employeeController.addEmployee);
