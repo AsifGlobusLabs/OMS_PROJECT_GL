@@ -15,12 +15,14 @@ import Col from "react-bootstrap/Col";
 import Nav from "react-bootstrap/Nav";
 import Row from "react-bootstrap/Row";
 import Tab from "react-bootstrap/Tab";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
 const CreateTeam = () => {
   const { EmployeeID } = useParams();
   const [item, setItem] = useState(null);
   const [error, setError] = useState(null);
   const [data, setData] = useState([]);
+  const [teamData, setTeamData] = useState([]);
 
   console.log(item, "fjhfhfh");
 
@@ -87,6 +89,15 @@ const CreateTeam = () => {
     return <div>Loading...</div>;
   }
 
+  const handleAddToTeam = (employeeID) => {
+    // Find the selected employee from the filtered data
+    const selectedEmployee = data.find(
+      (item) => item.EmployeeID === employeeID
+    );
+    // Update the team data with the selected employee
+    setTeamData((prevTeamData) => [...prevTeamData, selectedEmployee]);
+  };
+
   return (
     <Box sx={{ display: "flex" }}>
       <SideBar />
@@ -124,8 +135,14 @@ const CreateTeam = () => {
             </Card>
           ))}
           <Tab.Container id="fill-tab-example" defaultActiveKey="first">
-            <div style={{ width: "100%", display: "flex", justifyContent:"space-around" }}>
-              <Col lg={2} style={{  padding:"10px" }}>
+            <div
+              style={{
+                width: "100%",
+                display: "flex",
+                justifyContent: "space-around",
+              }}
+            >
+              <Col lg={2} style={{ padding: "10px" }}>
                 <Nav variant="pills" className="flex-column">
                   <Nav.Item>
                     <Nav.Link eventKey="first">Software</Nav.Link>
@@ -139,89 +156,132 @@ const CreateTeam = () => {
                 </Nav>
               </Col>
 
-              <Col lg={9} >
-               
-                  <Tab.Content>
-                    <Tab.Pane eventKey="first">
+              <Col lg={9}>
+                <Tab.Content>
+                  <Tab.Pane eventKey="first">
                     <table className="table table-striped">
-                  <thead style={{ fontSize: "15px" }}>
-                    <tr>
-                      <th>EmployeeID</th>
-                      <th>Name</th>
-                      <th>Designation</th>
-                      <th>Department</th>
-                      <th>Status</th>
-                      <th>Add</th>
-                    </tr>
-                  </thead>
+                      <thead style={{ fontSize: "15px" }}>
+                        <tr>
+                          <th>EmployeeID</th>
+                          <th>Name</th>
+                          <th>Designation</th>
+                          <th>Department</th>
+                          <th>Status</th>
+                          <th>Add</th>
+                        </tr>
+                      </thead>
                       <tbody style={{ fontSize: "13px" }}>
                         {filteredData01.map((item) => (
                           <tr key={item._id}>
                             <td>{item.EmployeeID}</td>
-                            <td>{item.FirstName}</td>
+                            <td>
+                              {item.FirstName} {item.LastName}
+                            </td>
                             <td>{item.DesignationID}</td>
                             <td>{item.DepartmentID}</td>
                             <td>{item.EmploymentStatus}</td>
+                            <td
+                              style={{
+                                fontSize: "18px",
+                                color: "green",
+                                cursor: "pointer",
+                              }}
+                              onClick={() => handleAddToTeam(item.EmployeeID)}
+                            >
+                              <AddCircleOutlineIcon />{" "}
+                            </td>
                           </tr>
                         ))}
                       </tbody>
-                      </table>
-                    </Tab.Pane>
-                    <Tab.Pane eventKey="second">
+                    </table>
+                  </Tab.Pane>
+                  <Tab.Pane eventKey="second">
                     <table className="table table-striped">
-                  <thead style={{ fontSize: "15px" }}>
-                    <tr>
-                      <th>EmployeeID</th>
-                      <th>Name</th>
-                      <th>Designation</th>
-                      <th>Department</th>
-                      <th>Status</th>
-                      <th>Add</th>
-                    </tr>
-                  </thead>
+                      <thead style={{ fontSize: "15px" }}>
+                        <tr>
+                          <th>EmployeeID</th>
+                          <th>Name</th>
+                          <th>Designation</th>
+                          <th>Department</th>
+                          <th>Status</th>
+                          <th>Add</th>
+                        </tr>
+                      </thead>
                       <tbody style={{ fontSize: "13px" }}>
                         {filteredData02.map((item) => (
                           <tr key={item._id}>
                             <td>{item.EmployeeID}</td>
-                            <td>{item.FirstName}</td>
+                            <td>
+                              {item.FirstName} {item.LastName}
+                            </td>
                             <td>{item.DesignationID}</td>
                             <td>{item.DepartmentID}</td>
                             <td>{item.EmploymentStatus}</td>
                           </tr>
                         ))}
                       </tbody>
-                      </table>
-                      </Tab.Pane>
-                    <Tab.Pane eventKey="third">
+                    </table>
+                  </Tab.Pane>
+                  <Tab.Pane eventKey="third">
                     <table className="table table-striped">
-                  <thead style={{ fontSize: "15px" }}>
-                    <tr>
-                      <th>EmployeeID</th>
-                      <th>Name</th>
-                      <th>Designation</th>
-                      <th>Department</th>
-                      <th>Status</th>
-                      <th>Add</th>
-                    </tr>
-                  </thead>
+                      <thead style={{ fontSize: "15px" }}>
+                        <tr>
+                          <th>EmployeeID</th>
+                          <th>Name</th>
+                          <th>Designation</th>
+                          <th>Department</th>
+                          <th>Status</th>
+                          <th>Add</th>
+                        </tr>
+                      </thead>
                       <tbody style={{ fontSize: "13px" }}>
                         {filteredData03.map((item) => (
                           <tr key={item._id}>
                             <td>{item.EmployeeID}</td>
-                            <td>{item.FirstName}</td>
+                            <td>
+                              {item.FirstName} {item.LastName}
+                            </td>
                             <td>{item.DesignationID}</td>
                             <td>{item.DepartmentID}</td>
                             <td>{item.EmploymentStatus}</td>
                           </tr>
                         ))}
                       </tbody>
-                      </table>
-                    </Tab.Pane>
-                  </Tab.Content>
-                
+                    </table>
+                  </Tab.Pane>
+                </Tab.Content>
               </Col>
             </div>
           </Tab.Container>
+        </div>
+
+        <div>
+          <h4>Team Members</h4>
+
+          <table className="table table-striped">
+            <thead style={{ fontSize: "15px" }}>
+              <tr>
+                <th>EmployeeID</th>
+                <th>Name</th>
+                <th>Designation</th>
+                <th>Department</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody style={{ fontSize: "13px" }}>
+              {teamData.map((employee) => (
+                <tr key={item._id}>
+                  <td>{employee.EmployeeID}</td>
+                  <td>
+                    {employee.FirstName} {item.LastName}
+                  </td>
+                  <td>{employee.DesignationID}</td>
+                  <td>{employee.DepartmentID}</td>
+                  <td>{employee.EmploymentStatus}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </Box>
     </Box>
