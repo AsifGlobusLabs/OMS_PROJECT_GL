@@ -13,9 +13,11 @@ import profile from "./profile.webp";
 import { Card } from "react-bootstrap";
 import Col from "react-bootstrap/Col";
 import Nav from "react-bootstrap/Nav";
-import Row from "react-bootstrap/Row";
 import Tab from "react-bootstrap/Tab";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import DeleteIcon from '@mui/icons-material/Delete';
+
+
 
 const CreateTeam = () => {
   const { EmployeeID } = useParams();
@@ -96,6 +98,15 @@ const CreateTeam = () => {
     );
     // Update the team data with the selected employee
     setTeamData((prevTeamData) => [...prevTeamData, selectedEmployee]);
+  };
+
+
+  const handleDelete = (employeeID) => {
+    // Filter out the selected employee from the team data
+    const updatedTeamData = teamData.filter(
+      (employee) => employee.EmployeeID !== employeeID
+    );
+    setTeamData(updatedTeamData);
   };
 
   return (
@@ -217,6 +228,16 @@ const CreateTeam = () => {
                             <td>{item.DesignationID}</td>
                             <td>{item.DepartmentID}</td>
                             <td>{item.EmploymentStatus}</td>
+                            <td
+                              style={{
+                                fontSize: "18px",
+                                color: "green",
+                                cursor: "pointer",
+                              }}
+                              onClick={() => handleAddToTeam(item.EmployeeID)}
+                            >
+                              <AddCircleOutlineIcon />{" "}
+                            </td>
                           </tr>
                         ))}
                       </tbody>
@@ -244,6 +265,16 @@ const CreateTeam = () => {
                             <td>{item.DesignationID}</td>
                             <td>{item.DepartmentID}</td>
                             <td>{item.EmploymentStatus}</td>
+                            <td
+                              style={{
+                                fontSize: "18px",
+                                color: "green",
+                                cursor: "pointer",
+                              }}
+                              onClick={() => handleAddToTeam(item.EmployeeID)}
+                            >
+                              <AddCircleOutlineIcon />{" "}
+                            </td>
                           </tr>
                         ))}
                       </tbody>
@@ -255,7 +286,7 @@ const CreateTeam = () => {
           </Tab.Container>
         </div>
 
-        <div>
+        <div style={{marginTop:"20px"}}>
           <h4>Team Members</h4>
 
           <table className="table table-striped">
@@ -266,6 +297,7 @@ const CreateTeam = () => {
                 <th>Designation</th>
                 <th>Department</th>
                 <th>Status</th>
+                <th>Delete</th>
               </tr>
             </thead>
             <tbody style={{ fontSize: "13px" }}>
@@ -278,6 +310,10 @@ const CreateTeam = () => {
                   <td>{employee.DesignationID}</td>
                   <td>{employee.DepartmentID}</td>
                   <td>{employee.EmploymentStatus}</td>
+                  <td style={{color:"red", cursor:"pointer"}}
+                  onClick={() => handleDelete(item.EmployeeID)}
+                  >
+                    <DeleteIcon/></td>
                 </tr>
               ))}
             </tbody>
@@ -289,3 +325,12 @@ const CreateTeam = () => {
 };
 
 export default CreateTeam;
+
+
+
+
+
+
+
+
+
