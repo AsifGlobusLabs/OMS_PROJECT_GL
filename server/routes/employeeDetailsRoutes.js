@@ -17,8 +17,11 @@ router.get("/allData",employeeController.getAllDataOfEmployees);
 // Get all data of employees by their employee id
 router.get("/allData/:EmployeeID",employeeController.getAllDataOfEmployeesByEmployeeId);
 
+// // Get all data of employees by their employee id
+// router.get("/dNames/:EmployeeID",employeeController.getDataOfEmployeesWithTheirDNames);
+
 // Get all data of employees by their employee id
-router.get("/dNames/:EmployeeID",employeeController.getDataOfEmployeesWithTheirDNames);
+router.get("/dNames",employeeController.getDataOfEmployeesWithTheirDNames);
 
 // Add a new employee
 router.post("/", employeeController.addEmployee);
