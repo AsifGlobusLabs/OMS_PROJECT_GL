@@ -154,14 +154,14 @@ const CreateTeam = () => {
               }}
             >
               <Col lg={2} style={{ padding: "10px" }}>
-                <Nav variant="pills" className="flex-column">
+                <Nav variant="pills" className="flex-column" style={{textAlign:"center"}}>
                   <Nav.Item>
                     <Nav.Link eventKey="first">Software</Nav.Link>
                   </Nav.Item>
-                  <Nav.Item>
+                  <Nav.Item style={{marginTop:"10px"}}>
                     <Nav.Link eventKey="second">HR</Nav.Link>
                   </Nav.Item>
-                  <Nav.Item>
+                  <Nav.Item style={{marginTop:"10px"}}>
                     <Nav.Link eventKey="third">SCM</Nav.Link>
                   </Nav.Item>
                 </Nav>
