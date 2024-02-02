@@ -2,8 +2,6 @@ const db = require("../db");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-// SECRET_KEY = 'GLOBUSLABS_RND_OMS_PROJECT'
-
 // inserting user details
 
 exports.addUserDetails = async (req, res) => {
