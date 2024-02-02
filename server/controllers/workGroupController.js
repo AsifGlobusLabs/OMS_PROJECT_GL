@@ -29,6 +29,21 @@ exports.getAllWorkGroups = (req, res) => {
   });
 };
 
+
+// Getting all data of a particular group
+
+exports.getAllDataOfGroup = (req, res) => {
+  const employeeIdAssigner = req.params.EmployeeID_Assigner;
+  const query = "SELECT * FROM tb_workGroup WHERE EmployeeID_Assigner = ?";
+  db.query(query, employeeIdAssigner,(err, results) => {
+    if (err) {
+      console.error("Error executing query:", err);
+      res.status(500).json({ error: "Internal Server Error" });
+      return;
+    }
+    res.status(200).json(results);
+  });
+};
 // updating work group's data
 
 exports.updateWorkGroup = (req, res) => {
