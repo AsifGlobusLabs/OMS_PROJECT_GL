@@ -8,7 +8,8 @@ import Signup from './Component/signup/Signup'
 import Assignment from './Page/Assignment/Assignment'
 import Task from './Page/Task/Task'
 import TeamMember from './Page/Team/TeamMember'
-import CreateTeam from './Page/Team/CreateTeam'
+
+import CreateTeam from './Page/Team/CreateTeam/CreateTeam'
 
 
 export default function App() {

@@ -1,17 +1,16 @@
 
 
 import * as React from 'react';
-// import SideBar from '../../Component/SideBar
 import SideBar from '../../Component/SideBar'
 import PropTypes from 'prop-types';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import SoftwareTeam from './TeamMember/SoftwareTeam';
-import HumanResourceTeam from './TeamMember/HumanResourceTeam';
-import ScmTeam from './TeamMember/ScmTeam';
-import AllTeamMembers from './TeamMember/AllTeamMembers';
+import SoftwareTeam from './SoftwareTeam';
+import HumanResourceTeam from './HumanResourceTeam';
+import ScmTeam from './ScmTeam';
+import AllTeamMembers from './AllTeamMembers';
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
