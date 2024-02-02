@@ -155,7 +155,7 @@ function RegisterPage() {
             <div className="left-register">
               <Form noValidate validated={validated} onSubmit={handleSubmit}>
                 <Row className="mb-3">
-                  <Form.Group as={Col} md="6">
+                  <Form.Group as={Col} md="12">
                     <Form.Label>Employee ID</Form.Label>
                     <InputGroup hasValidation>
                       <Form.Control
