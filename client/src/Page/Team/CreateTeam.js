@@ -124,8 +124,8 @@ const CreateTeam = () => {
             </Card>
           ))}
           <Tab.Container id="fill-tab-example" defaultActiveKey="first">
-            <div style={{ width: "100%", display: "flex", marginLeft: "20px" }}>
-              <Col lg={2}>
+            <div style={{ width: "100%", display: "flex", justifyContent:"space-around" }}>
+              <Col lg={2} style={{  padding:"10px" }}>
                 <Nav variant="pills" className="flex-column">
                   <Nav.Item>
                     <Nav.Link eventKey="first">Software</Nav.Link>
@@ -139,7 +139,7 @@ const CreateTeam = () => {
                 </Nav>
               </Col>
 
-              <Col lg={8} style={{ marginLeft: "20px" }}>
+              <Col lg={9} >
                
                   <Tab.Content>
                     <Tab.Pane eventKey="first">
