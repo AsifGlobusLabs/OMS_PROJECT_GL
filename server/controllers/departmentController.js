@@ -30,6 +30,28 @@ exports.addDepartment = (req, res) => {
   });
 };
 
+
+// getting latest or last department id
+
+exports.getLastDepartmentId = (req, res) => {
+  const query =
+    "SELECT MAX(DepartmentID) AS maxID FROM tb_department ";
+
+  db.query(query, (error, results) => {
+    if (error) {
+      console.error("Error executing query:", error);
+      res.status(500).json({ error: "Internal Server Error" });
+      return;
+    }
+    if (results.length === 0) {
+      res.status(404).json({ error: "There is not any department found" });
+      return;
+    }
+    const lastDepartmentId = results[0].maxID;
+    res.status(200).json({ lastDepartmentId: lastDepartmentId });
+  });
+};
+
 // updating Department's data
 
 exports.updateDepartment = (req, res) => {
@@ -69,7 +91,9 @@ exports.deleteDepartment = (req, res) => {
         res.status(404).json({ error: "Department not found" });
         return;
       } else {
-        res.status(200).json({ message: "Department's data deleted successfully" });
+        res
+          .status(200)
+          .json({ message: "Department's data deleted successfully" });
       }
     }
   });

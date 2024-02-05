@@ -8,6 +8,9 @@ router.get("/", departmentController.getAllDepartments);
 // Insert department's data
 router.post("/", departmentController.addDepartment);
 
+// Get last department id
+router.get("/lastDepartmentId", departmentController.getLastDepartmentId);
+
 // Updating department's data
 router.patch("/update/:DepartmentID", departmentController.updateDepartment);
 

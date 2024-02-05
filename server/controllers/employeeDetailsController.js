@@ -14,10 +14,11 @@ exports.getAllEmployees = (req, res) => {
   });
 };
 
-// Getting all data of employees 
+// Getting all data of employees
 
 exports.getAllDataOfEmployees = (req, res) => {
-  const query = "SELECT tb_employee.*, tb_userdetails.Role, tb_userdetails.Username FROM tb_employee INNER JOIN tb_userdetails ON tb_employee.EmployeeID = tb_userdetails.EmployeeID";
+  const query =
+    "SELECT tb_employee.*, tb_userdetails.Role, tb_userdetails.Username FROM tb_employee INNER JOIN tb_userdetails ON tb_employee.EmployeeID = tb_userdetails.EmployeeID";
   db.query(query, (err, results) => {
     if (err) {
       console.error("Error executing query:", err);
@@ -32,7 +33,8 @@ exports.getAllDataOfEmployees = (req, res) => {
 
 exports.getAllDataOfEmployeesByEmployeeId = (req, res) => {
   const employeeId = req.params.EmployeeID;
-  const query = "SELECT tb_employee.*, tb_userdetails.Role, tb_userdetails.Username FROM tb_employee INNER JOIN tb_userdetails ON tb_employee.EmployeeID = tb_userdetails.EmployeeID WHERE tb_employee.EmployeeID = ?";
+  const query =
+    "SELECT tb_employee.*, tb_userdetails.Role, tb_userdetails.Username FROM tb_employee INNER JOIN tb_userdetails ON tb_employee.EmployeeID = tb_userdetails.EmployeeID WHERE tb_employee.EmployeeID = ?";
   db.query(query, employeeId, (err, results) => {
     if (err) {
       console.error("Error executing query:", err);
@@ -58,12 +60,12 @@ exports.getAllDataOfEmployeesByEmployeeId = (req, res) => {
 //   });
 // };
 
-
 // Getting data of employees with their department and designation name
 
 exports.getDataOfEmployeesWithTheirDNames = (req, res) => {
-  const query = "SELECT tb_employee.EmployeeID,tb_employee.FirstName,tb_employee.LastName,tb_employee.EmploymentStatus,tb_employee.DepartmentID,tb_department.DepartmentName,tb_employee.DesignationID,tb_designation.DesignationName FROM tb_employee JOIN tb_department ON tb_employee.DepartmentID = tb_department.DepartmentID JOIN tb_designation ON tb_employee.DesignationID = tb_designation.DesignationID";
-  db.query(query,(err, results) => {
+  const query =
+    "SELECT tb_employee.EmployeeID,tb_employee.FirstName,tb_employee.LastName,tb_employee.EmploymentStatus,tb_employee.DepartmentID,tb_department.DepartmentName,tb_employee.DesignationID,tb_designation.DesignationName FROM tb_employee JOIN tb_department ON tb_employee.DepartmentID = tb_department.DepartmentID JOIN tb_designation ON tb_employee.DesignationID = tb_designation.DesignationID";
+  db.query(query, (err, results) => {
     if (err) {
       console.error("Error executing query:", err);
       res.status(500).json({ error: "Internal Server Error" });
@@ -106,7 +108,7 @@ exports.getLastEmployeeId = (req, res) => {
       return;
     }
     const lastEmployeeId = results[0].EmployeeID;
-    res.status(200).json({ lastEmployeeId:lastEmployeeId });
+    res.status(200).json({ lastEmployeeId: lastEmployeeId });
   });
 };
 
@@ -149,7 +151,9 @@ exports.deleteEmployee = (req, res) => {
         res.status(404).json({ error: "Employee not found" });
         return;
       } else {
-        res.status(200).json({ message: "Employee's data deleted successfully" });
+        res
+          .status(200)
+          .json({ message: "Employee's data deleted successfully" });
       }
     }
   });

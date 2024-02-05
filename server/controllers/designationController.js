@@ -69,7 +69,9 @@ exports.deleteDesignation = (req, res) => {
         res.status(404).json({ error: "Designation not found" });
         return;
       } else {
-        res.status(200).json({ message: "Designation's data deleted successfully" });
+        res
+          .status(200)
+          .json({ message: "Designation's data deleted successfully" });
       }
     }
   });
