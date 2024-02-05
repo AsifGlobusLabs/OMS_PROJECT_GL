@@ -7,9 +7,11 @@ import Login from './Component/loginPage/Login'
 import Signup from './Component/signup/Signup'
 import Assignment from './Page/Assignment/Assignment'
 import Task from './Page/Task/Task'
-import TeamMember from './Page/Team/TeamMember'
+// import TeamMember from './Page/Team/TeamMember'
 
-import CreateTeam from './Page/Team/CreateTeam/CreateTeam'
+import TeamMember from './Page/Team/AllTeamMembers'
+import Create from './Page/Team/CreateGroup/Create'
+// import CreateTeam from './Page/Team/CreateTeam/CreateTeam'
 import ViewEmployee from './Page/viewEmployee/ViewEmployee'
 import Department from './Page/Department/Department'
 
@@ -29,7 +31,7 @@ export default function App() {
         <Route path='/registerpage' element={<RegisterPage/>}></Route>
         <Route path='/loginpage' element={<Login/>}></Route>
         <Route path='/signuppage' element={<Signup/>}></Route>
-        <Route path='/createteam/:EmployeeID' element={<CreateTeam/>}></Route>
+        <Route path='/createteam/:EmployeeID' element={<Create/>}></Route>
 
     </Routes>
  
