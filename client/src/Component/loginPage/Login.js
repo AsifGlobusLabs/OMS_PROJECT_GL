@@ -1,18 +1,53 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { MDBContainer, MDBInput } from "mdb-react-ui-kit";
+import * as React from 'react';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import CssBaseline from '@mui/material/CssBaseline';
+import TextField from '@mui/material/TextField';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
+import Link from '@mui/material/Link';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import Card from '@mui/material/Card'; // Import Card component
+import CardContent from '@mui/material/CardContent'; // Import CardContent component
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import HeaderSignIn from './HeaderSignIn';
+import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 import axios from "axios";
-import "./Login.css";
-import logo from '../../assets/images/Gl-Logo.png'
 
-const Login = () => {
-  const [EmployeeID, setEmployeeID] = useState("");
-  const [Password, setPassword] = useState("");
+// const defaultTheme = createTheme();
+
+const customTheme = createTheme({
+  palette: {
+    background: {
+      default: 'whitesmoke', // Change the default background color here
+    },
+  },
+});
+
+export default function Login() {
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
+  const [formData, setFormData] = useState({
+    EmployeeID:"",
+    Password:"",
+  });
+
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
+  };
+
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
@@ -20,8 +55,8 @@ const Login = () => {
       const response = await axios.post(
         "http://localhost:3306/api/userDetails/login",
         {
-          EmployeeID: EmployeeID,
-          Password: Password,
+          EmployeeID: formData.EmployeeID,
+          Password: formData.Password,
         },
         {
           headers: {
@@ -54,121 +89,89 @@ const Login = () => {
     }
   };
 
-  return (
-    <div className="main-container p-0">
-     <div
-        className="login-header p-2"
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
-        <div className="logo">
-          <Link to={"/"}>
-          <img src={logo} alt="logo" ></img>
-          </Link>
-        </div>
 
-        <Link
-          to={"/signuppage"}
-          
-          style={{
-            textDecoration: "none",
+  return (
+    <ThemeProvider theme={customTheme} >
+      <HeaderSignIn />
+      <Container component="main" maxWidth="xs" style={{backgroundColor:'whitesmoke'}}>
+        <CssBaseline />
+        <Box
+          sx={{
+            marginTop: 8,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
           }}
         >
-          <div
-            style={{
-              color: "white",
-              paddingRight: "25px",
-              display: "flex",
-              alignItems: "center",
-            }}
-          >
-            <i
-              className="fa-solid fa-user"
-              style={{ fontSize: "16px", color: "white" }}
-            ></i>
-            <span
-              style={{ fontSize: "12px", marginLeft: "3px", fontWeight: 600 }}
-            >
-              SIGN-UP
-            </span>
-          </div>
-        </Link>
-      </div>
-
-
-
-
-
-      <div className="login-container">
-        <div className="login-section">
-          <div>
-            <h4>SIGN-IN</h4>
-          </div>
-          <div className="login-section1">
-            <div className="login-left">
-              <img
-                src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
-                className="img-fluid"
-                alt="Login Image"
-              />
-            </div>
-
-            <div className="login-right">
-              <MDBContainer className="p-3 my-5 d-flex flex-column w-70">
-                <label
-                  htmlFor="form1"
-                  className="col-sm-4 col-form-label"
-                >
-                  User ID:
-                </label>
-                <MDBInput
-                  wrapperClass="mb-4"
-                  id="form1"
-                  type="text"
-                  value={EmployeeID}
-                  onChange={(e) => setEmployeeID(e.target.value)}
+          <Card>
+            <CardContent> {/* Wrap content inside CardContent */}
+            <span style={{ display: "flex", justifyContent: "center" }}>
+                <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+                  <LockOutlinedIcon />
+                </Avatar>
+              </span>
+              <Typography
+                style={{ display: "flex", justifyContent: "center" }}
+                component="h1"
+                variant="h5"
+              >
+                Sign in
+              </Typography>
+              <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+                <TextField
+                  margin="normal"
+                  required
+                  fullWidth
+                  id="EmployeeID"
+                  label="EmployeeID"
+                  name="EmployeeID"
+                  autoComplete="EmployeeID"
+                  value={formData.EmployeeID}
+                  onChange={handleInputChange}
+                  autoFocus
                 />
-                <label
-                  htmlFor="form2"
-                  className="col-sm-4 col-form-label"
-                >
-                  Password:
-                </label>
-                <MDBInput
-                  wrapperClass="mb-4"
-                  id="form2"
+                <TextField
+                  margin="normal"
+                  required
+                  fullWidth
+                  name="Password"
+                  label="password"
                   type="Password"
-                  value={Password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  id="password"
+                  autoComplete="current-password"
+                  value={formData.Password}
+                  onChange={handleInputChange}
                 />
-
-                <button
-                  type="button"
-                  onClick={handleLogin}
-                  disabled={loading}
-                  class="col-sm-10"
-                  style={{
-                    border: "none",
-                    background: "#24a0ed",
-                    color: "white",
-                    borderRadius: "5px",
-                    padding: "5px 0px",
-                    marginTop: "10px",
-                    width:"100%",
-                  }}  
+                <FormControlLabel
+                  control={<Checkbox value="remember" color="primary" />}
+                  label="Remember me"
+                />
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  sx={{ mt: 3, mb: 2 }}
                 >
-                  {loading ? "Logging in..." : "Login"}
-                </button>
-              </MDBContainer>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
+                  Sign In
+                </Button>
 
-export default Login;
+                <Grid container>
+                  <Grid item xs>
+                    <Link href="#" variant="body2">
+                      Forgot password?
+                    </Link>
+                  </Grid>
+                  <Grid item>
+                    <Link href="#" variant="body2">
+                      {"Don't have an account? Sign Up"}
+                    </Link>
+                  </Grid>
+                </Grid>
+              </Box>
+            </CardContent>
+          </Card>
+        </Box>
+      </Container>
+    </ThemeProvider>
+  );
+}
