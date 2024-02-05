@@ -107,11 +107,78 @@ exports.deleteUserDetails = (req, res) => {
   });
 };
 
+// exports.loginUser = async (req, res) => {
+//   const { EmployeeID, Password } = req.body;
+
+//   // Fetch user from the database based on the email
+//   const query = "SELECT * FROM tb_userdetails WHERE EmployeeID = ?";
+
+//   db.query(query, [EmployeeID], async (err, results) => {
+//     if (err) {
+//       console.error("Error during login:", err);
+//       res.status(500).json({ error: "Internal Server Error" });
+//     } else {
+//       if (results.length > 0) {
+//         const user = results[0];
+
+//         // Compare the provided password with the hashed password from the database
+//         const passwordMatch = await bcrypt.compare(Password, user.Password);
+
+//         if (passwordMatch) {
+//           // Passwords match, generate JWT token
+//           const token = jwt.sign(
+//             {
+//               Username: user.Username,
+//               EmployeeID: user.EmployeeID,
+//               Role: user.Role,
+//             },
+//             process.env.SECRET_KEY || SECRET_KEY,
+//             { expiresIn: "1h" }
+//           );
+//           res.cookie("token", token, { httpOnly: true });
+
+//           // Avoid logging sensitive information
+//           console.log("User authenticated successfully");
+
+//           res.json({
+//             message: "Login successful",
+//             user: {
+//               EmployeeID: user.EmployeeID,
+//               Username: user.Username,
+//               Role: user.Role,
+//             },
+//             token,
+//           });
+//         } else {
+//           // Passwords do not match
+//           console.log("Invalid password");
+//           res.status(401).json({ error: "Invalid password" });
+//         }
+//       } else {
+//         // User not found
+//         console.log("Employee not found");
+//         res.status(404).json({ error: "Employee not found" });
+//       }
+//     }
+//   });
+// };
+
+// exports.logoutUser = (req, res) => {
+//   try {
+//     res.clearCookie("token");
+//     res.json({ message: "Logout successful" });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: "Internal server error" });
+//   }
+// };
+
+
 exports.loginUser = async (req, res) => {
   const { EmployeeID, Password } = req.body;
 
   // Fetch user from the database based on the email
-  const query = "SELECT * FROM tb_userdetails WHERE EmployeeID = ?";
+  const query = "SELECT tb_userdetails.*, tb_employee.FirstName, tb_employee.LastName FROM tb_userdetails INNER JOIN tb_employee ON tb_userdetails.EmployeeID = tb_employee.EmployeeID WHERE tb_userdetails.EmployeeID = ?";
 
   db.query(query, [EmployeeID], async (err, results) => {
     if (err) {
@@ -146,6 +213,8 @@ exports.loginUser = async (req, res) => {
               EmployeeID: user.EmployeeID,
               Username: user.Username,
               Role: user.Role,
+              FirstName:user.FirstName,
+              LastName:user.LastName
             },
             token,
           });
