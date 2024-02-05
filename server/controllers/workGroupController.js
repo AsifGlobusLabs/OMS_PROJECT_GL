@@ -40,7 +40,7 @@ exports.addWorkGroup = (req, res) => {
 
 
 
-//get all data form employees tb table
+//get all data form employees table
 
 exports.getAllworkGroupEmployeesData = (req, res) => {
   const query = `
