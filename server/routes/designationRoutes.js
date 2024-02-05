@@ -8,6 +8,9 @@ router.get("/", designationController.getAllDesignations);
 // Add a new designation
 router.post("/", designationController.addDesignation);
 
+// Get last designation Id
+router.get("/lastDesignationId", designationController.getLastDesignationId);
+
 // Update designation's data
 router.patch("/update/:DesignationID", designationController.updateDesignation);
 
