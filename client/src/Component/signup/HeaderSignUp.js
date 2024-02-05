@@ -4,10 +4,11 @@ import logo from '../../assets/images/Gl-Logo.png';
 
 function HeaderSingup() {
   return (
-    <div className="signup-header p-2" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", backgroundColor:'#3a7575',  }}>
+    <div className="signup-header p-2" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", backgroundColor:'#3a7575', height:"64px" }}>
       <div className="logo">
         <Link to={"/"}>
-          <img src={logo} alt="logo" height='60px'/>
+          <img src={logo} alt="logo" height='55px' style={{background:"white", backgroundSize:"140px auto"}}/>
+    
         </Link>
       </div>
       <Link to={"/loginpage"} style={{ textDecoration: "none" }}>
