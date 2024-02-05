@@ -397,7 +397,7 @@ function RegisterPage() {
             
             style={{ maxHeight: "400px", overflowY: "auto", marginTop:"20px" }}
           >
-            <table className="table table-striped">
+            <table className="table table-striped table-bordered">
               <thead style={{ fontSize: "15px" }}>
                 <tr>
                   <th>Employee ID</th>

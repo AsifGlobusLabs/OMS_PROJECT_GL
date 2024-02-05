@@ -6,11 +6,85 @@ import { Button, Col, Form, InputGroup, Row } from "react-bootstrap";
 import "./Department.css"
 
 const Department = () => {
+  const [validated, setValidated] = useState(false);
   const [tableData, setTableData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(25);
 
+  const [formData, setFormData] = useState({
+  DepartmentID: "",
+    DepartmentName:"",
+  });
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
+  };
+
+  const handleSubmit = async (event) => {
+    const form = event.currentTarget;
+    if (form.checkValidity() === false) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+    setValidated(true);
+
+    if (form.checkValidity() === true) {
+      try {
+        setIsLoading(true);
+        const apiUrl = "http://localhost:3306/api/department";
+        const response = await fetch(apiUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData),
+        });
+        if (response.ok) console.log("Registration successful!");
+        else console.error("Registration failed:", response.statusText);
+      } catch (error) {
+        console.error("Error submitting data:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+  };
+
+ //last number data
+ useEffect(() => {
+  const fetchLastJobNo = async () => {
+    try {
+      const response = await fetch(
+        "http://localhost:3306/api/department/lastDepartmentId",
+        { method: "GET", headers: { "Content-Type": "application/json" } }
+      );
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Received data:", data); // Log received data for debugging
+        const numericPart = parseInt(data.lastDepartmentId.slice(4), 10);
+        console.log("Parsed numeric part:", numericPart); // Log parsed numeric part
+        if (!isNaN(numericPart)) {
+          const nextJobNo = numericPart + 1;
+          setFormData({
+            ...formData,
+            DepartmentID: `DEPT${nextJobNo.toString().padStart(3, "0")}`,
+          });
+        } else {
+          console.error("Invalid numeric part:", data.lastDepartmentId);
+        }
+      } else {
+        console.error("Failed to fetch last JobNo");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+  fetchLastJobNo();
+}, []);
+
+
+
+  // fetching data to below table
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -48,7 +122,7 @@ const Department = () => {
      
             <div className="New-departmemt">
           <Typography variant="h5" style={{fontWeight:"500"}}>New Department</Typography>
-          <Form >
+          <Form noValidate validated={validated} onSubmit={handleSubmit}>
               <Row className="mb-3">
                 <Form.Group as={Col} md="6">
                   <Form.Label>Department ID</Form.Label>
@@ -59,7 +133,8 @@ const Department = () => {
                       placeholder="Department ID"
                       aria-describedby="inputGroupPrepend"
                       name="DeparmentID"
-              
+                      value={formData.DepartmentID}
+                      onChange={handleInputChange}
                       required
                     />
                     <Form.Control.Feedback type="invalid">
@@ -74,7 +149,8 @@ const Department = () => {
                     type="text"
                     placeholder="Department Name"
                     name="DepartmentName"
-               
+                    value={formData.DepartmentName}
+                    onChange={handleInputChange}
                     required
                   />
                   <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
@@ -91,11 +167,11 @@ const Department = () => {
               >
                 <Button
                   type="submit"
-                  className="btn mt-2"
-               
+                  className="btn mt-2 custom-button"
+                  disabled={isLoading}
                  style={{backgroundColor:"#055f85", borderColor:"#055f85"}}
                 >
-                submit
+                  {isLoading ? "Submitting..." : "Submit"}
                 </Button>
               </div>
             </Form>
@@ -103,13 +179,13 @@ const Department = () => {
 
             <div className="Department-table">
             <div >
-          <Typography variant="h5" style={{fontWeight:"500"}}>Employee Data</Typography>
+          <Typography variant="h5" style={{fontWeight:"500"}}>Department Data</Typography>
           </div>
           <div
             
             style={{ maxHeight: "400px", overflowY: "auto", marginTop:"20px" }}
           >
-            <table className="table table-striped">
+            <table className="table table-striped table-bordered">
               <thead style={{ fontSize: "15px" }}>
                 <tr>
                   <th>Department ID</th>

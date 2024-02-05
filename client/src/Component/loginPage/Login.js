@@ -6,7 +6,7 @@ import "./Login.css";
 import logo from '../../assets/images/Gl-Logo.png'
 
 const Login = () => {
-  const [UserID, setUserID] = useState("");
+  const [EmployeeID, setEmployeeID] = useState("");
   const [Password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -20,30 +20,37 @@ const Login = () => {
       const response = await axios.post(
         "http://localhost:3306/api/userDetails/login",
         {
-          UserID: UserID,
+          EmployeeID: EmployeeID,
           Password: Password,
         },
         {
           headers: {
             "Content-Type": "application/json",
           },
-          
+          withCredentials: true,
         },
       );
 
       const data = response.data;
 
-      if (!data) {
-        setError("Invalid Employee ID or Password");
+      if (response.status === 400 || !data) {
+        console.log("not open");
       } else {
         console.log("login successful");
-        navigate("/");
+        // Store user data in sessionStorage
+        sessionStorage.setItem("userData", JSON.stringify(data.user));
+        // Use navigate to navigate based on user role
+        if (data.user.role === "Admin") {
+          navigate("/newEmployee"); // Navigate to the admin route
+        } else {
+          navigate("/"); // Navigate to the user route
+        }
       }
     } catch (error) {
       setError("Invalid Employee ID or Password");
       console.error(error);
-    } finally {
-      setLoading(false);
+      alert("Invalid Employee ID or Password");
+      window.location.reload(false);
     }
   };
 
@@ -121,8 +128,8 @@ const Login = () => {
                   wrapperClass="mb-4"
                   id="form1"
                   type="text"
-                  value={UserID}
-                  onChange={(e) => setUserID(e.target.value)}
+                  value={EmployeeID}
+                  onChange={(e) => setEmployeeID(e.target.value)}
                 />
                 <label
                   htmlFor="form2"

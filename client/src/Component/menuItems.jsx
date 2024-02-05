@@ -11,7 +11,7 @@ import ViewListIcon from '@mui/icons-material/ViewList';
 
 export const menuItems = [
   { text: "Home", icon: <HomeIcon />, path: "/"},
-  { text: "New Employee", icon: <AppRegistrationIcon/>, path: "/registerpage"},
+  { text: "New Employee", icon: <AppRegistrationIcon/>, path: "/newEmployee"},
   { text: "View Employee", icon: <TableRowsIcon/>, path: "/viewEmployee"},
   { text: "New Department", icon: <ViewListIcon/>, path: "/Department"},
   { text: "Team", icon: <GroupsIcon/>, path: "/team" },

@@ -26,7 +26,7 @@ export default function App() {
         <Route path='/assignment' element={<Assignment/>}></Route>
         <Route path='/task' element={<Task/>}></Route>
         <Route path='/settings' element={<Settings />}></Route>
-        <Route path='/registerpage' element={<RegisterPage/>}></Route>
+        <Route path='/newEmployee' element={<RegisterPage/>}></Route>
         <Route path='/loginpage' element={<Login/>}></Route>
         <Route path='/signuppage' element={<Signup/>}></Route>
         <Route path='/createteam/:EmployeeID' element={<CreateTeam/>}></Route>
