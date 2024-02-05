@@ -12,15 +12,9 @@ router.get("/:EmployeeID_Assigner", workGroupController.getAllDataOfGroup);
 router.post("/", workGroupController.addWorkGroup);
 
 // Update employee group's data
-router.patch(
-  "/update/:WorkGroupID",
-  workGroupController.updateWorkGroup
-);
+router.patch("/update/:WorkGroupID", workGroupController.updateWorkGroup);
 
 // Deleting a employee group
-router.delete(
-  "/delete/:WorkGroupID",
-  workGroupController.deleteWorkGroup
-);
+router.delete("/delete/:WorkGroupID", workGroupController.deleteWorkGroup);
 
 module.exports = router;

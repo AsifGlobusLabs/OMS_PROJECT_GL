@@ -13,21 +13,25 @@ exports.addUserDetails = async (req, res) => {
 
   try {
     const hashedPassword = await bcrypt.hash(Password, 10);
-    const query = "INSERT INTO tb_userdetails (EmployeeID, Role, Username, Password) VALUES (?, ?, ?, ?)";
-    db.query(query, [EmployeeID, Role, Username, hashedPassword], (err, results) => {
-      if (err) {
-        console.error("Error executing query:", err);
-        return res.status(500).json({ error: "Internal server error" });
+    const query =
+      "INSERT INTO tb_userdetails (EmployeeID, Role, Username, Password) VALUES (?, ?, ?, ?)";
+    db.query(
+      query,
+      [EmployeeID, Role, Username, hashedPassword],
+      (err, results) => {
+        if (err) {
+          console.error("Error executing query:", err);
+          return res.status(500).json({ error: "Internal server error" });
+        }
+        console.log("User registered successfully");
+        res.status(201).json({ message: "User registered successfully" });
       }
-      console.log("User registered successfully");
-      res.status(201).json({ message: "User registered successfully" });
-    });
+    );
   } catch (error) {
     console.error("Error hashing password:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 };
-
 
 // getting all user details
 
@@ -68,10 +72,14 @@ exports.updateUserDetails = async (req, res) => {
         res.status(404).json({ error: "Employee not found" });
         return;
       } else if (results.affectedRows > 0 && results.changedRows === 0) {
-        res.status(200).json({ message: "Employee's Data is up to date already" });
+        res
+          .status(200)
+          .json({ message: "Employee's Data is up to date already" });
         return;
       } else {
-        res.status(200).json({ message: "Employee details updated successfully" });
+        res
+          .status(200)
+          .json({ message: "Employee details updated successfully" });
       }
     }
   });
@@ -156,12 +164,11 @@ exports.loginUser = async (req, res) => {
 };
 
 exports.logoutUser = (req, res) => {
-  try{
-  res.clearCookie('token');
-  res.json({ message: "Logout successful" });
+  try {
+    res.clearCookie("token");
+    res.json({ message: "Logout successful" });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal server error" });
   }
 };
-
