@@ -21,6 +21,9 @@ import { menuItems } from "./menuItems"; // Import the menuItems
 
 import logo from '../assets/images/Gl-Logo.png'
 
+
+
+
 const drawerWidth = 240;
 
 const openedMixin = (theme) => ({
@@ -32,7 +35,7 @@ const openedMixin = (theme) => ({
   overflowX: "hidden",
   background: "white",
   color: "white",
-  fontFamily: "sans-serif",
+  
 });
 
 const closedMixin = (theme) => ({
@@ -156,7 +159,7 @@ export default function SideBar() {
                   {item.icon}
                 </ListItemIcon>
                 <ListItemText
-                  primary={<div style={{ fontSize: "1rem", fontFamily: 'Georgia, serif' }}>{item.text}</div>}
+                  primary={<div style={{ fontSize: "1rem", fontFamily: 'Roboto', }}>{item.text}</div>}
                   sx={{
                     opacity: open ? 1 : 0,
                   }}

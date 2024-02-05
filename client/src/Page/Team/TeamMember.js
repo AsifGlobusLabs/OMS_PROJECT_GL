@@ -58,11 +58,11 @@ export default function TeamMember() {
     <Box sx={{ width: '100%',display:'flex' }}>
         <SideBar />
         <Box component="main" sx={{ flexGrow: 1, p: 3 ,marginTop:"55px"}}>
-        <Typography variant="h5" sx={{textAlign:"center", margin:"10px"}}>
+        <Typography variant="h5" >
              Team  Member
         </Typography>
 
-      <Box sx={{ borderBottom: 1, borderColor: 'divider'}}>
+      <Box sx={{ borderBottom: 1, borderColor: 'divider', marginTop:"20px"}}>
         <Tabs value={value} onChange={handleChange} aria-label="basic tabs example" >
         <Tab label="ALL" {...a11yProps(0)} />
           <Tab label="Software" {...a11yProps(1)} />

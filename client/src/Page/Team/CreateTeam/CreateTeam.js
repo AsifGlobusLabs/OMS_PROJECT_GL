@@ -394,7 +394,7 @@ const CreateTeam = () => {
     <Box sx={{ display: "flex" }}>
       <SideBar />
       <Box component="main" sx={{ flexGrow: 1, p: 3, marginTop: "55px" }}>
-        <Typography variant="h5" sx={{ textAlign: "center" }}>
+        <Typography variant="h5" >
           Create Team
         </Typography>
         <div className="createTeam-container">
