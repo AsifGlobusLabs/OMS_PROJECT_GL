@@ -3,11 +3,19 @@ import { Link } from "react-router-dom";
 import { Button, Col, Form, InputGroup, Row } from "react-bootstrap";
 import "./RegisterPage.css";
 import logo from "../../assets/images/Gl-Logo.png";
+import SideBar from "../../Component/SideBar";
+import Box from "@mui/material/Box";
+import { Typography } from "@mui/material";
 
 function RegisterPage() {
   const [validated, setValidated] = useState(false);
   const [departmentData, setDepartmentData] = useState([]);
   const [deginationData, setDeginationData] = useState([]);
+  const [tableData, setTableData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(25);
+
   const [formData, setFormData] = useState({
     EmployeeID: "",
     FirstName: "",
@@ -109,318 +117,336 @@ function RegisterPage() {
     fetchData("http://localhost:3306/api/designation", setDeginationData);
   }, []);
 
+  // fetch Data below table
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const apiUrl = "http://localhost:3306/api/employee";
+        const response = await fetch(apiUrl, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        const result = await response.json();
+        const reversedData = result.reverse();
+        setTableData(reversedData);
+        setFilteredData(result);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
+
+  // Change page
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+
+
   return (
-    <div className="main-container p-0" style={{ width: "100vw" }}>
-      <div
-        className="register-header p-2"
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
-        <div className="logo">
-          <Link to={"/"}>
-            <img src={logo} alt="logo" />
-          </Link>
-        </div>
-        <Link to={"/signuppage"} style={{ textDecoration: "none" }}>
-          <div
-            style={{
-              color: "white",
-              paddingRight: "25px",
-              display: "flex",
-              alignItems: "center",
-            }}
-          >
-            <i
-              className="fa-solid fa-user"
-              style={{ fontSize: "16px", color: "white" }}
-            ></i>
-            <span
-              style={{ fontSize: "12px", marginLeft: "3px", fontWeight: 600 }}
-            >
-              SIGN-UP
-            </span>
-          </div>
-        </Link>
-      </div>
-      <div className="register-container">
-        <div className="register-section">
-          <h4>REGISTRATION FORM</h4>
+    <Box sx={{ display: "flex" }}>
+      <SideBar />
+      <Box component="main" sx={{ flexGrow: 1, p: 3, marginTop: "55px" }}>
+        
+        <div className="Employee-container">    
           <div className="register">
-            <div className="right-register">
-              <div className="right-img"></div>
-            </div>
-            <div className="left-register">
-              <Form noValidate validated={validated} onSubmit={handleSubmit}>
-                <Row className="mb-3">
-                  <Form.Group as={Col} md="12">
-                    <Form.Label>Employee ID</Form.Label>
-                    <InputGroup hasValidation>
-                      <Form.Control
-                        type="text"
-                        placeholder="Employee ID"
-                        aria-describedby="inputGroupPrepend"
-                        name="EmployeeID"
-                        value={formData.EmployeeID}
-                        onChange={handleInputChange}
-                        required
-                      />
-                      <Form.Control.Feedback type="invalid">
-                        Please Enter Employee ID.
-                      </Form.Control.Feedback>
-                    </InputGroup>
-                  </Form.Group>
-                </Row>
-
-                <Row className="mb-3">
-                  <Form.Group as={Col} md="6">
-                    <Form.Label>First name</Form.Label>
+          <div>
+        <Typography variant="h5" style={{fontWeight:"500"}}>New Employee</Typography>
+        </div>
+            <Form noValidate validated={validated} onSubmit={handleSubmit}>
+              <Row className="mb-3">
+                <Form.Group as={Col} md="4">
+                  <Form.Label>Employee ID</Form.Label>
+                  <InputGroup hasValidation>
                     <Form.Control
+                      style={{ fontWeight: "600", fontSize: "15px" }}
                       type="text"
-                      placeholder="First name"
-                      name="FirstName"
-                      value={formData.FirstName}
-                      onChange={handleInputChange}
-                      required
-                    />
-                    <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-                  </Form.Group>
-                  <Form.Group as={Col} md="6">
-                    <Form.Label>Last name</Form.Label>
-                    <Form.Control
-                      type="text"
-                      placeholder="Last name"
-                      name="LastName"
-                      value={formData.LastName}
-                      onChange={handleInputChange}
-                      require
-                    />
-                    <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-                  </Form.Group>
-                </Row>
-
-                <Row className="mb-3">
-                  <Form.Group as={Col} md="6">
-                    <Form.Label>Date of Birth</Form.Label>
-                    <Form.Control
-                      type="date"
-                      placeholder="DOB"
-                      name="DateOfBirth"
-                      value={formData.DateOfBirth}
-                      onChange={handleInputChange}
-                      required
-                    />
-                  </Form.Group>
-
-                  <Form.Group as={Col} md="6">
-                    <Form.Label>Gender</Form.Label>
-                    <InputGroup required>
-                      <Form.Check
-                        inline
-                        label="Male"
-                        name="Gender"
-                        type="radio"
-                        value="M"
-                        checked={formData.Gender === "M"}
-                        onChange={handleInputChange}
-                        isInvalid={validated && !formData.Gender}
-                      />
-                      <Form.Check
-                        inline
-                        label="Female"
-                        name="Gender"
-                        type="radio"
-                        value="F"
-                        checked={formData.Gender === "F"}
-                        onChange={handleInputChange}
-                        isInvalid={validated && !formData.Gender}
-                      />
-                      <Form.Control.Feedback type="invalid">
-                        Please select a gender.
-                      </Form.Control.Feedback>
-                    </InputGroup>
-                  </Form.Group>
-                </Row>
-
-                <Row className="mb-3">
-                  <Form.Group as={Col} md="6">
-                    <Form.Label>Email</Form.Label>
-                    <Form.Control
-                      type="email"
-                      placeholder="Enter Email"
-                      name="Email"
-                      value={formData.Email}
-                      onChange={handleInputChange}
-                      required
-                    />
-                    <Form.Control.Feedback>
-                      Please Enter Email
-                    </Form.Control.Feedback>
-                  </Form.Group>
-                  <Form.Group as={Col} md="6">
-                    <Form.Label>Phone Number</Form.Label>
-                    <Form.Control
-                      type="number"
-                      placeholder="Phone Number"
-                      name="ContactNumber"
-                      value={formData.ContactNumber}
-                      onChange={handleInputChange}
-                      required
-                    />
-                    <Form.Control.Feedback>
-                      Please Enter Phone Number
-                    </Form.Control.Feedback>
-                  </Form.Group>
-                </Row>
-
-                <Row className="mb-3">
-                  <Form.Group as={Col} md="12">
-                    <Form.Label>Address</Form.Label>
-                    <Form.Control
-                      type="text"
-                      placeholder="Address"
-                      name="Address"
-                      value={formData.Address}
+                      placeholder="Employee ID"
+                      aria-describedby="inputGroupPrepend"
+                      name="EmployeeID"
+                      value={formData.EmployeeID}
                       onChange={handleInputChange}
                       required
                     />
                     <Form.Control.Feedback type="invalid">
-                      Please provide a Address.
+                      Please Enter Employee ID.
                     </Form.Control.Feedback>
-                  </Form.Group>
-                </Row>
+                  </InputGroup>
+                </Form.Group>
+                <Form.Group as={Col} md="4">
+                  <Form.Label>First name</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="First name"
+                    name="FirstName"
+                    value={formData.FirstName}
+                    onChange={handleInputChange}
+                    required
+                  />
+                  <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                </Form.Group>
+                <Form.Group as={Col} md="4">
+                  <Form.Label>Last name</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Last name"
+                    name="LastName"
+                    value={formData.LastName}
+                    onChange={handleInputChange}
+                    require
+                  />
+                  <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                </Form.Group>
+              </Row>
 
-                <Row className="mb-3">
-                  <Form.Group as={Col} md="6">
-                    <Form.Label htmlFor="Date">Join Date</Form.Label>
-                    <Form.Control
-                      type="date"
-                      placeholder="Join Date"
-                      name="JoinDate"
-                      value={formData.JoinDate}
+              <Row className="mb-3"></Row>
+
+              <Row className="mb-3">
+                <Form.Group as={Col} md="4">
+                  <Form.Label htmlFor="Date">Join Date</Form.Label>
+                  <Form.Control
+                    type="date"
+                    placeholder="Join Date"
+                    name="JoinDate"
+                    value={formData.JoinDate}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </Form.Group>
+                <Form.Group as={Col} md="4">
+                  <Form.Label>Date of Birth</Form.Label>
+                  <Form.Control
+                    type="date"
+                    placeholder="DOB"
+                    name="DateOfBirth"
+                    value={formData.DateOfBirth}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </Form.Group>
+
+                <Form.Group as={Col} md="4">
+                  <Form.Label>Gender</Form.Label>
+                  <InputGroup required>
+                    <Form.Check
+                      inline
+                      label="Male"
+                      name="Gender"
+                      type="radio"
+                      value="M"
+                      checked={formData.Gender === "M"}
                       onChange={handleInputChange}
-                      required
+                      isInvalid={validated && !formData.Gender}
                     />
-                  </Form.Group>
-
-                  <Form.Group as={Col} md="6">
-                    <Form.Label htmlFor="EmployementStatus">
-                      Employement Status
-                    </Form.Label>
-                    <Form.Select
-                      aria-label="Employment Status"
-                      name="EmploymentStatus"
-                      value={formData.EmploymentStatus}
+                    <Form.Check
+                      inline
+                      label="Female"
+                      name="Gender"
+                      type="radio"
+                      value="F"
+                      checked={formData.Gender === "F"}
                       onChange={handleInputChange}
-                      required
-                    >
-                      <option>select Status</option>
-                      <option>Active</option>
-                      <option>Inactive</option>
-                    </Form.Select>
-                  </Form.Group>
-                </Row>
-                <Row className="mb-3">
-                  <Form.Group as={Col} md="6">
-                    <Form.Label htmlFor="DepartmentID">
-                      Department ID
-                    </Form.Label>
-                    {/* 
-                    <Form.Select
-                      aria-label="Default select example"
-                      name="DepartmentID"
-                      value={formData.DepartmentID}
-                      onChange={handleInputChange}
-                      required
-                    >
-                      <option>Select Department ID</option>
-                      {departmentData.map((item) => (
-                        <option key={item._id}>
-                          {item.DepartmentID} - {item.DepartmentName}
-                        </option>
-                      ))}
-                    </Form.Select> */}
+                      isInvalid={validated && !formData.Gender}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      Please select a gender.
+                    </Form.Control.Feedback>
+                  </InputGroup>
+                </Form.Group>
+              </Row>
 
-                    <Form.Select
-                      aria-label="Default select example"
-                      name="DepartmentID"
-                      value={formData.DepartmentID}
-                      onChange={handleInputChange}
-                      required
-                    >
-                      <option value="">Select Department ID</option>
-                      {departmentData.map((item) => (
-                        <option key={item._id} value={item.DepartmentID}>
-                          {item.DepartmentID} - {item.DepartmentName}
-                        </option>
-                      ))}
-                    </Form.Select>
-
-                    <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-                  </Form.Group>
-
-                  <Form.Group as={Col} md="6">
-                    <Form.Label htmlFor="DesignationID">
-                      Designation ID
-                    </Form.Label>
-
-                    {/* <Form.Select
-                      aria-label="Default select example"
-                      name="DesignationID"
-                      value={formData.DesignationID}
-                      onChange={handleInputChange}
-                      required
-                    >
-                      <option>Select Designation ID</option>
-                      {deginationData.map((item) => (
-                        <option key={item._id}>
-                          {item.DesignationID} - {item.DesignationName}
-                        </option>
-                      ))}
-                    </Form.Select> */}
-
-                    <Form.Select
-                      aria-label="Default select example"
-                      name="DesignationID"
-                      value={formData.DesignationID}
-                      onChange={handleInputChange}
-                      required
-                    >
-                      <option value="">Select Designation ID</option>
-                      {deginationData.map((item) => (
-                        <option key={item._id} value={item.DesignationID}>
-                          {item.DesignationID} - {item.DesignationName}
-                        </option>
-                      ))}
-                    </Form.Select>
-
-                    <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-                  </Form.Group>
-                </Row>
-
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                  }}
-                >
-                  <Button
-                    type="submit"
-                    className="btn btn-primary mt-2"
-                    disabled={isLoading}
+              <Row className="mb-3">
+                <Form.Group as={Col} md="4">
+                  <Form.Label>Email</Form.Label>
+                  <Form.Control
+                    type="email"
+                    placeholder="Enter Email"
+                    name="Email"
+                    value={formData.Email}
+                    onChange={handleInputChange}
+                    required
+                  />
+                  <Form.Control.Feedback>
+                    Please Enter Email
+                  </Form.Control.Feedback>
+                </Form.Group>
+                <Form.Group as={Col} md="4">
+                  <Form.Label>Phone Number</Form.Label>
+                  <Form.Control
+                    type="number"
+                    placeholder="Phone Number"
+                    name="ContactNumber"
+                    value={formData.ContactNumber}
+                    onChange={handleInputChange}
+                    required
+                  />
+                  <Form.Control.Feedback>
+                    Please Enter Phone Number
+                  </Form.Control.Feedback>
+                </Form.Group>
+                <Form.Group as={Col} md="4">
+                  <Form.Label htmlFor="EmployementStatus">
+                    Employement Status
+                  </Form.Label>
+                  <Form.Select
+                    aria-label="Employment Status"
+                    name="EmploymentStatus"
+                    value={formData.EmploymentStatus}
+                    onChange={handleInputChange}
+                    required
                   >
-                    {isLoading ? "Submitting..." : "Submit"}
-                  </Button>
-                </div>
-              </Form>
-            </div>
+                    <option>select Status</option>
+                    <option>Active</option>
+                    <option>Inactive</option>
+                  </Form.Select>
+                </Form.Group>
+              </Row>
+
+              <Row className="mb-3">
+                <Form.Group as={Col} md="4">
+                  <Form.Label>Address</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Address"
+                    name="Address"
+                    value={formData.Address}
+                    onChange={handleInputChange}
+                    required
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    Please provide a Address.
+                  </Form.Control.Feedback>
+                </Form.Group>
+                <Form.Group as={Col} md="4">
+                  <Form.Label htmlFor="DepartmentID">Department ID</Form.Label>
+                  <Form.Select
+                    aria-label="Default select example"
+                    name="DepartmentID"
+                    value={formData.DepartmentID}
+                    onChange={handleInputChange}
+                    required
+                    style={{ fontSize: "15px" }}
+                  >
+                    <option value="">Select Department ID</option>
+                    {departmentData.map((item) => (
+                      <option key={item._id} value={item.DepartmentID}>
+                        {item.DepartmentID} - {item.DepartmentName}
+                      </option>
+                    ))}
+                  </Form.Select>
+
+                  <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                </Form.Group>
+
+                <Form.Group as={Col} md="4">
+                  <Form.Label htmlFor="DesignationID">
+                    Designation ID
+                  </Form.Label>
+
+                  <Form.Select
+                    aria-label="Default select example"
+                    name="DesignationID"
+                    value={formData.DesignationID}
+                    onChange={handleInputChange}
+                    required
+                    style={{ fontSize: "15px" }}
+                  >
+                    <option value="">Select Designation ID</option>
+                    {deginationData.map((item) => (
+                      <option key={item._id} value={item.DesignationID}>
+                        {item.DesignationID} - {item.DesignationName}
+                      </option>
+                    ))}
+                  </Form.Select>
+
+                  <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                </Form.Group>
+              </Row>
+
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "flex-end",
+                  alignItems: "center",
+                }}
+              >
+                <Button
+                  type="submit"
+                  className="btn mt-2 custom-button"
+                  disabled={isLoading}
+                 style={{backgroundColor:"#055f85", borderColor:"#055f85"}}
+                >
+                  {isLoading ? "Submitting..." : "Submit"}
+                </Button>
+              </div>
+            </Form>
           </div>
+
+           <div className="Employee-table">
+            <div >
+          <Typography variant="h5" style={{fontWeight:"500"}}>Employee Data</Typography>
+          </div>
+          <div
+            
+            style={{ maxHeight: "400px", overflowY: "auto", marginTop:"20px" }}
+          >
+            <table className="table table-striped">
+              <thead style={{ fontSize: "15px" }}>
+                <tr>
+                  <th>Employee ID</th>
+                  <th>Name</th>
+                  <th>Designation ID</th>
+                  <th>Department ID</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody style={{ fontSize: "13px" }}>
+                {currentItems.map((item) => (
+                  <tr key={item._id}>
+                    <td>{item.EmployeeID}</td>
+                    <td>
+                      {item.FirstName} {item.LastName}
+                    </td>
+                    <td>{item.DesignationID}</td>
+                    <td>{item.DepartmentID}</td>
+                    <td>
+                    {item.EmploymentStatus=== "Active" ? (
+                      <span style={{color:"#6EC531 "}}>{item.EmploymentStatus}</span>
+                    ):(<span style={{color:"red"}}>{item.EmploymentStatus}</span>)}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Pagination */}
+          <ul className="pagination">
+            {Array.from(
+              { length: Math.ceil(filteredData.length / itemsPerPage) },
+              (_, index) => (
+                <li key={index} className="page-item">
+                  <button
+                    onClick={() => paginate(index + 1)}
+                    className="page-link"
+                  >
+                    {index + 1}
+                  </button>
+                </li>
+              )
+            )}
+          </ul>
         </div>
-      </div>
-    </div>
+        </div>
+      </Box>
+    </Box>
   );
 }
 
