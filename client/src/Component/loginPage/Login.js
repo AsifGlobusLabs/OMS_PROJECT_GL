@@ -32,7 +32,7 @@ const Login = () => {
       );
 
       const data = response.data;
-
+      console.log(data, "datat");
       if (response.status === 400 || !data) {
         console.log("not open");
       } else {
