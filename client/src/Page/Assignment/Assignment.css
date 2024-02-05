@@ -5,13 +5,43 @@
     
 }
 
+.Assignmentcard-container{
+    margin-top: 20px;
+    padding: 10px;
+    border: 1px solid #5c7c77;
+    box-shadow: 0px 3px 5px #5c7c77;
+}
+
 .assignment-card{
     /* background-color: red; */
-    margin-top: 20px;
-    padding: 20px;
+    margin-top: 10px;
+    padding: 10px;
     display: flex;
     align-items: center;
     justify-content: space-around;
+    
+}
+
+.create-assignment{
+    margin-top: 30px;
     border: 1px solid #5c7c77;
     box-shadow: 0px 3px 5px #5c7c77;
+   padding: 10px;
+}
+
+.create-assignment form{
+    margin-top: 10px;
+    padding: 10px;
+}
+
+.assignment-table{
+    margin-top: 30px;
+    border: 1px solid #5c7c77;
+    box-shadow: 0px 3px 5px #5c7c77;
+   padding: 10px;
+}
+
+.assignment-table table{
+    margin-top: 20px;
+    padding: 20px;
 }
