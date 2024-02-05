@@ -15,7 +15,7 @@ export const menuItems = [
   { text: "View Employee", icon: <TableRowsIcon/>, path: "/viewEmployee"},
   { text: "New Department", icon: <ViewListIcon/>, path: "/Department"},
   { text: "Team", icon: <GroupsIcon/>, path: "/team" },
-  { text: "Assignment", icon: <AssignmentIcon />, path: "/assignment" },
+  { text: "New Assignment", icon: <AssignmentIcon />, path: "/assignment" },
   { text: "Task", icon: <AddCircleIcon />, path: "/task" },
   { text: "Settings", icon: <SettingsIcon />, path: "/settings" },
 
