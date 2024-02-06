@@ -324,6 +324,7 @@ function RegisterPage() {
                     Please provide a Address.
                   </Form.Control.Feedback>
                 </Form.Group>
+                
                 <Form.Group as={Col} md="4">
                   <Form.Label htmlFor="DepartmentID">Department ID</Form.Label>
                   <Form.Select
