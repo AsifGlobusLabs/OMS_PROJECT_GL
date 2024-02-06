@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import SideBar from "../../Component/SideBar";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -15,6 +15,47 @@ import AssignmentTable from "./AssignmentTable";
 export default function NewAssignment() {
   const [validated, setValidated] = useState(false);
 
+  const [workgroupEmployees, setWorkgroupEmployees] = useState([]);
+  const [assignedEmployees, setAssignedEmployees] = useState([]);
+  const [userData, setUserData] = useState([]);
+
+
+
+  useEffect(() => {
+    // Fetch user data from sessionStorage
+    const userDataFromSession = JSON.parse(sessionStorage.getItem("userData"));
+    setUserData(userDataFromSession);
+  }, []);
+
+  useEffect(() => {
+    const fetchWorkgroupEmployees = async () => {
+      try {
+        const response = await fetch("http://localhost:3306/api/workGroup/allData");
+        if (!response.ok) {
+          throw new Error("Failed to fetch data");
+        }
+        const data = await response.json();
+        setWorkgroupEmployees(data);
+      } catch (error) {
+        console.error("Error fetching workgroup employees:", error);
+      }
+    };
+
+    fetchWorkgroupEmployees();
+  }, []);
+
+  useEffect(() => {
+    if (userData.EmployeeID && workgroupEmployees.length > 0) {
+      const assigned = workgroupEmployees.filter((employee) => {
+        return userData.EmployeeID === employee.EmployeeID_Assigner;
+      });
+      setAssignedEmployees(assigned);
+    }
+  }, [userData, workgroupEmployees]);
+
+
+console.log(assignedEmployees, "data show")
+
   const handleSubmit = (event) => {
     const form = event.currentTarget;
     if (form.checkValidity() === false) {
@@ -25,8 +66,8 @@ export default function NewAssignment() {
     setValidated(true);
   };
 
-  // to get login data
-  const userData = JSON.parse(sessionStorage.getItem("userData"));
+  // // to get login data
+  // const userData = JSON.parse(sessionStorage.getItem("userData"));
 
   return (
     <Box sx={{ display: "flex" }}>~
@@ -62,7 +103,9 @@ export default function NewAssignment() {
                   />
                   <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                 </Form.Group>
-                <Form.Group as={Col} md="4" controlId="validationCustom02">
+
+
+                {/* <Form.Group as={Col} md="4" controlId="validationCustom02">
                   <Form.Label>Assign To</Form.Label>
                   <Form.Control
                     required
@@ -71,7 +114,30 @@ export default function NewAssignment() {
 
                   />
                   <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                </Form.Group> */}
+                 <Form.Group as={Col} md="4">
+                  <Form.Label htmlFor="DepartmentID">Employee_AssignTo</Form.Label>
+                  <Form.Select
+                    aria-label="Default select example"
+                    name="DepartmentID"
+                    value={userData.DepartmentID}
+                  //  onChange={handleInputChange}
+                    required
+                    style={{ fontSize: "15px" }}
+                  >
+                    <option value="">Select Department ID</option>
+                    {assignedEmployees.map((item) => (
+                      <option key={item._id} value={item.EmployeeID_AssignTo}>
+                        {item.EmployeeID_AssignTo} - {item.Assignee_FirstName}
+                      </option>
+                    ))}
+                  </Form.Select>
+
+                  <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                 </Form.Group>
+
+
+
               </Row>
 
               <Row className="mb-3">
