@@ -25,11 +25,11 @@ export default function NewAssignment() {
     setValidated(true);
   };
 
-  // to get login data 
+  // to get login data
   const userData = JSON.parse(sessionStorage.getItem("userData"));
 
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box sx={{ display: "flex" }}>~
       <SideBar />
       <Box component="main" sx={{ flexGrow: 1, p: 3, marginTop: "55px" }}>
         <div className="assignment-container">
@@ -48,7 +48,7 @@ export default function NewAssignment() {
                     required
                     type="text"
                     placeholder="Assignment ID"
-            
+
                   />
                   <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                 </Form.Group>
@@ -68,7 +68,7 @@ export default function NewAssignment() {
                     required
                     type="text"
                     placeholder="Assign To"
-               
+
                   />
                   <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                 </Form.Group>
@@ -114,7 +114,7 @@ export default function NewAssignment() {
                   id="assignment"
                   placeholder="Give Assignment...."
                   name="task_details"
-                  
+
                 />
                   <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                 </Form.Group>
@@ -130,7 +130,7 @@ export default function NewAssignment() {
                 <Button
                   type="submit"
                   className="btn mt-2 custom-button"
-                 
+
                  style={{backgroundColor:"#055f85", borderColor:"#055f85"}}
                 >
                  submit
@@ -144,3 +144,19 @@ export default function NewAssignment() {
     </Box>
   );
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

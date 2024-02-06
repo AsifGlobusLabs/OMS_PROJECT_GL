@@ -1,49 +1,48 @@
-import React from 'react'
+import React from 'react';
 import "./Assignment.css";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import CardContent from "@mui/material/CardContent";
 import { Typography } from '@mui/material';
 
-
 const AssignmentCard = () => {
+  const statuses = [
+    { status: "Pending", color: "#007bff" },
+    { status: "Progress", color: "#28a745" },
+    { status: "Complete", color: "#dc3545" }
+  ];
+
   return (
     <div className='Assignmentcard-container'>
-    <Typography variant="h5" style={{fontWeight:"500"}}>Assignment Status</Typography>
-    <div className="assignment-card">
- 
-    {["Primary", "Success", "Danger"].map((variant) => (
-      <Card
-        key={variant}
-        sx={{
-          backgroundColor:
-            variant.toLowerCase() === "primary"
-              ? "#007bff"
-              : variant.toLowerCase() === "success"
-              ? "#28a745"
-              : variant.toLowerCase() === "danger"
-              ? "#dc3545"
-              : "inherit",
-          color: "white",
-          width: "16rem",
-          height: "10rem",
-          marginBottom: "16px",
-        }}
-      >
-        <CardHeader title="Header" />
-        <CardContent>
-          <Typography variant="h6" component="div">
-            {variant} Card Title
-          </Typography>
-          <Typography variant="body2">
-            Some quick example text to build
-          </Typography>
-        </CardContent>
-      </Card>
-    ))}
-  </div>
-  </div>
-  )
+      <Typography variant="h5" style={{fontWeight:"500"}}>Assignment Status</Typography>
+      <div className="assignment-card">
+        {statuses.map(({ status, color }) => (
+          <Card
+            key={status}
+            sx={{
+              backgroundColor: color,
+              color: "white",
+              width: "16rem",
+              height: "10rem",
+              marginBottom: "16px",
+            }}
+          >
+            <CardHeader title={status} />
+            <CardContent>
+              <Typography variant="h6" component="div">
+                {status} Card Title
+              </Typography>
+              <Typography variant="body2">
+                {status === "Pending" ? "Some pending tasks" :
+                 status === "Progress" ? "Tasks in progress" :
+                 status === "Complete" ? "Completed tasks" : ""}
+              </Typography>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+    </div>
+  );
 }
 
-export default AssignmentCard
+export default AssignmentCard;

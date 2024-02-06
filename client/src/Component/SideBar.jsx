@@ -1,4 +1,3 @@
-
 // SideBar.js
 import React, { useState } from "react";
 import { styled, useTheme } from "@mui/material/styles";
@@ -9,7 +8,7 @@ import List from "@mui/material/List";
 import CssBaseline from "@mui/material/CssBaseline";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
-import MenuIcon from '@mui/icons-material/Menu';
+import MenuIcon from "@mui/icons-material/Menu";
 
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
@@ -19,10 +18,7 @@ import Header from "./header/Header";
 import { useNavigate, useLocation } from "react-router-dom";
 import { menuItems } from "./menuItems"; // Import the menuItems
 
-import logo from '../assets/images/Gl-Logo.png'
-
-
-
+import logo from "../assets/images/Gl-Logo.png";
 
 const drawerWidth = 240;
 
@@ -35,7 +31,6 @@ const openedMixin = (theme) => ({
   overflowX: "hidden",
   background: "white",
   color: "white",
-  
 });
 
 const closedMixin = (theme) => ({
@@ -102,12 +97,8 @@ export default function SideBar() {
       <Header open={open} handleDrawerOpen={handleDrawerOpen} />
       <Drawer variant="permanent" open={open}>
         <DrawerHeader>
-          <IconButton onClick={handleDrawerClose} style={{ color: "#055f85" }} >
-            {theme.direction === "rtl" ? (
-              <MenuIcon />
-            ) : (
-              <MenuIcon />
-            )}
+          <IconButton onClick={handleDrawerClose} style={{ color: "#055f85" }}>
+            {theme.direction === "rtl" ? <MenuIcon /> : <MenuIcon />}
           </IconButton>
         </DrawerHeader>
         <Divider />
@@ -120,11 +111,10 @@ export default function SideBar() {
               onClick={() => navigate(item.path)}
             >
               <ListItemButton
-               
                 sx={{
                   minHeight: 58,
-                  color:"#055f85",
-                  
+                  color: "#055f85",
+
                   justifyContent: open ? "initial" : "center",
                   px: 2.5,
                   borderBottom: "1px solid #ccc",
@@ -132,11 +122,11 @@ export default function SideBar() {
                   ...(location.pathname === item.path && {
                     background: " #5c7c77",
                     color: "white",
-                    }),
-                    ":hover": {
-                      background: "rgba(68, 117, 109, 0.5)", // Add the desired hover background color
-                      color: "white", // Add the desired hover text color
-                    },
+                  }),
+                  ":hover": {
+                    background: "rgba(68, 117, 109, 0.5)", // Add the desired hover background color
+                    color: "white", // Add the desired hover text color
+                  },
                 }}
               >
                 <ListItemIcon
@@ -144,22 +134,26 @@ export default function SideBar() {
                     minWidth: 0,
                     mr: open ? 3 : "auto",
                     justifyContent: "center",
-                
-                 color:"#055f85",
-                 ...(location.pathname === item.path && {
-                  background: " #5c7c77",
-                  color: "white",
-                  }),
-                  ":hover": {
-                    background: "rgba(68, 117, 109, 0.5)", // Add the desired hover background color
-                    color: "white", // Add the desired hover text color
-                  },
+
+                    color: "#055f85",
+                    ...(location.pathname === item.path && {
+                      background: " #5c7c77",
+                      color: "white",
+                    }),
+                    ":hover": {
+                      background: "rgba(68, 117, 109, 0.5)", // Add the desired hover background color
+                      color: "white", // Add the desired hover text color
+                    },
                   }}
                 >
                   {item.icon}
                 </ListItemIcon>
                 <ListItemText
-                  primary={<div style={{ fontSize: "1rem", fontFamily: 'Roboto', }}>{item.text}</div>}
+                  primary={
+                    <div style={{ fontSize: "1rem", fontFamily: "Roboto" }}>
+                      {item.text}
+                    </div>
+                  }
                   sx={{
                     opacity: open ? 1 : 0,
                   }}

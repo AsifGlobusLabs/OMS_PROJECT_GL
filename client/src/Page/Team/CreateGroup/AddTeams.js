@@ -6,7 +6,7 @@ const AddTeams = ({ sdata, updateAssignedEmployees }) => {
   const [assignedEmployees, setAssignedEmployees] = useState([]);
 
   // console.log(assignedEmployees, "name aali");
-  // console.log(sdata, "data aali");
+   console.log(sdata, "data aali");
 
   useEffect(() => {
     const fetchWorkgroupEmployees = async () => {
