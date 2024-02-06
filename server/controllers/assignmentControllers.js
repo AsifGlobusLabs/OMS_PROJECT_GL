@@ -19,6 +19,10 @@ exports.getAllAssignments = (req, res) => {
 exports.addAssignment = (req, res) => {
   const newassignment = req.body;
 
+  // Set default values if not provided
+  newassignment.AssignmentStatus = newassignment.AssignmentStatus || "Pending";
+  newassignment.Type = newassignment.Type || "A";
+
   const query = "INSERT INTO tb_assignment SET ?";
   db.query(query, newassignment, (err, results) => {
     if (err) {
@@ -29,6 +33,7 @@ exports.addAssignment = (req, res) => {
     }
   });
 };
+
 
 
 // // getting latest or last assignment id

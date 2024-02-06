@@ -37,6 +37,8 @@ function RegisterPage() {
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
+
+
   const handleSubmit = async (event) => {
     const form = event.currentTarget;
     if (form.checkValidity() === false) {
@@ -63,6 +65,7 @@ function RegisterPage() {
       }
     }
   };
+
 
   //last number data
   useEffect(() => {
@@ -95,6 +98,8 @@ function RegisterPage() {
     };
     fetchLastJobNo();
   }, []);
+
+
 
   // Department and Designation DATA GET
   useEffect(() => {
@@ -324,6 +329,7 @@ function RegisterPage() {
                     Please provide a Address.
                   </Form.Control.Feedback>
                 </Form.Group>
+
                 <Form.Group as={Col} md="4">
                   <Form.Label htmlFor="DepartmentID">Department ID</Form.Label>
                   <Form.Select
