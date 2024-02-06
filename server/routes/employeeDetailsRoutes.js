@@ -9,7 +9,6 @@ const employeeController = require("../controllers/employeeDetailsController");
 router.get("/", employeeController.getAllEmployees);
 
 // Get all data of employees
-// router.get("/allData",auth,employeeController.getAllDataOfEmployees);
 
 router.get("/allData", employeeController.getAllDataOfEmployees);
 
