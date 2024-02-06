@@ -120,6 +120,8 @@ export default function NewAssignment() {
 
       const responseData = await response.json();
       console.log("Response:", responseData);
+      form.reset();
+
     } catch (error) {
       console.error("Error:", error);
     }
