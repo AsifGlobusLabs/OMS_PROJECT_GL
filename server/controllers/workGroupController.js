@@ -67,13 +67,9 @@ exports.getAllworkGroupEmployeesData = (req, res) => {
       return res.status(500).json({ error: "Internal Server Error" });
     }
     res.status(200).json(results);
-    console.log(results);
+    // console.log(results);
   });
 };
-
-
-
-
 
 
 // Getting all work group's data
