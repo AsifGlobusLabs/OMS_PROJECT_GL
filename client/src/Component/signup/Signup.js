@@ -25,7 +25,7 @@ import TextField from "@mui/material/TextField";
 const customTheme = createTheme({
   palette: {
     background: {
-      default: "whitesmoke", // Change the default background color here
+      default: '#c3ddd9',
     },
   },
 });

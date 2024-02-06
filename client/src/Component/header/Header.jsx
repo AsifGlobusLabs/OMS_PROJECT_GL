@@ -234,7 +234,7 @@ export default function Header({ open, handleDrawerOpen }) {
   const id = isOpen ? "simple-popper" : undefined;
 
   const userData = JSON.parse(sessionStorage.getItem("userData"));
-  console.log(userData);
+  // console.log(userData);
 
   const handleLogout = async (e) => {
     e.preventDefault();
@@ -252,7 +252,8 @@ export default function Header({ open, handleDrawerOpen }) {
       if (response.ok) {
         // Clear user data from sessionStorage
         sessionStorage.removeItem("userData");
-        navigate("/");
+        localStorage.removeItem("token")
+        navigate("/loginpage");
         alert("logout successful");
       } else {
         console.log("logout failed");

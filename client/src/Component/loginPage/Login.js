@@ -24,7 +24,7 @@ import axios from "axios";
 const customTheme = createTheme({
   palette: {
     background: {
-      default: 'whitesmoke', // Change the default background color here
+      default: '#c3ddd9',
     },
   },
 });
@@ -75,11 +75,11 @@ export default function Login() {
         // Store user data in sessionStorage
         sessionStorage.setItem("userData", JSON.stringify(data.user));
         // Use navigate to navigate based on user role
-        if (data.user.role === "Admin") {
-          navigate("/newEmployee"); // Navigate to the admin route
-        } else {
-          navigate("/"); // Navigate to the user route
-        }
+        localStorage.clear();
+        localStorage.setItem("token", JSON.stringify(data.token));
+        
+          navigate("/"); 
+       
       }
     } catch (error) {
       setError("Invalid Employee ID or Password");
@@ -93,7 +93,7 @@ export default function Login() {
   return (
     <ThemeProvider theme={customTheme} >
       <HeaderSignIn />
-      <Container component="main" maxWidth="xs" style={{backgroundColor:'whitesmoke'}}>
+      <Container component="main" maxWidth="xs" >
         <CssBaseline />
         <Box
           sx={{
