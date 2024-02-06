@@ -314,7 +314,7 @@ export default function Header({ open, handleDrawerOpen }) {
                   <ListItem disablePadding>
                     <ListItemButton>
                       <ListItemText
-                       primary="please sign-in..."
+                       primary="please Sign-in..."
                        sx={{ color: "white" }}
                       />
                     </ListItemButton>
