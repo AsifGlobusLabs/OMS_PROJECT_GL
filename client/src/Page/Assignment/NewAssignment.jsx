@@ -15,21 +15,72 @@ import AssignmentTable from "./AssignmentTable";
 export default function NewAssignment() {
   const [validated, setValidated] = useState(false);
   const [workGroupData, setWorkGroupData] = useState([]);
-  console.log(workGroupData, "heklsj");
+  // console.log(workGroupData, "heklsj");
 
   const [workgroupEmployees, setWorkgroupEmployees] = useState([]);
   const [assignedEmployees, setAssignedEmployees] = useState([]);
   const [userData, setUserData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [formData, setFormData] = useState({
+     AssignmentID: "",
+     EmployeeID: userData.EmployeeID,
+     EmployeeID_AssignTo:"",
+     Assignment_Description:"",
+     AssignDate:"",
+     DeadlineDate:"",
+     AssignmentPriority:"",
+    });
 
 
-  console.log(assignedEmployees, "data show")
-  console.log(userData, "user data shoew")
+    const handleInputChange = (e) => {
+      const { name, value } = e.target;
+      setFormData((prevData) => ({ ...prevData, [name]: value }));
+    };
+  
+
+    const handleSubmit = async (event) => {
+      const form = event.currentTarget;
+      if (form.checkValidity() === false) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+      setValidated(true);
+  
+      if (form.checkValidity() === true) {
+        try {
+          setIsLoading(true);
+          const apiUrl = "http://localhost:3306/api/assignmentDetails";
+          const response = await fetch(apiUrl, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(formData),
+          });
+          if (response.ok) console.log("Registration successful!");
+          else console.error("Registration failed:", response.statusText);
+        } catch (error) {
+          console.error("Error submitting data:", error);
+        } finally {
+          setIsLoading(false);
+        }
+      }
+    };
+
+  // console.log(assignedEmployees, "data show")
+  // console.log(userData, "user data shoew")
 
   useEffect(() => {
-    // Fetch user data from sessionStorage
-    const userDataFromSession = JSON.parse(sessionStorage.getItem("userData"));
-    setUserData(userDataFromSession);
+    const userData = JSON.parse(sessionStorage.getItem("userData")) || {};
+    setUserData(userData);
+    // Set EmployeeID in formData after userData is fetched
+    setFormData((prevData) => ({
+      ...prevData,
+      EmployeeID: userData.EmployeeID || "",
+    
+    }));
+    
   }, []);
+
 
   useEffect(() => {
     const fetchWorkgroupEmployees = async () => {
@@ -60,16 +111,6 @@ export default function NewAssignment() {
 
 console.log(assignedEmployees, "data show")
 
-  const handleSubmit = (event) => {
-    const form = event.currentTarget;
-    if (form.checkValidity() === false) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-
-    setValidated(true);
-  };
-
   // // to get login data
   // const userData = JSON.parse(sessionStorage.getItem("userData"));
 
@@ -95,6 +136,40 @@ console.log(assignedEmployees, "data show")
     fetchData();
   }, []);
 
+
+  //last number data
+ useEffect(() => {
+  const fetchLastJobNo = async () => {
+    try {
+      const response = await fetch(
+        "http://localhost:3306/api/assignmentDetails/lastAssignmentId",
+        { method: "GET", headers: { "Content-Type": "application/json" } }
+      );
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Received data:", data); // Log received data for debugging
+        const numericPart = parseInt(data.lastAssignmentId.slice(3), 10);
+        console.log("Parsed numeric part:", numericPart); // Log parsed numeric part
+        if (!isNaN(numericPart)) {
+          const nextJobNo = numericPart + 1;
+          setFormData({
+            ...formData,
+            AssignmentID: `AS${nextJobNo.toString().padStart(3, "0")}`,
+          });
+        } else {
+          console.error("Invalid numeric part:", data.lastAssignmentId);
+        }
+      } else {
+        console.error("Failed to fetch last JobNo");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+  fetchLastJobNo();
+}, []);
+
+
   return (
     <Box sx={{ display: "flex" }}>
       <SideBar />
@@ -115,17 +190,24 @@ console.log(assignedEmployees, "data show")
                     required
                     type="text"
                     placeholder="Assignment ID"
+                    name="AssignmentID"
+                    value={formData.AssignmentID}
+                    onChange={handleInputChange}
                   />
                   <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                 </Form.Group>
+
                 <Form.Group as={Col} md="4" controlId="validationCustom02">
                   <Form.Label>Employee ID</Form.Label>
                   <Form.Control
                     required
                     type="text"
                     placeholder="Employee ID"
-                    value={userData.EmployeeID}
+                    name="EmployeeID"
+                    value={formData.EmployeeID}
+                    onChange={handleInputChange}
                   />
+                
                   <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                 </Form.Group>
 
@@ -147,16 +229,16 @@ console.log(assignedEmployees, "data show")
                   <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                 </Form.Group> */}
                  <Form.Group as={Col} md="4">
-                  <Form.Label htmlFor="DepartmentID">Employee_AssignTo</Form.Label>
+                  <Form.Label htmlFor="EmployeeID_AssignTo">Employee_AssignTo</Form.Label>
                   <Form.Select
                     aria-label="Default select example"
-                    name="DepartmentID"
-                    value={userData.DepartmentID}
-                  //  onChange={handleInputChange}
+                    name="EmployeeID_AssignTo"
+              
+                   onChange={handleInputChange}
                     required
                     style={{ fontSize: "15px" }}
                   >
-                    <option value="">Select Department ID</option>
+                    <option value="">Select EmployeeID AssignTo</option>
                     {assignedEmployees.map((item) => (
                       <option key={item._id} value={item.EmployeeID_AssignTo}>
                         {item.EmployeeID_AssignTo} - {item.Assignee_FirstName}
@@ -172,26 +254,36 @@ console.log(assignedEmployees, "data show")
               </Row>
 
               <Row className="mb-3">
-                <Form.Group as={Col} md="4" controlId="validationCustom03">
+              <Form.Group as={Col} md="4">
                   <Form.Label>Assign Date</Form.Label>
-                  <Form.Control type="date" placeholder="City" required />
-                  <Form.Control.Feedback type="invalid">
-                    Please provide Assign Date
-                  </Form.Control.Feedback>
+                  <Form.Control
+                    type="date"
+                    placeholder="assignDate"
+                    name="AssignDate"
+                    value={formData.AssignDate}
+                    onChange={handleInputChange}
+                    required
+                  />
                 </Form.Group>
 
-                <Form.Group as={Col} md="4" controlId="validationCustom04">
+                <Form.Group as={Col} md="4">
                   <Form.Label>Deadline Date</Form.Label>
-                  <Form.Control type="date" placeholder="State" required />
+                  <Form.Control type="date" placeholder="Deadline Date" name="DeadlineDate" required 
+                  value={formData.DeadlineDate}
+                  onChange={handleInputChange}
+                  />
                   <Form.Control.Feedback type="invalid">
                     Please provide DeadlineDate
                   </Form.Control.Feedback>
                 </Form.Group>
 
-                <Form.Group as={Col} md="4" controlId="validationCustom05">
+                <Form.Group as={Col} md="4" controlId="AssignmentPriority">
                   <Form.Label>Priority</Form.Label>
 
-                  <Form.Select type="text" placeholder="Priority" required>
+                  <Form.Select type="text" placeholder="Priority"  name="AssignmentPriority" required
+                  value={formData.AssignmentPriority}
+                  onChange={handleInputChange}
+                  >
                     <option>Select priority</option>
                     <option>High</option>
                     <option>Medium</option>
@@ -210,7 +302,9 @@ console.log(assignedEmployees, "data show")
                     className="form-control"
                     id="assignment"
                     placeholder="Give Assignment...."
-                    name="task_details"
+                    name="Assignment_Description"
+                    value={formData.Assignment_Description}
+                    onChange={handleInputChange}
                   />
                   <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                 </Form.Group>
@@ -226,9 +320,10 @@ console.log(assignedEmployees, "data show")
                 <Button
                   type="submit"
                   className="btn mt-2 custom-button"
-                  style={{ backgroundColor: "#055f85", borderColor: "#055f85" }}
+                  disabled={isLoading}
+                 style={{backgroundColor:"#055f85", borderColor:"#055f85"}}
                 >
-                  submit
+                  {isLoading ? "Submitting..." : "Submit"}
                 </Button>
               </div>
             </Form>
