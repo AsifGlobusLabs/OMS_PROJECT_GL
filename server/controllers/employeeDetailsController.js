@@ -25,7 +25,8 @@ exports.getAllDataOfEmployees = (req, res) => {
       res.status(500).json({ error: "Internal Server Error" });
       return;
     }
-    res.status(200).json(results);
+    const userEmployees = results.filter(employee => employee.Role === 'User');
+    res.status(200).json(userEmployees);
   });
 };
 
