@@ -92,13 +92,13 @@ export default function NewAssignment() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const form = event.currentTarget;
-
+  
     if (form.checkValidity() === false) {
       event.stopPropagation();
       setValidated(true);
       return;
     }
-
+  
     try {
       const response = await fetch(
         "http://localhost:3306/api/assignmentDetails",
@@ -113,15 +113,31 @@ export default function NewAssignment() {
           }),
         }
       );
-
+  
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
-
+  
       const responseData = await response.json();
       console.log("Response:", responseData);
-      form.reset();
+  
+      // Reset the form data after successful submission
+      setAssignmentData({
+        AssignmentID: "",
+        EmployeeID: "",
+        EmployeeID_AssignTo: "",
+        AssignDate: "",
+        DeadlineDate: "",
+        AssignmentPriority: "",
+        Assignment_Description: "",
+      });
+  
+      // Reset form validation
+      setValidated(false);
+      window.alert("Form submitted successfully!");
 
+       // Reload the page
+    window.location.reload();
     } catch (error) {
       console.error("Error:", error);
     }
