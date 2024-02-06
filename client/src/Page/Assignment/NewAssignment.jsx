@@ -15,7 +15,7 @@ import AssignmentTable from "./AssignmentTable";
 export default function NewAssignment() {
   const [validated, setValidated] = useState(false);
   const [workGroupData, setWorkGroupData] = useState([]);
-  console.log(workGroupData,"heklsj");
+  console.log(workGroupData, "heklsj");
 
   const handleSubmit = (event) => {
     const form = event.currentTarget;
@@ -30,7 +30,7 @@ export default function NewAssignment() {
   // to get login data
   const userData = JSON.parse(sessionStorage.getItem("userData"));
 
-  // get data in assignTo 
+  // get data in assignTo
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -52,7 +52,6 @@ export default function NewAssignment() {
     fetchData();
   }, []);
 
-
   return (
     <Box sx={{ display: "flex" }}>
       <SideBar />
@@ -73,7 +72,6 @@ export default function NewAssignment() {
                     required
                     type="text"
                     placeholder="Assignment ID"
-
                   />
                   <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                 </Form.Group>
@@ -83,31 +81,27 @@ export default function NewAssignment() {
                     required
                     type="text"
                     placeholder="Employee ID"
-                   value={userData.EmployeeID}
+                    value={userData.EmployeeID}
                   />
                   <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                 </Form.Group>
 
-
                 <Form.Group as={Col} md="4" controlId="validationCustom02">
                   <Form.Label>Assign To</Form.Label>
 
-                  <Form.Select
-                    required
-                    type="text"
-                    placeholder="Assign To"
-
-                  >
+                  <Form.Select required type="text" placeholder="Assign To">
                     <option value="">Select Assign To</option>
-                    {workGroupData.map((item) => (
-                      <option key={item._id} >
-                        {item.EmployeeID_AssignTo}
-                      </option>
-                    ))}
+
+                    {workGroupData.map((item) =>
+                      item.EmployeeID_Assigner === userData.EmployeeID ? (
+                        <option key={item._id}>
+                          {item.EmployeeID_AssignTo}
+                        </option>
+                      ) : null
+                    )}
                   </Form.Select>
                   <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                 </Form.Group>
-
               </Row>
 
               <Row className="mb-3">
@@ -115,7 +109,7 @@ export default function NewAssignment() {
                   <Form.Label>Assign Date</Form.Label>
                   <Form.Control type="date" placeholder="City" required />
                   <Form.Control.Feedback type="invalid">
-                  Please provide Assign Date
+                    Please provide Assign Date
                   </Form.Control.Feedback>
                 </Form.Group>
 
@@ -131,27 +125,26 @@ export default function NewAssignment() {
                   <Form.Label>Priority</Form.Label>
 
                   <Form.Select type="text" placeholder="Priority" required>
-                  <option>Select priority</option>
+                    <option>Select priority</option>
                     <option>High</option>
                     <option>Medium</option>
-                    <option >Low</option>
-                    </Form.Select>
+                    <option>Low</option>
+                  </Form.Select>
                   <Form.Control.Feedback type="invalid">
                     Please provide a priority.
                   </Form.Control.Feedback>
                 </Form.Group>
               </Row>
               <Row className="mb-3">
-              <Form.Group as={Col} md="12" controlId="validationCustom01">
+                <Form.Group as={Col} md="12" controlId="validationCustom01">
                   <Form.Label>Assignment Description</Form.Label>
                   <textarea
-                  type="text"
-                  className="form-control"
-                  id="assignment"
-                  placeholder="Give Assignment...."
-                  name="task_details"
-
-                />
+                    type="text"
+                    className="form-control"
+                    id="assignment"
+                    placeholder="Give Assignment...."
+                    name="task_details"
+                  />
                   <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                 </Form.Group>
               </Row>
@@ -166,33 +159,16 @@ export default function NewAssignment() {
                 <Button
                   type="submit"
                   className="btn mt-2 custom-button"
-
-                 style={{backgroundColor:"#055f85", borderColor:"#055f85"}}
+                  style={{ backgroundColor: "#055f85", borderColor: "#055f85" }}
                 >
-                 submit
+                  submit
                 </Button>
               </div>
-       </Form>
+            </Form>
           </div>
-          <AssignmentTable/>
+          <AssignmentTable />
         </div>
       </Box>
     </Box>
   );
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
