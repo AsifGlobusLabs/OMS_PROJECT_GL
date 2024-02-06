@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import SideBar from "../../Component/SideBar";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -14,6 +14,8 @@ import AssignmentTable from "./AssignmentTable";
 
 export default function NewAssignment() {
   const [validated, setValidated] = useState(false);
+  const [workGroupData, setWorkGroupData] = useState([]);
+  console.log(workGroupData,"heklsj");
 
   const handleSubmit = (event) => {
     const form = event.currentTarget;
@@ -28,8 +30,31 @@ export default function NewAssignment() {
   // to get login data
   const userData = JSON.parse(sessionStorage.getItem("userData"));
 
+  // get data in assignTo 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const apiUrl = "http://localhost:3306/api/workGroup/allData";
+        const response = await fetch(apiUrl, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        const result = await response.json();
+        setWorkGroupData(result);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+
   return (
-    <Box sx={{ display: "flex" }}>~
+    <Box sx={{ display: "flex" }}>
       <SideBar />
       <Box component="main" sx={{ flexGrow: 1, p: 3, marginTop: "55px" }}>
         <div className="assignment-container">
@@ -62,16 +87,27 @@ export default function NewAssignment() {
                   />
                   <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                 </Form.Group>
+
+
                 <Form.Group as={Col} md="4" controlId="validationCustom02">
                   <Form.Label>Assign To</Form.Label>
-                  <Form.Control
+
+                  <Form.Select
                     required
                     type="text"
                     placeholder="Assign To"
 
-                  />
+                  >
+                    <option value="">Select Assign To</option>
+                    {workGroupData.map((item) => (
+                      <option key={item._id} >
+                        {item.EmployeeID_AssignTo}
+                      </option>
+                    ))}
+                  </Form.Select>
                   <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                 </Form.Group>
+
               </Row>
 
               <Row className="mb-3">
