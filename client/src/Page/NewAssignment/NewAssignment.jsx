@@ -16,7 +16,7 @@ export default function NewAssignment() {
     AssignmentID: "",
     EmployeeID: "",
     EmployeeID_AssignTo: "",
-    AssignDate: "",
+    AssignDate: new Date().toISOString().split("T")[0],
     DeadlineDate: "",
     AssignmentPriority: "",
     Assignment_Description: "",
@@ -29,6 +29,7 @@ export default function NewAssignment() {
     setUserData(userDataFromSession);
   }, []);
 
+  // assignedTo data 
   useEffect(() => {
     const fetchAssignedEmployees = async () => {
       try {
@@ -53,6 +54,7 @@ export default function NewAssignment() {
     }
   }, [userData]);
 
+  // auto generated assignment no 
   useEffect(() => {
     const fetchLastAssignmentId = async () => {
       try {
