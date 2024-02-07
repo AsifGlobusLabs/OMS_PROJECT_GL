@@ -9,6 +9,10 @@ router.get("/", assignmentController.getAllAssignments);
 router.post("/", assignmentController.addAssignment);
 
 
+// add user details Data (Mitesh)
+router.post("/data", assignmentController.addAssignmentData );
+
+
 // all data show with name
 router.get('/allData', assignmentController.getAssigmentEmployeesData);
 

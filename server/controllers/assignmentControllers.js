@@ -64,6 +64,30 @@ exports.addAssignment = (req, res) => {
   });
 };
 
+
+
+exports.addAssignmentData = (req, res) => {
+  const newassignment = req.body;
+
+  // Set default values if not provided
+  newassignment.AssignmentStatus = newassignment.AssignmentStatus || "Pending";
+ 
+  const query = "INSERT INTO tb_assignment SET ?";
+  db.query(query, newassignment, (err, results) => {
+    if (err) {
+      console.error("Error executing query:", err);
+      res.status(500).json({ error: "Internal Server Error" });
+    } else {
+      res.status(200).json({ message: "Assignment added successfully" });
+    }
+  });
+};
+
+
+
+
+
+
 // // getting latest or last assignment id
 
 exports.getLastAssignmentId = (req, res) => {
