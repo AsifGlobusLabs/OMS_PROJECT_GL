@@ -3,10 +3,14 @@ const router = express.Router();
 const assignmentController = require("../controllers/assignmentControllers");
 
 // get all user details
-router.get("/", assignmentController.getAllAssignments);
+router.get("/", assignmentController.getAllAssignments); 
 
 // add user details
 router.post("/", assignmentController.addAssignment);
+
+
+// all data show with name
+router.get('/allData', assignmentController.getAssigmentEmployeesData);
 
 // get all user details
 router.get("/lastAssignmentId", assignmentController.getLastAssignmentId);
