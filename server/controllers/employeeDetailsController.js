@@ -128,7 +128,7 @@ exports.updateEmployee = (req, res) => {
       if (results.affectedRows === 0) {
         res.status(404).json({ error: "Employee not found" });
         return;
-      } else if (results.affectedRows > 0 && result.changedRows === 0) {
+      } else if (results.affectedRows > 0 && results.changedRows === 0) {
         res.status(200).json("Data is up to date already");
         return;
       } else {

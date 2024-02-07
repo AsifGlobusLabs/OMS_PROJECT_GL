@@ -1,6 +1,8 @@
 const db = require("../db");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const {generateToken} = require("../midderware/auth");
+const {sendEmail} = require("../emailServices");
 
 // inserting user details
 
@@ -241,3 +243,51 @@ exports.logoutUser = (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
+
+
+exports.forgetPassword = (req, res) => {
+  const email1 = req.body;
+  const email = email1.Email;
+
+  const checkEmailQuery = 'SELECT * FROM tb_employee WHERE email = ?';
+  db.query(checkEmailQuery, email, (err, results) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ message: 'Internal Server Error' });
+    }
+    console.log(results);
+
+    if (results.length === 0) {
+      return res.status(404).json({ message: 'Email not found' });
+    }
+
+    const token = generateToken(email);
+    console.log(token);
+
+    sendEmail(email, token)
+      .then(() => res.json({ message: 'Token sent to email' }))
+      .catch((error) => {
+        console.error(error);
+        res.status(500).json({ message: 'Error sending email' });
+      });
+  });
+};
+
+
+
+
+exports.resetPassword = (req, res) => {
+  const { token, newPassword } = req.body;
+
+  const verifyUser = jwt.verify(token, process.env.SECRET_KEY);
+  const updatePasswordQuery = 'UPDATE tb_userdetails SET Password = ? WHERE email = ?';
+    db.query(updatePasswordQuery, [newPassword, verifyUser.email], (err, results) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).json({ message: 'Internal Server Error' });
+      }
+
+      res.json({ message: 'Password reset successfully' });
+    });
+  };

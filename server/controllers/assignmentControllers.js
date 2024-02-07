@@ -49,7 +49,7 @@ exports.getLastAssignmentId = (req, res) => {
       return;
     }
     if (results[0].maxID === null) {
-      const AssignmentId = results[0].maxID="AS001";
+      const AssignmentId = results[0].maxID="AS000";
       res.status(200).json({lastAssignmentId: AssignmentId})
       return;
     }
