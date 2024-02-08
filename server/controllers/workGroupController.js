@@ -1,5 +1,64 @@
 const db = require("../db");
 
+// Inserting multiple work group with auto generated workGroupID
+
+// Function to get the highest work group ID from the database
+function getHighestWorkGroupID(callback) {
+  const sql = 'SELECT MAX(CAST(SUBSTRING(WorkGroupID, 3) AS SIGNED)) AS maxID FROM tb_workGroup';
+
+  db.query(sql, (error, results) => {
+    if (error) {
+      console.error('Error getting highest work group ID:', error);
+      callback(error, null);
+    } else {
+      const maxID = results[0].maxID || 0; 
+      callback(null, maxID);
+    }
+  });
+}
+
+// Function to generate workGroup IDs like WG001, WG002, ...
+function generateWorkGroupID(index) {
+  const paddedIndex = String(index).padStart(3, '0'); // Ensure three-digit padding
+  return `WG${paddedIndex}`;
+}
+
+exports.insertMultipleWorkGroup = (req, res) => {
+  const newWorkGroups = req.body; 
+
+  // Get the highest existing workGroup ID
+  getHighestWorkGroupID((error, maxID) => {
+    if (error) {
+      res.status(500).json({ error: 'Internal Server Error' });
+      return;
+    }
+
+    // Define the SQL query
+    const sql = 'INSERT INTO tb_workGroup (WorkGroupID, EmployeeID_Assigner,EmployeeID_AssignTo,DepartmentID_AssignTo,CreatedDate,CreatedBy) VALUES ?';
+
+    const values = newWorkGroups.map((workGroup, index) => [
+      generateWorkGroupID(maxID + index + 1), 
+      workGroup.EmployeeID_Assigner,
+      workGroup.EmployeeID_AssignTo,
+      workGroup.DepartmentID_AssignTo,
+      workGroup.CreatedDate,
+      workGroup.CreatedBy
+    ]);
+
+    // Execute the query
+    db.query(sql, [values], (error, results) => {
+      if (error) {
+        console.error('Error inserting work groups:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+      } else {
+        res.status(200).json({ message: 'Work group inserted successfully' });
+      }
+    });
+  });
+}
+
+
+
 // inserting work group data
 
 exports.addWorkGroup = (req, res) => {

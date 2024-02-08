@@ -2,27 +2,31 @@ const express = require("express");
 const router = express.Router();
 const assignmentController = require("../controllers/assignmentControllers");
 
-// get all user details
+// get all Assignment
 router.get("/", assignmentController.getAllAssignments); 
 
-// add user details
+// add Assignment
 router.post("/", assignmentController.addAssignment);
 
-
-// add user details Data (Mitesh)
+// add Assignment Data (Mitesh)
 router.post("/data", assignmentController.addAssignmentData );
 
-
-// all data show with name
+// all data show with name(Mitesh)
 router.get('/allData', assignmentController.getAssigmentEmployeesData);
 
-// get all user details
+// get last assignment id
 router.get("/lastAssignmentId", assignmentController.getLastAssignmentId);
 
-// update user details
+// update assignment
 router.patch("/update/:AssignmentID", assignmentController.updateAssignment);
 
-// delete user details
+// update assignment status to progress
+router.patch("/:AssignmentID/progress", assignmentController.progressAssignmentStatus);
+
+// update assignment status to completed
+router.patch("/:AssignmentID/completed", assignmentController.completedAssignmentStatus);
+
+// delete assignment
 router.delete("/delete/:AssignmentID", assignmentController.deleteAssignment);
 
 

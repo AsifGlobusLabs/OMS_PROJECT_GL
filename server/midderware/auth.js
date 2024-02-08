@@ -44,8 +44,8 @@ const authenticateUser = async (req, res, next) => {
     }
 };
 
-function generateToken(email) {
-    return jwt.sign({ email }, process.env.SECRET_KEY, { expiresIn: '1h' });
+function generateToken(email,Password_resetUsed) {
+    return jwt.sign({ email,Password_resetUsed }, process.env.SECRET_KEY, { expiresIn: '15h' });
   }
 
 module.exports = {generateToken , authenticateUser};
