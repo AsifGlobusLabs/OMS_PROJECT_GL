@@ -8,7 +8,7 @@ import { Typography } from '@mui/material';
 const AssignmentCard = () => {
   const statuses = [
     { status: "Pending", color: "#dc3545" },
-    { status: "Progress", color: "#007bff" },
+    { status: "Progress", color: "orange" },
     { status: "Complete", color: "#28a745" }
   ];
 
