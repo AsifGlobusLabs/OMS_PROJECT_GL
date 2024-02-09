@@ -16,6 +16,9 @@ router.get("/:EmployeeID_Assigner", workGroupController.getAllDataOfGroup);
 // Add a new employee group
 router.post("/", workGroupController.addWorkGroup);
 
+// Add a new employee group
+router.post("/multiple", workGroupController.insertMultipleWorkGroup);
+
 // Update employee group's data
 router.patch("/update/:WorkGroupID", workGroupController.updateWorkGroup);
 

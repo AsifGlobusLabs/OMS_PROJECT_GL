@@ -247,23 +247,19 @@ exports.logoutUser = (req, res) => {
 
 
 exports.forgetPassword = (req, res) => {
-  const email1 = req.body;
-  const email = email1.Email;
+  const email = req.body.email;
 
-  const checkEmailQuery = 'SELECT * FROM tb_employee WHERE email = ?';
+  const checkEmailQuery = 'SELECT tb_employee.*, tb_userdetails.Password_resetUsed FROM tb_employee JOIN tb_userdetails ON tb_employee.EmployeeID = tb_userdetails.EmployeeID WHERE tb_employee.email = ?;'
   db.query(checkEmailQuery, email, (err, results) => {
     if (err) {
       console.error(err);
       return res.status(500).json({ message: 'Internal Server Error' });
     }
-    console.log(results);
-
     if (results.length === 0) {
       return res.status(404).json({ message: 'Email not found' });
     }
-
-    const token = generateToken(email);
-    console.log(token);
+    const Password_resetUsed = results[0].Password_resetUsed
+    const token = generateToken(email,Password_resetUsed);
 
     sendEmail(email, token)
       .then(() => res.json({ message: 'Token sent to email' }))
@@ -275,19 +271,46 @@ exports.forgetPassword = (req, res) => {
 };
 
 
+exports.resetPassword = async (req, res) => {
+  try {
+    const token = req.params.token;
+    const newPassword = req.body.newPassword;
 
+    // Hash the new password
+    const updatedPassword = await bcrypt.hash(newPassword, 10);
 
-exports.resetPassword = (req, res) => {
-  const { token, newPassword } = req.body;
+    // Verify the user using the token
+    const verifyUser = jwt.verify(token, process.env.SECRET_KEY);
 
-  const verifyUser = jwt.verify(token, process.env.SECRET_KEY);
-  const updatePasswordQuery = 'UPDATE tb_userdetails SET Password = ? WHERE email = ?';
-    db.query(updatePasswordQuery, [newPassword, verifyUser.email], (err, results) => {
+    const checkEmailQuery = 'SELECT tb_employee.*, tb_userdetails.Password_resetUsed FROM tb_employee JOIN tb_userdetails ON tb_employee.EmployeeID = tb_userdetails.EmployeeID WHERE tb_employee.email = ?;'
+    db.query(checkEmailQuery, verifyUser.email, (err, results) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ message: 'Internal Server Error' });
+    }
+    // Check if the token has a valid version
+    if (verifyUser.Password_resetUsed !== results[0].Password_resetUsed ) {
+      return res.status(401).json({ message: 'Token is invalid due to password change' });
+    }
+
+    const updatePasswordQuery =
+      'UPDATE tb_userdetails JOIN tb_employee ON tb_userdetails.EmployeeID = tb_employee.EmployeeID SET tb_userdetails.Password = ?,tb_userdetails.Password_resetUsed = tb_userdetails.Password_resetUsed + 1 WHERE tb_employee.email = ?';
+
+    db.query(updatePasswordQuery, [updatedPassword , verifyUser.email], (err, results) => {
       if (err) {
         console.error(err);
         return res.status(500).json({ message: 'Internal Server Error' });
       }
-
       res.json({ message: 'Password reset successfully' });
     });
-  };
+  });
+} catch (error) {
+    console.error(error);
+
+    if (error.name === 'JsonWebTokenError' || error.name === 'TokenExpiredError') {
+      return res.status(401).json({ message: 'Invalid or expired token' });
+    }
+
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+};

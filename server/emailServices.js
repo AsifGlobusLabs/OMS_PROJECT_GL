@@ -11,12 +11,11 @@ const transporter = nodemailer.createTransport({
 });
 
 function sendEmail(email, token) {
-  console.log(email);
   const mailOptions = {
     from: 'miteshpradhan97@gmail.com',
     to: email,
     subject: 'Password Reset',
-    text: `Use this token to reset your password: ${token}`,
+    html: 'Use this token to <a href="http://localhost:3306/api/userDetails/resetPassword/'+token+'">reset your password</a>'
   };
 
   return transporter.sendMail(mailOptions);

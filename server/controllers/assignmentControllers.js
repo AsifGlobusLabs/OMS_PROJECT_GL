@@ -14,7 +14,6 @@ exports.getAllAssignments = (req, res) => {
   });
 };
 
-
 // get all data with name
 
 exports.getAssigmentEmployeesData = (req, res) => {
@@ -64,14 +63,14 @@ exports.addAssignment = (req, res) => {
   });
 };
 
-
+// Inserting assignment
 
 exports.addAssignmentData = (req, res) => {
   const newassignment = req.body;
 
   // Set default values if not provided
   newassignment.AssignmentStatus = newassignment.AssignmentStatus || "Pending";
- 
+
   const query = "INSERT INTO tb_assignment SET ?";
   db.query(query, newassignment, (err, results) => {
     if (err) {
@@ -82,11 +81,6 @@ exports.addAssignmentData = (req, res) => {
     }
   });
 };
-
-
-
-
-
 
 // // getting latest or last assignment id
 
@@ -100,8 +94,8 @@ exports.getLastAssignmentId = (req, res) => {
       return;
     }
     if (results[0].maxID === null) {
-      const AssignmentId = results[0].maxID="AS000";
-      res.status(200).json({lastAssignmentId: AssignmentId})
+      const AssignmentId = (results[0].maxID = "AS000");
+      res.status(200).json({ lastAssignmentId: AssignmentId });
       return;
     }
     const lastAssignmentId = results[0].maxID;
@@ -129,6 +123,58 @@ exports.updateAssignment = (req, res) => {
         return;
       } else {
         res.status(200).json({ message: "Assignment updated successfully" });
+      }
+    }
+  });
+};
+
+// updating assignment status from pending to progress
+
+exports.progressAssignmentStatus = (req, res) => {
+  const assignmentId = req.params.AssignmentID;
+  const query =
+    "UPDATE tb_assignment SET AssignmentStatus = 'Progress' WHERE AssignmentID = ? AND AssignmentStatus = 'Pending';";
+  db.query(query, [assignmentId], (err, results) => {
+    if (err) {
+      console.error("Error executing query:", err);
+      res.status(500).json({ error: "Internal Server Error" });
+    } else {
+      if (results.affectedRows === 0) {
+        res.status(404).json({ error: "Assignment not found" });
+        return;
+      } else if (results.affectedRows > 0 && results.changedRows === 0) {
+        res.status(200).json("Assignment Status is up to date already");
+        return;
+      } else {
+        res
+          .status(200)
+          .json({ message: "Assignment Status updated successfully" });
+      }
+    }
+  });
+};
+
+// updating assignment status from progress to completed
+
+exports.completedAssignmentStatus = (req, res) => {
+  const assignmentId = req.params.AssignmentID;
+  const query =
+    "UPDATE tb_assignment SET AssignmentStatus = 'Completed' WHERE AssignmentID = ? AND AssignmentStatus = 'Progress';";
+  db.query(query, [assignmentId], (err, results) => {
+    if (err) {
+      console.error("Error executing query:", err);
+      res.status(500).json({ error: "Internal Server Error" });
+    } else {
+      if (results.affectedRows === 0) {
+        res.status(404).json({ error: "Assignment not found" });
+        return;
+      } else if (results.affectedRows > 0 && results.changedRows === 0) {
+        res.status(200).json("Assignment Status is up to date already");
+        return;
+      } else {
+        res
+          .status(200)
+          .json({ message: "Assignment Status updated successfully" });
       }
     }
   });
