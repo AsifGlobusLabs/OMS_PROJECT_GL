@@ -15,6 +15,13 @@ import {
   TableRow,
   TablePagination, // Add TablePagination
 } from "@mui/material";
+import {
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  OutlinedInput,
+} from "@mui/material";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import CheckIcon from "@mui/icons-material/Check";
 import profile from "./profilenn.png";
@@ -38,8 +45,6 @@ const Create = () => {
   const [selectedEmployee, setSelectedEmployee] = useState([]);
   const [page, setPage] = useState(0); // State for current page
   const [rowsPerPage, setRowsPerPage] = useState(3); // State for rows per page
-
-  console.log(item, "hhfhfhhf");
 
   // Function to update assignedEmployees state
   const updateAssignedEmployees = (employees) => {
@@ -184,7 +189,34 @@ const Create = () => {
               width: "70%",
             }}
           >
-            <DropdownButton
+            <FormControl sx={{ m: 1, width: 300, marginLeft:'380px', backgroundColor:'whitesmoke' }}>
+              <Select
+                labelId="demo-multiple-name-label"
+                id="demo-multiple-name"
+                value={
+                  selectedDepartment ? selectedDepartment.DepartmentName : ""
+                }
+                onChange={(event) => {
+                  const selectedDept = departments.find(
+                    (dept) => dept.DepartmentName === event.target.value
+                  );
+                  setSelectedDepartment(selectedDept);
+                  handleDepartmentSelect(selectedDept); // Fetch data for the selected department
+                }}
+                input={<OutlinedInput label="Select Department" />}
+                
+              >
+                {departments.map((department) => (
+                  <MenuItem
+                    key={department.DepartmentID}
+                    value={department.DepartmentName}
+                  >
+                    {department.DepartmentName}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            {/* <DropdownButton
               id="dropdown-basic-button"
               title={
                 selectedDepartment
@@ -203,7 +235,7 @@ const Create = () => {
                   </Dropdown.Item>
                 ))}
               </div>
-            </DropdownButton>
+            </DropdownButton> */}
 
             <TextField
               sx={{ marginRight: "15px" }}
