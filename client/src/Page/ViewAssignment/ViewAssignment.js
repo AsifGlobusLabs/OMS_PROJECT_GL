@@ -5,6 +5,7 @@ import { Modal, Button, Table, Tab, Tabs, Pagination } from "react-bootstrap";
 import { format } from "date-fns";
 import { Typography } from "@mui/material";
 import "./ViewAssignment.css";
+import AddBoxIcon from "@mui/icons-material/AddBox";
 
 const ViewAssignment = () => {
   const [tableData, setTableData] = useState([]);
@@ -55,8 +56,8 @@ const ViewAssignment = () => {
       return tableData.filter((item) => item.AssignmentStatus === "Pending");
     } else if (activeTab === "Progress") {
       return tableData.filter((item) => item.AssignmentStatus === "Progress");
-    } else if (activeTab === "Complete") {
-      return tableData.filter((item) => item.AssignmentStatus === "Complete");
+    } else if (activeTab === "Completed") {
+      return tableData.filter((item) => item.AssignmentStatus === "Completed");
     }
     return [];
   };
@@ -92,7 +93,7 @@ const ViewAssignment = () => {
               <Tab eventKey="Progress" title="Progress">
                 <TableComponent data={currentItems} />
               </Tab>
-              <Tab eventKey="Complete" title="Complete">
+              <Tab eventKey="Completed" title="Completed">
                 <TableComponent data={currentItems} />
               </Tab>
             </Tabs>
@@ -129,30 +130,68 @@ const TableComponent = ({ data }) => {
     setSelectedDescription(null);
   };
 
+  const handleAdd = async (AssignmentID, AssignmentStatus) => {
+    try {
+      let apiUrl;
+      if (AssignmentStatus === "Pending") {
+        apiUrl = `http://localhost:3306/api/assignmentDetails/${AssignmentID}/Progress`;
+      } else if (AssignmentStatus === "Progress") {
+        apiUrl = `http://localhost:3306/api/assignmentDetails/${AssignmentID}/Completed`;
+      } else {
+        // If status is already 'Complete', do nothing
+        return;
+      }
+
+      const response = await fetch(apiUrl, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
+
+      if (response.ok) {
+        alert(
+          `Data moved to ${
+            AssignmentStatus === "Pending" ? "progress" : "completed"
+          }`
+        );
+        // Optionally, you may want to update the UI to reflect the status change
+      } else {
+        console.error("Error updating task:", response.status);
+      }
+    } catch (error) {
+      console.error("Error updating task:", error);
+    }
+  };
+
   return (
     <div>
       <Table striped bordered hover size="sm" className="small-table">
         <thead>
           <tr>
-            <th>AssignmentID</th>
+            <th>Assignment ID</th>
             <th>Assigner</th>
-            <th>AssignTo</th>
+            {/* <th>AssignTo</th> */}
             <th>Assignment Description</th>
             <th>Assign Date</th>
             <th>Deadline Date</th>
             <th>Status</th>
             <th>Priority</th>
             <th>Type</th>
+            <th>Add</th>
           </tr>
         </thead>
         <tbody>
           {data.map((item, index) => (
             <tr key={index}>
               <td>{item.AssignmentID}</td>
-              <td>{item.EmployeeID}-{item.Assigner_FirstName}</td>
               <td>
-                {item.EmployeeID_AssignTo}--{item.Assignee_FirstName}
+                {item.EmployeeID}-{item.Assigner_FirstName}
               </td>
+              {/* <td>
+                {item.EmployeeID_AssignTo}--{item.Assignee_FirstName}
+              </td> */}
               <td
                 onClick={() =>
                   handleDescriptionClick(item.Assignment_Description)
@@ -166,6 +205,15 @@ const TableComponent = ({ data }) => {
               <td>{item.AssignmentStatus}</td>
               <td>{item.AssignmentPriority}</td>
               <td>{item.Type}</td>
+              <td>
+                {item.AssignmentStatus !== "Completed" && (
+                  <AddBoxIcon
+                    onClick={() =>
+                      handleAdd(item.AssignmentID, item.AssignmentStatus)
+                    }
+                  />
+                )}
+              </td>
             </tr>
           ))}
         </tbody>

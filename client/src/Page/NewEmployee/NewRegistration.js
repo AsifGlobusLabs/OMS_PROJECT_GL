@@ -297,14 +297,14 @@ function NewRegistration({ addEmployee }) {
                     </Select>
                   </FormControl>
                 </Grid>
-                <Container sx={{marginTop:'10px', marginRight:'20px', display:'flex', justifyContent:'flex-end'}}>
-                  <Grid item xs={3}>
+                <Container sx={{marginTop:'10px', display:'flex', justifyContent:"flex-end"}}>
+                  <Grid item xs={1}>
                     <Button
                       type="submit"
                       variant="contained"
                       // color="primary"
                       disabled={isLoading}
-                      fullWidth
+                      
                       sx={{backgroundColor:"#5c7c77"}}
                     >
                       {isLoading ? "Submitting..." : "Submit"}

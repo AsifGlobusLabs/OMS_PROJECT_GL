@@ -321,9 +321,9 @@ const TableComponent = ({ data }) => {
       <Table striped bordered hover size="sm"  className="small-table">
         <thead>
           <tr>
-            <th>AssignmentID</th>
-            <th>EmployeeID</th>
-            <th>EmployeeID AssignTo</th>
+            <th>Assignment ID</th>
+            {/* <th>EmployeeID</th> */}
+            <th>AssignTo</th>
             <th>Assignment Description</th>
             <th>Assign Date</th>
             <th>Deadline Date</th>
@@ -336,8 +336,8 @@ const TableComponent = ({ data }) => {
           {data.map((item, index) => (
             <tr key={index}>
               <td>{item.AssignmentID}</td>
-              <td>{item.EmployeeID}</td>
-              <td>{item.EmployeeID_AssignTo}--{item.Assignee_FirstName}</td>
+              {/* <td>{item.EmployeeID}</td> */}
+              <td>{item.EmployeeID_AssignTo} - {item.Assignee_FirstName}</td>
               <td
                 onClick={() => handleDescriptionClick(item.Assignment_Description)}
                 style={{ cursor: 'pointer' }}
