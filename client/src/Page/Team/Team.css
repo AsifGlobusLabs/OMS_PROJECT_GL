@@ -1,10 +1,14 @@
 /* Team.css */
 
 .card-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-  }
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1px;
+  justify-content: space-around;
+  background-color: rgb(247, 247, 247);
+  margin-top: 30px;
+
+}
   
   .card {
     background-color: #fff;
