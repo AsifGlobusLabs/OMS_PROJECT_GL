@@ -2,26 +2,26 @@ import React, { useState, useEffect } from "react";
 import SideBar from "../../Component/SideBar";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import "./Assignment.css";
+
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
-import AssignmentCard from "./AssignmentCard";
-import AssignmentTable from "./AssignmentTable";
+import TaskTable from "./TaskTable";
 
-export default function NewAssignment() {
+
+export default function NewTask() {
   const [validated, setValidated] = useState(false);
-  const [assignmentData, setAssignmentData] = useState({
-    AssignmentID: "",
+  const [taskData, setTaskData] = useState({
+    TaskID: "",
+    StartDate: new Date().toISOString().split("T")[0],
+    EndDate: "",
+    CreatedAt: "",
+    TaskStatus:"",
+    TaskDescription: "",
     EmployeeID: "",
-    EmployeeID_AssignTo: "",
-    AssignDate: new Date().toISOString().split("T")[0],
-    DeadlineDate: "",
-    AssignmentPriority: "",
-    Assignment_Description: "",
   });
-  const [assignedEmployees, setAssignedEmployees] = useState([]);
+  const [loginEmployees, setLoginEmployees] = useState([]);
   const [userData, setUserData] = useState(null);
 
   useEffect(() => {
@@ -29,9 +29,9 @@ export default function NewAssignment() {
     setUserData(userDataFromSession);
   }, []);
 
-  // assignedTo data 
+  // login employee data 
   useEffect(() => {
-    const fetchAssignedEmployees = async () => {
+    const fetchLoginEmployees = async () => {
       try {
         const response = await fetch(
           "http://localhost:3306/api/workGroup/allData"
@@ -41,37 +41,37 @@ export default function NewAssignment() {
         }
         const data = await response.json();
         const assigned = data.filter(
-          (employee) => userData.EmployeeID === employee.EmployeeID_Assigner
+          (employee) => userData.EmployeeID === employee.EmployeeID
         );
-        setAssignedEmployees(assigned);
+        setLoginEmployees(assigned);
       } catch (error) {
         console.error("Error fetching assigned employees:", error);
       }
     };
 
     if (userData) {
-      fetchAssignedEmployees();
+      fetchLoginEmployees();
     }
   }, [userData]);
 
-  // auto generated assignment no 
+  // auto generated task no 
   useEffect(() => {
-    const fetchLastAssignmentId = async () => {
+    const fetchLastTaskId = async () => {
       try {
         const response = await fetch(
-          "http://localhost:3306/api/assignmentDetails/lastAssignmentId"
+          "http://localhost:3306/api/taskDetails/lastTaskId"
         );
         if (response.ok) {
           const data = await response.json();
-          const numericPart = parseInt(data.lastAssignmentId.slice(2), 10);
+          const numericPart = parseInt(data.lastTaskId.slice(2), 10);
           if (!isNaN(numericPart)) {
             const nextJobNo = numericPart + 1;
-            setAssignmentData((prevState) => ({
+            setTaskData((prevState) => ({
               ...prevState,
-              AssignmentID: `AS${nextJobNo.toString().padStart(3, "0")}`,
+              TaskID: `T${nextJobNo.toString().padStart(3, "0")}`,
             }));
           } else {
-            console.error("Invalid numeric part:", data.lastAssignmentId);
+            console.error("Invalid numeric part:", data.lastTaskId);
           }
         } else {
           console.error("Failed to fetch last AssignmentID");
@@ -80,12 +80,12 @@ export default function NewAssignment() {
         console.error("Error:", error);
       }
     };
-    fetchLastAssignmentId();
+    fetchLastTaskId();
   }, []);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
-    setAssignmentData((prevState) => ({
+    setTaskData((prevState) => ({
       ...prevState,
       [name]: value,
     }));
@@ -103,14 +103,14 @@ export default function NewAssignment() {
   
     try {
       const response = await fetch(
-        "http://localhost:3306/api/assignmentDetails",
+        "http://localhost:3306/api/taskDetails",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            ...assignmentData,
+            ...taskData,
             EmployeeID: userData.EmployeeID,
           }),
         }
@@ -124,14 +124,15 @@ export default function NewAssignment() {
       console.log("Response:", responseData);
   
       // Reset the form data after successful submission
-      setAssignmentData({
-        AssignmentID: "",
+      setTaskData({
+       
+        TaskID: "",
+        StartDate: "",
+        EndDate: "",
+        CreatedAt: "",
+        TaskStatus:"",
+        TaskDescription: "",
         EmployeeID: "",
-        EmployeeID_AssignTo: "",
-        AssignDate: "",
-        DeadlineDate: "",
-        AssignmentPriority: "",
-        Assignment_Description: "",
       });
   
       // Reset form validation
@@ -154,27 +155,27 @@ export default function NewAssignment() {
       <SideBar />
       <Box component="main" sx={{ flexGrow: 1, p: 3, marginTop: "55px" }}>
         <div className="assignment-container">
-          <AssignmentCard />
+      
           <div className="create-assignment">
             <Typography variant="h5" style={{ fontWeight: "500" }}>
-              Create Assignment
+              Create Task
             </Typography>
             <Form noValidate validated={validated} onSubmit={handleSubmit}>
               <Row className="mb-3">
-                <Form.Group as={Col} md="4" controlId="validationCustom01">
-                  <Form.Label>Assignment ID</Form.Label>
+                <Form.Group as={Col} md="6" controlId="validationCustom01">
+                  <Form.Label>Task ID</Form.Label>
                   <Form.Control
                    style={{ fontWeight: "600", fontSize: "16px" }}
                     required
                     type="text"
-                    placeholder="Assignment ID"
-                    name="AssignmentID"
-                    value={assignmentData.AssignmentID}
+                    placeholder="Task ID"
+                    name="TaskID"
+                    value={taskData.TaskID}
                     onChange={handleInputChange}
                   />
                   <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                 </Form.Group>
-                <Form.Group as={Col} md="4" controlId="validationCustom02">
+                <Form.Group as={Col} md="6" controlId="validationCustom02">
                   <Form.Label>Employee ID</Form.Label>
                   <Form.Control
                     required
@@ -185,90 +186,70 @@ export default function NewAssignment() {
                   />
                   <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                 </Form.Group>
-                <Form.Group as={Col} md="4">
-                  <Form.Label htmlFor="Employee_AssignTo">
-                    Employee_AssignTo
+                
+              </Row>
+              <Row className="mb-3">
+              <Form.Group as={Col} md="4">
+                  <Form.Label htmlFor="StartDate">
+                   Start Date
                   </Form.Label>
-                  <Form.Select
+                  <Form.Control
+                    type="date"
                     aria-label="Default select example"
-                    name="EmployeeID_AssignTo"
-                    value={assignmentData.EmployeeID_AssignTo}
+                    name="StartDate"
+                    value={taskData.StartDate}
                     onChange={handleInputChange}
                     required
                     style={{ fontSize: "15px" }}
-                  >
-                    <option value="">Select Department ID</option>
-                    {assignedEmployees.map((item, index) => (
-                      <option key={index} value={item.EmployeeID_AssignTo}>
-                        {item.EmployeeID_AssignTo} - {item.Assignee_FirstName}
-                      </option>
-                    ))}
-                  </Form.Select>
+                  />
+                   
                   <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                 </Form.Group>
-              </Row>
-              <Row className="mb-3">
-                <Form.Group as={Col} md="4" controlId="validationCustom03">
-                  <Form.Label>Assign Date</Form.Label>
+                <Form.Group as={Col} md="4" controlId="EndDate">
+                  <Form.Label>End Date</Form.Label>
                   <Form.Control
                     type="date"
-                    placeholder="Assign Date"
+                    placeholder="End Date"
                     required
-                    name="AssignDate"
-                    value={assignmentData.AssignDate}
+                    name="EndDate"
+                    value={taskData.EndDate}
                     onChange={handleInputChange}
                   />
                   <Form.Control.Feedback type="invalid">
-                    Please provide Assign Date
+                    Please provide End Date
                   </Form.Control.Feedback>
                 </Form.Group>
                 <Form.Group as={Col} md="4" controlId="validationCustom04">
-                  <Form.Label>Deadline Date</Form.Label>
+                  <Form.Label>Created At</Form.Label>
                   <Form.Control
                     type="date"
-                    placeholder="Deadline Date"
+                    placeholder="Created At"
                     required
-                    name="DeadlineDate"
-                    value={assignmentData.DeadlineDate}
+                    name="CreatedAt"
+                    value={taskData.CreatedAt}
                     onChange={handleInputChange}
                   />
                   <Form.Control.Feedback type="invalid">
-                    Please provide Deadline Date
+                    Please provide Created At
                   </Form.Control.Feedback>
                 </Form.Group>
-                <Form.Group as={Col} md="4" controlId="validationCustom05">
-                  <Form.Label>Priority</Form.Label>
-                  <Form.Select
-                    required
-                    name="AssignmentPriority"
-                    value={assignmentData.AssignmentPriority}
-                    onChange={handleInputChange}
-                  >
-                    <option value="">Select priority</option>
-                    <option value="High">High</option>
-                    <option value="Medium">Medium</option>
-                    <option value="Low">Low</option>
-                  </Form.Select>
-                  <Form.Control.Feedback type="invalid">
-                    Please provide a priority.
-                  </Form.Control.Feedback>
-                </Form.Group>
+               
               </Row>
               <Row className="mb-3">
-                <Form.Group as={Col} md="12" controlId="Assignment_Description">
-                  <Form.Label>Assignment Description</Form.Label>
+                <Form.Group as={Col} md="12" controlId="TaskDescription">
+                  <Form.Label>Task Description</Form.Label>
                   <textarea
                     type="text"
                     className="form-control"
-                    id="Assignment_Description"
-                    placeholder="Give Assignment...."
-                    name="Assignment_Description"
-                    value={assignmentData.Assignment_Description}
+                    id="TaskDescription"
+                    placeholder="Give Task...."
+                    name="TaskDescription"
+                    value={taskData.TaskDescription}
                     onChange={handleInputChange}
                     required
                   />
                   <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-                  <Form.Control.Feedback type="invalid">Give Assignment!</Form.Control.Feedback>
+                  <Form.Control.Feedback type="invalid">Give Task!</Form.Control.Feedback>
                 </Form.Group>
               </Row>
               <div
@@ -288,7 +269,7 @@ export default function NewAssignment() {
               </div>
             </Form>
           </div>
-          <AssignmentTable />
+            <TaskTable/>
         </div>
       </Box>
     </Box>

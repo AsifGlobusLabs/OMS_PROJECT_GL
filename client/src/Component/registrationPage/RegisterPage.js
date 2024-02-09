@@ -195,7 +195,8 @@ function RegisterPage() {
                     onChange={handleInputChange}
                     required
                   />
-                  <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                  <Form.Control.Feedback type="invalid">Please Enter your First Name!</Form.Control.Feedback>
+                  <Form.Control.Feedback >Looks good!</Form.Control.Feedback>
                 </Form.Group>
                 <Form.Group as={Col} md="4">
                   <Form.Label>Last name</Form.Label>
@@ -205,9 +206,10 @@ function RegisterPage() {
                     name="LastName"
                     value={formData.LastName}
                     onChange={handleInputChange}
-                    require
+                    required
                   />
-                  <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                  <Form.Control.Feedback type="invalid">Please Enter your Last Name!</Form.Control.Feedback>
+                  <Form.Control.Feedback >Looks good!</Form.Control.Feedback>
                 </Form.Group>
               </Row>
 
@@ -224,7 +226,10 @@ function RegisterPage() {
                     onChange={handleInputChange}
                     required
                   />
+                  <Form.Control.Feedback type="invalid">Please Enter Join Date!</Form.Control.Feedback>
+                  <Form.Control.Feedback >Looks good!</Form.Control.Feedback>
                 </Form.Group>
+
                 <Form.Group as={Col} md="4">
                   <Form.Label>Date of Birth</Form.Label>
                   <Form.Control
@@ -235,6 +240,8 @@ function RegisterPage() {
                     onChange={handleInputChange}
                     required
                   />
+                  <Form.Control.Feedback type="invalid">Please Enter DOB!</Form.Control.Feedback>
+                  <Form.Control.Feedback >Looks good!</Form.Control.Feedback>
                 </Form.Group>
 
                 <Form.Group as={Col} md="4">
@@ -263,6 +270,7 @@ function RegisterPage() {
                     <Form.Control.Feedback type="invalid">
                       Please select a gender.
                     </Form.Control.Feedback>
+                  <Form.Control.Feedback >Looks good!</Form.Control.Feedback>
                   </InputGroup>
                 </Form.Group>
               </Row>
@@ -281,6 +289,7 @@ function RegisterPage() {
                   <Form.Control.Feedback>
                     Please Enter Email
                   </Form.Control.Feedback>
+                  <Form.Control.Feedback >Looks good!</Form.Control.Feedback>
                 </Form.Group>
                 <Form.Group as={Col} md="4">
                   <Form.Label>Phone Number</Form.Label>
@@ -295,6 +304,7 @@ function RegisterPage() {
                   <Form.Control.Feedback>
                     Please Enter Phone Number
                   </Form.Control.Feedback>
+                  <Form.Control.Feedback >Looks good!</Form.Control.Feedback>
                 </Form.Group>
                 <Form.Group as={Col} md="4">
                   <Form.Label htmlFor="EmployementStatus">
@@ -311,6 +321,8 @@ function RegisterPage() {
                     <option>Active</option>
                     <option>Inactive</option>
                   </Form.Select>
+                  <Form.Control.Feedback type="invalid">Please Select Status!</Form.Control.Feedback>
+                  <Form.Control.Feedback >Looks good!</Form.Control.Feedback>
                 </Form.Group>
               </Row>
 
@@ -328,10 +340,11 @@ function RegisterPage() {
                   <Form.Control.Feedback type="invalid">
                     Please provide a Address.
                   </Form.Control.Feedback>
+                  <Form.Control.Feedback >Looks good!</Form.Control.Feedback>
                 </Form.Group>
 
                 <Form.Group as={Col} md="4">
-                  <Form.Label htmlFor="DepartmentID">Department ID</Form.Label>
+                  <Form.Label htmlFor="DepartmentID">Department </Form.Label>
                   <Form.Select
                     aria-label="Default select example"
                     name="DepartmentID"
@@ -340,20 +353,20 @@ function RegisterPage() {
                     required
                     style={{ fontSize: "15px" }}
                   >
-                    <option value="">Select Department ID</option>
+                    <option value="">Select Department</option>
                     {departmentData.map((item) => (
                       <option key={item._id} value={item.DepartmentID}>
                         {item.DepartmentID} - {item.DepartmentName}
                       </option>
                     ))}
                   </Form.Select>
-
+                  <Form.Control.Feedback type="invalid">Please Select Department!</Form.Control.Feedback>
                   <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                 </Form.Group>
 
                 <Form.Group as={Col} md="4">
                   <Form.Label htmlFor="DesignationID">
-                    Designation ID
+                    Designation
                   </Form.Label>
 
                   <Form.Select
@@ -364,14 +377,15 @@ function RegisterPage() {
                     required
                     style={{ fontSize: "15px" }}
                   >
-                    <option value="">Select Designation ID</option>
+                    <option value="">Select Designation</option>
                     {deginationData.map((item) => (
                       <option key={item._id} value={item.DesignationID}>
                         {item.DesignationID} - {item.DesignationName}
                       </option>
                     ))}
                   </Form.Select>
-
+                  <Form.Control.Feedback type="invalid">Please Select Designation ID!</Form.Control.Feedback>
+                
                   <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                 </Form.Group>
               </Row>

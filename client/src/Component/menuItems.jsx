@@ -14,10 +14,11 @@ export const menuItems = [
   { text: "New Employee", icon: <AppRegistrationIcon/>, path: "/newEmployee"},
   { text: "View Employee", icon: <TableRowsIcon/>, path: "/viewEmployee"},
   { text: "New Department", icon: <ViewListIcon/>, path: "/Department"},
+  { text: "New Designation", icon: <ViewListIcon/>, path: "/newdesignation"},
   { text: "Team", icon: <GroupsIcon/>, path: "/team" },
   { text: "New Assignment", icon: <AssignmentIcon />, path: "/newassignment" },
   { text: "View Assignment", icon: <AssignmentIcon />, path: "/viewassignment" },
-  { text: "Task", icon: <AddCircleIcon />, path: "/task" },
+  { text: "New Task", icon: <AddCircleIcon />, path: "/Newtask" },
   { text: "Settings", icon: <SettingsIcon />, path: "/settings" },
 
 ];
