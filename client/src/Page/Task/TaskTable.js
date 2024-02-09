@@ -5,7 +5,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import moment from "moment";
 
-const AssignmentTable = () => {
+const TaskTable = () => {
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -26,7 +26,7 @@ const AssignmentTable = () => {
     const fetchAssignedEmployees = async () => {
       try {
         const response = await fetch(
-          "http://localhost:3306/api/assignmentDetails"
+          "http://localhost:3306/api/taskDetails"
         );
         if (!response.ok) {
           throw new Error("Failed to fetch data");
@@ -56,8 +56,10 @@ const AssignmentTable = () => {
   // Change page
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
+
+
   // delete btn
-  const handleDelete = async (AssignmentID) => {
+  const handleDelete = async (TaskID) => {
     // Display a confirmation dialog
     const confirmDelete = window.confirm(
       "Are you sure you want to delete this item?"
@@ -69,7 +71,7 @@ const AssignmentTable = () => {
     }
 
     try {
-      const apiUrl = `http://localhost:3306/api/assignmentDetails/delete/${AssignmentID}`;
+      const apiUrl = `http://localhost:3306/api/taskDetails/delete/${TaskID}`;
       const response = await fetch(apiUrl, {
         method: "DELETE",
       });
@@ -77,7 +79,7 @@ const AssignmentTable = () => {
       if (response.ok) {
         // Remove the deleted item from both data and filteredData arrays
         setAssignedEmployees((prevData) =>
-          prevData.filter((item) => item.AssignmentID !== AssignmentID)
+          prevData.filter((item) => item.TaskID !== TaskID)
         );
       } else {
         console.error("Error deleting item:", response.status);
@@ -108,14 +110,13 @@ const AssignmentTable = () => {
             <Table striped bordered hover size="sm">
               <thead>
                 <tr>
-                  <th>Assignment ID</th>
-                  {/* <th>EmployeeID</th> */}
-                  <th>EmployeeID AssignTo</th>
-                  <th>Assignment Description</th>
-                  <th>Assign Date</th>
-                  <th>Deadline Date</th>
-                  <th>Assignment Status</th>
-                  <th>Assignment Priority</th>
+                  <th>Task ID</th>
+                  <th>EmployeeID</th>
+                  <th>Task Description</th>
+                  <th>Start Date</th>
+                  <th>End Date</th>
+                  <th>Created At</th>
+                  <th>Task Status</th>
                   <th>Type</th>
                   <th>Edit</th>
                   <th>Delete</th>
@@ -124,19 +125,18 @@ const AssignmentTable = () => {
               <tbody>
                 {currentItems.map((item) => {
                   // Only render rows where the status is 'Pending'
-                  if (item.AssignmentStatus === "Pending") {
+                  if (item.TaskStatus === "Pending") {
                     return (
-                      <tr key={item.AssignmentID}>
-                        <td>{item.AssignmentID}</td>
-                        {/* <td>{item.EmployeeID}</td> */}
-                        <td>{item.EmployeeID_AssignTo}</td>
-                        <td>{item.Assignment_Description}</td>
-                        <td>{moment(item.AssignDate).format("DD/MM/YYYY")}</td>
-                        <td>{moment(item.DeadlineDate).format("DD/MM/YYYY")}</td>
+                      <tr key={item.TaskID}>
+                        <td>{item.TaskID}</td>
+                        <td>{item.EmployeeID}</td>
+                        <td>{item.TaskDescription}</td>
+                        <td>{moment(item.StartDate).format("DD/MM/YYYY")}</td>
+                        <td>{moment(item.EndDate).format("DD/MM/YYYY")}</td>
+                        <td>{moment(item.CreatedAt).format("DD/MM/YYYY")}</td>
                         <td style={{ color: "red" }}>
-                          {item.AssignmentStatus}
+                          {item.TaskStatus}
                         </td>
-                        <td>{item.AssignmentPriority}</td>
                         <td>{item.Type}</td>
                         <td
                           style={{
@@ -153,7 +153,7 @@ const AssignmentTable = () => {
                             textAlign: "center",
                             cursor: "pointer",
                           }}
-                          onClick={() => handleDelete(item.AssignmentID)}
+                          onClick={() => handleDelete(item.TaskID)}
                         >
                           <DeleteIcon />
                         </td>
@@ -176,14 +176,13 @@ const AssignmentTable = () => {
             <Table striped bordered hover size="sm">
               <thead>
                 <tr>
-                  <th>Assignment ID</th>
-                  {/* <th>EmployeeID</th> */}
-                  <th>EmployeeID AssignTo</th>
-                  <th>Assignment Description</th>
-                  <th>Assign Date</th>
-                  <th>Deadline Date</th>
-                  <th>Assignment Status</th>
-                  <th>Assignment Priority</th>
+                <th>Task ID</th>
+                  <th>EmployeeID</th>
+                  <th>Task Description</th>
+                  <th>Start Date</th>
+                  <th>End Date</th>
+                  <th>Created At</th>
+                  <th>Task Status</th>
                   <th>Type</th>
                   <th>Edit</th>
                   <th>Delete</th>
@@ -192,19 +191,18 @@ const AssignmentTable = () => {
               <tbody>
                 {currentItems.map((item) => {
                   // Only render rows where the status is 'Progress'
-                  if (item.AssignmentStatus === "Progress") {
+                  if (item.TaskStatus === "Progress") {
                     return (
-                      <tr key={item.AssignmentID}>
-                        <td>{item.AssignmentID}</td>
-                        {/* <td>{item.EmployeeID}</td> */}
-                        <td>{item.EmployeeID_AssignTo}</td>
-                        <td>{item.Assignment_Description}</td>
-                        <td>{moment(item.AssignDate).format("DD/MM/YYYY")}</td>
-                        <td>{moment(item.DeadlineDate).format("DD/MM/YYYY")}</td>
-                        <td style={{ color: "orange" }}>
-                          {item.AssignmentStatus}
+                        <tr key={item.TaskID}>
+                        <td>{item.TaskID}</td>
+                        <td>{item.EmployeeID}</td>
+                        <td>{item.TaskDescription}</td>
+                        <td>{moment(item.StartDate).format("DD/MM/YYYY")}</td>
+                        <td>{moment(item.EndDate).format("DD/MM/YYYY")}</td>
+                        <td>{moment(item.CreatedAt).format("DD/MM/YYYY")}</td>
+                        <td style={{ color: "red" }}>
+                          {item.TaskStatus}
                         </td>
-                        <td>{item.AssignmentPriority}</td>
                         <td>{item.Type}</td>
                         <td
                           style={{
@@ -221,7 +219,7 @@ const AssignmentTable = () => {
                             textAlign: "center",
                             cursor: "pointer",
                           }}
-                          onClick={() => handleDelete(item.AssignmentID)}
+                          onClick={() => handleDelete(item.TaskID)}
                         >
                           <DeleteIcon />
                         </td>
@@ -243,14 +241,13 @@ const AssignmentTable = () => {
             <Table striped bordered hover size="sm">
               <thead>
                 <tr>
-                  <th>Assignment ID</th>
-                  {/* <th>EmployeeID</th> */}
-                  <th>EmployeeID AssignTo</th>
-                  <th>Assignment Description</th>
-                  <th>Assign Date</th>
-                  <th>Deadline Date</th>
-                  <th>Assignment Status</th>
-                  <th>Assignment Priority</th>
+                <th>Task ID</th>
+                  <th>EmployeeID</th>
+                  <th>Task Description</th>
+                  <th>Start Date</th>
+                  <th>End Date</th>
+                  <th>Created At</th>
+                  <th>Task Status</th>
                   <th>Type</th>
                   <th>Edit</th>
                   <th>Delete</th>
@@ -259,19 +256,18 @@ const AssignmentTable = () => {
               <tbody>
                 {currentItems.map((item) => {
                   // Only render rows where the status is 'Completed'
-                  if (item.AssignmentStatus === "Completed") {
+                  if (item.TaskStatus === "Completed") {
                     return (
-                      <tr key={item.AssignmentID}>
-                        <td>{item.AssignmentID}</td>
-                        {/* <td>{item.EmployeeID}</td> */}
-                        <td>{item.EmployeeID_AssignTo}</td>
-                        <td>{item.Assignment_Description}</td>
-                        <td>{moment(item.AssignDate).format("DD/MM/YYYY")}</td>
-                        <td>{moment(item.DeadlineDate).format("DD/MM/YYYY")}</td>
-                        <td style={{ color: "green" }}>
-                          {item.AssignmentStatus}
+                        <tr key={item.TaskID}>
+                        <td>{item.TaskID}</td>
+                        <td>{item.EmployeeID}</td>
+                        <td>{item.TaskDescription}</td>
+                        <td>{moment(item.StartDate).format("DD/MM/YYYY")}</td>
+                        <td>{moment(item.EndDate).format("DD/MM/YYYY")}</td>
+                        <td>{moment(item.CreatedAt).format("DD/MM/YYYY")}</td>
+                        <td style={{ color: "red" }}>
+                          {item.TaskStatus}
                         </td>
-                        <td>{item.AssignmentPriority}</td>
                         <td>{item.Type}</td>
                         <td
                           style={{
@@ -288,7 +284,7 @@ const AssignmentTable = () => {
                             textAlign: "center",
                             cursor: "pointer",
                           }}
-                          onClick={() => handleDelete(item.AssignmentID)}
+                          onClick={() => handleDelete(item.TaskID)}
                         >
                           <DeleteIcon />
                         </td>
@@ -320,4 +316,4 @@ const AssignmentTable = () => {
   );
 };
 
-export default AssignmentTable;
+export default TaskTable;

@@ -1,276 +1,194 @@
-import { Box } from '@mui/material'
+import { useState, useEffect } from "react";
+import SideBar from "../../Component/SideBar";
+import Box from "@mui/material/Box";
+import { Modal, Button, Table, Tab, Tabs, Pagination } from "react-bootstrap";
+import { format } from "date-fns";
 import { Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import { Tab, Table, Tabs } from "react-bootstrap";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditNoteIcon from "@mui/icons-material/EditNote";
-import moment from "moment";
-import SideBar from '../../Component/SideBar'
-import "./ViewAssignment.css"
+import "./ViewAssignment.css";
 
 const ViewAssignment = () => {
+  const [tableData, setTableData] = useState([]);
+  const [activeTab, setActiveTab] = useState("Pending");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(20);
 
-    const [data, setData] = useState([]);
-    const [filteredData, setFilteredData] = useState([]);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [itemsPerPage] = useState(25);
-  
-    const [assignedEmployees, setAssignedEmployees] = useState([]);
-    const [userData, setUserData] = useState(null);
-  
-    console.log(assignedEmployees, "hello");
-  
-    useEffect(() => {
-      const userDataFromSession = JSON.parse(sessionStorage.getItem("userData"));
-      setUserData(userDataFromSession);
-    }, []);
-  
-    // getting data in table of login user
-    useEffect(() => {
-      const fetchAssignedEmployees = async () => {
-        try {
-          const response = await fetch(
-            "http://localhost:3306/api/assignmentDetails"
-          );
-          if (!response.ok) {
-            throw new Error("Failed to fetch data");
-          }
-          const data = await response.json();
-          const assigned = data.filter(
-            (employee) => userData.EmployeeID === employee.EmployeeID_AssignTo
-          );
-          const reversedData = assigned.reverse();
-          setAssignedEmployees(reversedData);
-        } catch (error) {
-          console.error("Error fetching assigned employees:", error);
-        }
-      };
-  
-      if (userData) {
-        fetchAssignedEmployees();
-      }
-    }, [userData]);
-  
-    const indexOfLastItem = currentPage * itemsPerPage;
-    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentItems = assignedEmployees.slice(
-      indexOfFirstItem,
-      indexOfLastItem
-    );
-    // Change page
-    const paginate = (pageNumber) => setCurrentPage(pageNumber);
-  
-    // delete btn
-    const handleDelete = async (AssignmentID) => {
-      // Display a confirmation dialog
-      const confirmDelete = window.confirm(
-        "Are you sure you want to delete this item?"
-      );
-  
-      if (!confirmDelete) {
-        // If the user clicks "Cancel" in the confirmation dialog, do nothing
-        return;
-      }
-  
+  const [userData, setUserData] = useState(null);
+
+  useEffect(() => {
+    const userDataFromSession = JSON.parse(sessionStorage.getItem("userData"));
+    setUserData(userDataFromSession);
+  }, []);
+
+  useEffect(() => {
+    const fetchAssignedEmployees = async () => {
       try {
-        const apiUrl = `http://localhost:3306/api/assignmentDetails/delete/${AssignmentID}`;
-        const response = await fetch(apiUrl, {
-          method: "DELETE",
-        });
-  
-        if (response.ok) {
-          // Remove the deleted item from both data and filteredData arrays
-          setAssignedEmployees((prevData) =>
-            prevData.filter((item) => item.AssignmentID !== AssignmentID)
-          );
-        } else {
-          console.error("Error deleting item:", response.status);
+        const response = await fetch(
+          "http://localhost:3306/api/assignmentDetails/allData"
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch data");
         }
+        const data = await response.json();
+        const assigned = data.filter(
+          (employee) => userData.EmployeeID === employee.EmployeeID_AssignTo
+        );
+
+        const reversedData = assigned.reverse();
+        setTableData(reversedData);
       } catch (error) {
-        console.error("Error deleting item:", error);
+        console.error("Error fetching assigned employees:", error);
       }
     };
+
+    if (userData) {
+      fetchAssignedEmployees();
+    }
+  }, [userData]);
+
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+    setCurrentPage(1); // Reset current page when switching tabs
+  };
+
+  const filterDataByTab = () => {
+    if (activeTab === "Pending") {
+      return tableData.filter((item) => item.AssignmentStatus === "Pending");
+    } else if (activeTab === "Progress") {
+      return tableData.filter((item) => item.AssignmentStatus === "Progress");
+    } else if (activeTab === "Complete") {
+      return tableData.filter((item) => item.AssignmentStatus === "Complete");
+    }
+    return [];
+  };
+
+  const filteredItems = filterDataByTab();
+
+  // Pagination
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filteredItems.slice(indexOfFirstItem, indexOfLastItem);
+
+  // Change page
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
     <Box sx={{ display: "flex" }}>
       <SideBar />
       <Box component="main" sx={{ flexGrow: 1, p: 3, marginTop: "55px" }}>
+        <div className="assignment-table">
+          <Typography variant="h5" style={{ fontWeight: "500" }}>
+            Assignment Data
+          </Typography>
+          <div className="p-2">
+            <Tabs
+              defaultActiveKey="Pending"
+              id="uncontrolled-tab-example"
+              className="mb-3 mt-2"
+              onSelect={(tab) => handleTabChange(tab)}
+            >
+              <Tab eventKey="Pending" title="Pending">
+                <TableComponent data={currentItems} />
+              </Tab>
+              <Tab eventKey="Progress" title="Progress">
+                <TableComponent data={currentItems} />
+              </Tab>
+              <Tab eventKey="Complete" title="Complete">
+                <TableComponent data={currentItems} />
+              </Tab>
+            </Tabs>
+            <Pagination>
+              {Array.from({
+                length: Math.ceil(filteredItems.length / itemsPerPage),
+              }).map((_, index) => (
+                <Pagination.Item
+                  key={index}
+                  active={index + 1 === currentPage}
+                  onClick={() => paginate(index + 1)}
+                >
+                  {index + 1}
+                </Pagination.Item>
+              ))}
+            </Pagination>
+          </div>
+        </div>
+      </Box>
+    </Box>
+  );
+};
 
-      <div className="viewassignment-table">
-      <Typography variant="h5" style={{ fontWeight: "500" }}>
-        View Assignment Data
-      </Typography>
+const TableComponent = ({ data }) => {
+  const [selectedDescription, setSelectedDescription] = useState(null);
 
-      <div className="p-2">
-        <Tabs
-          defaultActiveKey="Pending"
-          id="uncontrolled-tab-example"
-          className="mb-3 mt-2"
-        >
-          {/* pending table data  */}
-          <Tab
-            eventKey="Pending"
-            title="Pending"
-            style={{ maxHeight: "400px", overflowY: "auto", marginTop: "20px" }}
-          >
-            <Table striped bordered hover size="sm">
-              <thead>
-                <tr>
-                  <th>Assignment ID</th>
-                  <th>EmployeeID Assigner</th>
-                  <th>EmployeeID AssignTo</th>
-                  <th>Assignment Description</th>
-                  <th>Assign Date</th>
-                  <th>Deadline Date</th>
-                  <th>Assignment Status</th>
-                  <th>Assignment Priority</th>
-                  <th>Type</th>
-        
-                </tr>
-              </thead>
-              <tbody>
-                {currentItems.map((item) => {
-                  // Only render rows where the status is 'Pending'
-                  if (item.AssignmentStatus === "Pending") {
-                    return (
-                      <tr key={item.AssignmentID}>
-                        <td>{item.AssignmentID}</td>
-                        <td>{item.EmployeeID}</td>
-                        <td>{item.EmployeeID_AssignTo}</td>
-                        <td>{item.Assignment_Description}</td>
-                        <td>{moment(item.AssignDate).format("DD/MM/YYYY")}</td>
-                        <td>{moment(item.DeadlineDate).format("DD/MM/YYYY")}</td>
-                        <td style={{ color: "red" }}>
-                          {item.AssignmentStatus}
-                        </td>
-                        <td>{item.AssignmentPriority}</td>
-                        <td>{item.Type}</td>
-                      </tr>
-                    );
-                  }
-                  return null; // If status is not 'Pending', don't render the row
-                })}
-              </tbody>
-            </Table>
-          </Tab>
+  // Function to handle click on description cell
+  const handleDescriptionClick = (description) => {
+    setSelectedDescription(description);
+  };
 
-          {/* progress table data  */}
+  // Function to close the modal
+  const handleClose = () => {
+    setSelectedDescription(null);
+  };
 
-          <Tab
-            eventKey="Progress"
-            title="Progress"
-            style={{ maxHeight: "400px", overflowY: "auto", marginTop: "20px" }}
-          >
-            <Table striped bordered hover size="sm">
-              <thead>
-                <tr>
-                  <th>Assignment ID</th>
-                  <th>EmployeeID Assigner</th>
-                  <th>EmployeeID AssignTo</th>
-                  <th>Assignment Description</th>
-                  <th>Assign Date</th>
-                  <th>Deadline Date</th>
-                  <th>Assignment Status</th>
-                  <th>Assignment Priority</th>
-                  <th>Type</th>
-                 
-                </tr>
-              </thead>
-              <tbody>
-                {currentItems.map((item) => {
-                  // Only render rows where the status is 'Progress'
-                  if (item.AssignmentStatus === "Progress") {
-                    return (
-                      <tr key={item.AssignmentID}>
-                        <td>{item.AssignmentID}</td>
-                        <td>{item.EmployeeID}</td>
-                        <td>{item.EmployeeID_AssignTo}</td>
-                        <td>{item.Assignment_Description}</td>
-                        <td>{moment(item.AssignDate).format("DD/MM/YYYY")}</td>
-                        <td>{moment(item.DeadlineDate).format("DD/MM/YYYY")}</td>
-                        <td style={{ color: "orange" }}>
-                          {item.AssignmentStatus}
-                        </td>
-                        <td>{item.AssignmentPriority}</td>
-                        <td>{item.Type}</td>
-                       
-                      </tr>
-                    );
-                  }
-                  return null; // If status is not 'Pending', don't render the row
-                })}
-              </tbody>
-            </Table>
-          </Tab>
+  return (
+    <div>
+      <Table striped bordered hover size="sm" className="small-table">
+        <thead>
+          <tr>
+            <th>AssignmentID</th>
+            <th>Assigner</th>
+            <th>AssignTo</th>
+            <th>Assignment Description</th>
+            <th>Assign Date</th>
+            <th>Deadline Date</th>
+            <th>Status</th>
+            <th>Priority</th>
+            <th>Type</th>
+          </tr>
+        </thead>
+        <tbody>
+          {data.map((item, index) => (
+            <tr key={index}>
+              <td>{item.AssignmentID}</td>
+              <td>{item.EmployeeID}-{item.Assigner_FirstName}</td>
+              <td>
+                {item.EmployeeID_AssignTo}--{item.Assignee_FirstName}
+              </td>
+              <td
+                onClick={() =>
+                  handleDescriptionClick(item.Assignment_Description)
+                }
+                style={{ cursor: "pointer" }}
+              >
+                {item.Assignment_Description.slice(0, 50)}
+              </td>
+              <td>{format(new Date(item.AssignDate), "dd/MM/yyyy")}</td>
+              <td>{format(new Date(item.DeadlineDate), "dd/MM/yyyy")}</td>
+              <td>{item.AssignmentStatus}</td>
+              <td>{item.AssignmentPriority}</td>
+              <td>{item.Type}</td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
 
-          {/* complete table data  */}
-          <Tab
-            eventKey="Completed"
-            title="Completed"
-            style={{ maxHeight: "400px", overflowY: "auto", marginTop: "20px" }}
-          >
-            <Table striped bordered hover size="sm">
-              <thead>
-                <tr>
-                  <th>Assignment ID</th>
-                  <th>EmployeeID Assigner</th>
-                  <th>EmployeeID AssignTo</th>
-                  <th>Assignment Description</th>
-                  <th>Assign Date</th>
-                  <th>Deadline Date</th>
-                  <th>Assignment Status</th>
-                  <th>Assignment Priority</th>
-                  <th>Type</th>
-                
-                </tr>
-              </thead>
-              <tbody>
-                {currentItems.map((item) => {
-                  // Only render rows where the status is 'Completed'
-                  if (item.AssignmentStatus === "Completed") {
-                    return (
-                      <tr key={item.AssignmentID}>
-                        <td>{item.AssignmentID}</td>
-                        <td>{item.EmployeeID}</td>
-                        <td>{item.EmployeeID_AssignTo}</td>
-                        <td>{item.Assignment_Description}</td>
-                        <td>{moment(item.AssignDate).format("DD/MM/YYYY")}</td>
-                        <td>{moment(item.DeadlineDate).format("DD/MM/YYYY")}</td>
-                        <td style={{ color: "green" }}>
-                          {item.AssignmentStatus}
-                        </td>
-                        <td>{item.AssignmentPriority}</td>
-                        <td>{item.Type}</td>
-                      
-                      </tr>
-                    );
-                  }
-                  return null; // If status is not 'Pending', don't render the row
-                })}
-              </tbody>
-            </Table>
-          </Tab>
-        </Tabs>
-      </div>
-
-      {/* Pagination */}
-      <ul className="pagination">
-        {Array.from(
-          { length: Math.ceil(filteredData.length / itemsPerPage) },
-          (_, index) => (
-            <li key={index} className="page-item">
-              <button onClick={() => paginate(index + 1)} className="page-link">
-                {index + 1}
-              </button>
-            </li>
-          )
-        )}
-      </ul>
+      {/* Modal to display full description */}
+      <Modal
+        show={selectedDescription !== null}
+        onHide={handleClose}
+        style={{ marginTop: "60px" }}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Assignment Description</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>{selectedDescription}</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
-        </Box>
+  );
+};
 
- </Box>
-  )
-}
-
-export default ViewAssignment
+export default ViewAssignment;

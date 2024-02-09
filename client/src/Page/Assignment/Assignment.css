@@ -47,7 +47,9 @@
     /* box-shadow: 0px 3px 5px #5c7c77; */
    padding: 10px;
   background-color: rgb(240, 240, 240);
-font-size: 14px;
+
 }
-
-
+/* Add this style to your Assignment.css file or wherever you manage your CSS */
+.small-table {
+  font-size: 0.9rem; /* Adjust the font size as needed */
+}
