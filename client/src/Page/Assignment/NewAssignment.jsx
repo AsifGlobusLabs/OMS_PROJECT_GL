@@ -16,7 +16,7 @@ export default function NewAssignment() {
     AssignmentID: "",
     EmployeeID: "",
     EmployeeID_AssignTo: "",
-    AssignDate: new Date().toISOString().split("T")[0],
+    AssignDate: "",
     DeadlineDate: "",
     AssignmentPriority: "",
     Assignment_Description: "",
@@ -29,7 +29,6 @@ export default function NewAssignment() {
     setUserData(userDataFromSession);
   }, []);
 
-  // assignedTo data 
   useEffect(() => {
     const fetchAssignedEmployees = async () => {
       try {
@@ -54,7 +53,6 @@ export default function NewAssignment() {
     }
   }, [userData]);
 
-  // auto generated assignment no 
   useEffect(() => {
     const fetchLastAssignmentId = async () => {
       try {
@@ -94,16 +92,16 @@ export default function NewAssignment() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const form = event.currentTarget;
-  
+
     if (form.checkValidity() === false) {
       event.stopPropagation();
       setValidated(true);
       return;
     }
-  
+
     try {
       const response = await fetch(
-        "http://localhost:3306/api/assignmentDetails",
+        "http://localhost:3306/api/assignmentDetails/data",
         {
           method: "POST",
           headers: {
@@ -115,14 +113,14 @@ export default function NewAssignment() {
           }),
         }
       );
-  
+
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
-  
+
       const responseData = await response.json();
       console.log("Response:", responseData);
-  
+
       // Reset the form data after successful submission
       setAssignmentData({
         AssignmentID: "",
@@ -131,15 +129,16 @@ export default function NewAssignment() {
         AssignDate: "",
         DeadlineDate: "",
         AssignmentPriority: "",
+        Type: "",
         Assignment_Description: "",
       });
-  
+
       // Reset form validation
       setValidated(false);
       window.alert("Form submitted successfully!");
 
-       // Reload the page
-    window.location.reload();
+      // Reload the page
+      window.location.reload();
     } catch (error) {
       console.error("Error:", error);
     }
@@ -164,7 +163,6 @@ export default function NewAssignment() {
                 <Form.Group as={Col} md="4" controlId="validationCustom01">
                   <Form.Label>Assignment ID</Form.Label>
                   <Form.Control
-                   style={{ fontWeight: "600", fontSize: "16px" }}
                     required
                     type="text"
                     placeholder="Assignment ID"
@@ -207,8 +205,10 @@ export default function NewAssignment() {
                   <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                 </Form.Group>
               </Row>
+
+
               <Row className="mb-3">
-                <Form.Group as={Col} md="4" controlId="validationCustom03">
+                <Form.Group as={Col} md="3" controlId="validationCustom03">
                   <Form.Label>Assign Date</Form.Label>
                   <Form.Control
                     type="date"
@@ -222,7 +222,7 @@ export default function NewAssignment() {
                     Please provide Assign Date
                   </Form.Control.Feedback>
                 </Form.Group>
-                <Form.Group as={Col} md="4" controlId="validationCustom04">
+                <Form.Group as={Col} md="3" controlId="validationCustom04">
                   <Form.Label>Deadline Date</Form.Label>
                   <Form.Control
                     type="date"
@@ -236,7 +236,7 @@ export default function NewAssignment() {
                     Please provide Deadline Date
                   </Form.Control.Feedback>
                 </Form.Group>
-                <Form.Group as={Col} md="4" controlId="validationCustom05">
+                <Form.Group as={Col} md="3" controlId="validationCustom05">
                   <Form.Label>Priority</Form.Label>
                   <Form.Select
                     required
@@ -253,9 +253,29 @@ export default function NewAssignment() {
                     Please provide a priority.
                   </Form.Control.Feedback>
                 </Form.Group>
+                <Form.Group as={Col} md="3" controlId="validationCustom05">
+                  <Form.Label>Type</Form.Label>
+                  <Form.Select
+                    required
+                    name="Type"
+                    value={assignmentData.Type}
+                    onChange={handleInputChange}
+                  >
+                    <option value="">Select Type</option>
+                    <option value="A">A</option>
+                    <option value="T">T</option>
+                    
+                  </Form.Select>
+                  <Form.Control.Feedback type="invalid">
+                    Please provide a priority.
+                  </Form.Control.Feedback>
+                </Form.Group>
               </Row>
+
+
+
               <Row className="mb-3">
-                <Form.Group as={Col} md="12" controlId="Assignment_Description">
+                <Form.Group as={Col} md="12" controlId="validationCustom01">
                   <Form.Label>Assignment Description</Form.Label>
                   <textarea
                     type="text"
@@ -265,10 +285,8 @@ export default function NewAssignment() {
                     name="Assignment_Description"
                     value={assignmentData.Assignment_Description}
                     onChange={handleInputChange}
-                    required
                   />
                   <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-                  <Form.Control.Feedback type="invalid">Give Assignment!</Form.Control.Feedback>
                 </Form.Group>
               </Row>
               <div
@@ -288,7 +306,7 @@ export default function NewAssignment() {
               </div>
             </Form>
           </div>
-          <AssignmentTable />
+          <AssignmentTable userData={userData} />
         </div>
       </Box>
     </Box>

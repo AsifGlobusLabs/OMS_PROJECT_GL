@@ -4,9 +4,11 @@ import DeleteIcon from "@mui/icons-material/Delete";
 const AddTeams = ({ sdata, updateAssignedEmployees }) => {
   const [workgroupEmployees, setWorkgroupEmployees] = useState([]);
   const [assignedEmployees, setAssignedEmployees] = useState([]);
+  const [data, setData] = useState([]); // Define data state variable
+  const [filteredData, setFilteredData] = useState([]); // Define filteredData state variable
 
   // console.log(assignedEmployees, "name aali");
-   console.log(sdata, "data aali");
+  console.log(sdata, "data aali");
 
   useEffect(() => {
     const fetchWorkgroupEmployees = async () => {
@@ -40,23 +42,26 @@ const AddTeams = ({ sdata, updateAssignedEmployees }) => {
   const handleDelete = async (workgroupId) => {
     try {
       const response = await fetch(
-        `http://localhost:3306/api/workGroup//delete/${workgroupId}`,
+        `http://localhost:3306/api/workGroup/delete/${workgroupId}`,
         {
           method: "DELETE",
         }
       );
 
-      if (!response.ok) {
-        throw new Error("Failed to delete");
+      if (response.ok) {
+        // Filter out the deleted item from both data and filteredData
+        setData((prevData) => prevData.filter((item) => item.workgroupId !== workgroupId));
+        setFilteredData((prevData) => prevData.filter((item) => item.workgroupId !== workgroupId));
+        // Also update the assignedEmployees state
+        const updatedAssignedEmployees = assignedEmployees.filter(
+          (employee) => employee.WorkGroupID !== workgroupId
+        );
+        setAssignedEmployees(updatedAssignedEmployees);
+
+        window.alert("Item deleted successfully!");
+      } else {
+        console.error("Error deleting item:", response.status);
       }
-
-      const updatedAssignedEmployees = assignedEmployees.filter(
-        (employee) => employee.WorkGroupID !== workgroupId
-      );
-
-      setAssignedEmployees(updatedAssignedEmployees);
-
-      window.alert("Item deleted successfully!");
     } catch (error) {
       console.error("Error deleting workgroup:", error);
     }
@@ -67,7 +72,7 @@ const AddTeams = ({ sdata, updateAssignedEmployees }) => {
       {sdata &&
         sdata.map((item) => (
           <div key={item.EmployeeID}>
-            <p style={{fontSize:"18px", fontWeight:600}}>
+            <p style={{ fontSize: "18px", fontWeight: 600, color:'white' }}>
               {item.FirstName} {item.LastName} <span>Teams</span>
             </p>
           </div>

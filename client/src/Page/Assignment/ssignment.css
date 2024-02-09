@@ -1,0 +1,79 @@
+/* Styles for the assignment table container */
+.assignment-table-container {
+    margin: 20px;
+  }
+  
+  /* Styles for the heading */
+  .assignment-table-heading {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  /* Styles for the tabs container */
+  .tabs-container {
+    background-color: #f0f0f0;
+    padding: 20px;
+    border-radius: 5px;
+  }
+  
+  /* Styles for the table */
+  .assignment-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  /* Styles for table headers */
+  .assignment-table th {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px;
+    text-align: left;
+  }
+  
+  /* Styles for table cells */
+  .assignment-table td {
+    padding: 10px;
+  }
+  
+  /* Styles for description cell */
+  .description-cell {
+    cursor: pointer;
+    max-width: 200px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  
+  /* Styles for modal content */
+  .modal-body {
+    font-size: 16px;
+  }
+  
+  /* Styles for modal title */
+  .modal-title {
+    font-size: 20px;
+    font-weight: bold;
+  }
+  
+  /* Styles for modal footer */
+  .modal-footer {
+    justify-content: center;
+  }
+  
+  /* Styles for close button in modal footer */
+  .modal-footer button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  /* Styles for close button hover state */
+  .modal-footer button:hover {
+    background-color: #0056b3;
+  }
+  

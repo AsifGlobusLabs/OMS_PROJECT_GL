@@ -1,321 +1,31 @@
-// import React, { useEffect, useState } from "react";
-// import {
-//   CardActionArea,
-//   CardActions,
-//   CardContent,
-//   CardMedia,
-// } from "@mui/material";
-// import profile from "./profilenn.png";
-// import { Card } from "react-bootstrap";
-// import { useParams } from "react-router-dom";
-// import SideBar from "../../../Component/SideBar";
-// import Box from "@mui/material/Box";
-// import { Typography, TextField } from "@mui/material";
-// import AddTeams from "./AddTeams";
-// import { Dropdown, DropdownButton } from "react-bootstrap";
-// import {
-//   Table,
-//   TableBody,
-//   TableCell,
-//   TableContainer,
-//   TableHead,
-//   TableRow,
-//   Paper,
-// } from "@mui/material";
-// import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-
-// const Create = () => {
-//   const { EmployeeID } = useParams();
-//   const [item, setItem] = useState(null);
-//   const [error, setError] = useState(null);
-//   const [departments, setDepartments] = useState([]);
-//   const [selectedDepartment, setSelectedDepartment] = useState(null);
-//   const [departmentData, setDepartmentData] = useState(null);
-
-//   const [assignedEmployees, setAssignedEmployees] = useState([]);
-
-//   // Function to update assignedEmployees state
-//   const updateAssignedEmployees = (employees) => {
-//     setAssignedEmployees(employees);
-//   };
-
-//   useEffect(() => {
-//     // Fetch departments from the backend when the component mounts
-//     fetch("http://localhost:3306/api/department")
-//       .then((response) => response.json())
-//       .then((data) => setDepartments(data))
-//       .catch((error) => console.error("Error fetching departments:", error));
-//   }, []);
-
-//   // Handle department selection
-//   const handleDepartmentSelect = (department) => {
-//     setSelectedDepartment(department);
-//     fetch(
-//       `http://localhost:3306/api/employee/dNames?department=${department.DepartmentName}`
-//     )
-//       .then((response) => response.json())
-//       .then((data) => {
-//         const filteredData = data.filter(
-//           (employee) => employee.DepartmentID === department.DepartmentID
-//         );
-//         setDepartmentData(filteredData);
-//       })
-//       .catch((error) =>
-//         console.error("Error fetching department data:", error)
-//       );
-//   };
-
-//   // Add employee to the team
-//   const handleAddToTeam = async (employeeID) => {
-//     const selectedEmployee = departmentData.find(
-//       (item) => item.EmployeeID === employeeID
-//     );
-
-//     const requestData = {
-//       EmployeeID_Assigner: item.map((item) => item.EmployeeID),
-//       EmployeeID_AssignTo: selectedEmployee.EmployeeID,
-//       DepartmentID_AssignTo: selectedEmployee.DepartmentID,
-//       CreatedDate: new Date().toISOString(),
-//       CreatedBy: "Admin",
-//     };
-
-//     try {
-//       const response = await fetch("http://localhost:3306/api/workGroup", {
-//         method: "POST",
-//         headers: {
-//           "Content-Type": "application/json",
-//         },
-//         body: JSON.stringify(requestData),
-//       });
-
-//       if (!response.ok) {
-//         throw new Error(`HTTP error! Status: ${response.status}`);
-//       }
-
-//       console.log("Employee added to the team successfully");
-//     } catch (error) {
-//       console.error("Error adding employee to the team:", error);
-//     }
-//   };
-
-//   // who is assign his data is not show
-//   const filteremployeData = departmentData
-//     ? departmentData.filter(
-//         (employee) =>
-//           !assignedEmployees.some(
-//             (assignedEmployee) =>
-//               assignedEmployee.EmployeeID_AssignTo === employee.EmployeeID
-//           )
-//       )
-//     : [];
-
-//   // Data show in Table
-//   const filteredDepartmentData = filteremployeData
-//     ? filteremployeData.filter(
-//         (employee) =>
-//           !item.map((item) => item.EmployeeID).includes(employee.EmployeeID)
-//       )
-//     : [];
-
-//   useEffect(() => {
-//     // Fetch employee data based on EmployeeID from the URL parameter
-//     const fetchData = async () => {
-//       try {
-//         const response = await fetch(
-//           `http://localhost:3306/api/employee/allData/${EmployeeID}`,
-//           {
-//             method: "GET",
-//             headers: {
-//               "Content-Type": "application/json",
-//             },
-//           }
-//         );
-
-//         if (!response.ok) {
-//           throw new Error(`HTTP error! Status: ${response.status}`);
-//         }
-
-//         const data = await response.json();
-//         setItem(data);
-//       } catch (error) {
-//         setError(error);
-//       }
-//     };
-
-//     fetchData();
-//   }, [EmployeeID]);
-
-//   if (error) {
-//     return <div>Error: {error.message}</div>;
-//   }
-
-//   if (!item) {
-//     return <div>Loading...</div>;
-//   }
-
-//   return (
-//     <Box sx={{ display: "flex" }}>
-//       <SideBar />
-//       <Box sx={{ flexGrow: 1, p: 3, marginTop: "55px" }}>
-//         <div
-//           style={{
-//             display: "flex",
-//             justifyContent: "space-between",
-//           }}
-//         >
-//           <Typography variant="h5" sx={{ textAlign: "start" }}>
-//             CREATE TEAM
-//           </Typography>
-//           <TextField
-//             label="Search"
-//             variant="outlined"
-//             style={{ height: "10px" }} // Adjust the height value as needed
-//           />
-//         </div>
-
-//         <br></br>
-
-//         <Box
-//           className="createTeam-container"
-//           sx={{
-//             display: "flex",
-//             justifyContent: "flex-start",
-//             marginTop: "10px",
-//             padding: "10px",
-//           }}
-//         >
-//           {item.map((items) => (
-//             <Card
-//               key={items.EmployeeID}
-//               sx={{ width: 200, height: 200, margin: "10px", padding: "10px" }}
-//             >
-//               <CardActionArea>
-//                 <Box sx={{ display: "flex", justifyContent: "center" }}>
-//                   <CardMedia
-//                     component="img"
-//                     image={profile}
-//                     alt="profile"
-//                     sx={{ height: "100px", width: "100px" }}
-//                   />
-//                 </Box>
-//                 <CardContent sx={{ textAlign: "center" }}>
-//                   <Typography gutterBottom variant="h6" component="div">
-//                     {items.FirstName} {items.LastName}
-//                   </Typography>
-//                   <Typography variant="body2" color="text.secondary">
-//                     {items.EmployeeID}
-//                   </Typography>
-//                 </CardContent>
-//               </CardActionArea>
-//               <CardActions
-//                 sx={{ display: "flex", justifyContent: "center" }}
-//               ></CardActions>
-//             </Card>
-//           ))}
-//           <Box sx={{ marginLeft: "10px" }}>
-//             <div
-//               style={{
-//                 display: "flex",
-//                 justifyContent: "space-between",
-//                 alignItems: "flex-start",
-//               }}
-//             >
-//               <div style={{ width: "30%" }}>
-//                 <DropdownButton
-//                   id="dropdown-basic-button"
-//                   title={
-//                     selectedDepartment
-//                       ? selectedDepartment.DepartmentName
-//                       : "Select Department"
-//                   }
-//                 >
-//                   <div style={{ maxHeight: "300px", overflowY: "auto" }}>
-//                     {departments.map((department) => (
-//                       <Dropdown.Item
-//                         key={department.DepartmentID}
-//                         onClick={() => handleDepartmentSelect(department)}
-//                       >
-//                         {department.DepartmentName}
-//                       </Dropdown.Item>
-//                     ))}
-//                   </div>
-//                 </DropdownButton>
-//               </div>
-//               <div style={{ width: "700px" }}>
-//                 <TableContainer component={Paper}>
-//                   <Table sx={{ minWidth: 650 }} aria-label="simple table">
-//                     <TableHead>
-//                       <TableRow>
-//                         <TableCell>Employee ID</TableCell>
-//                         <TableCell>Name</TableCell>
-//                         <TableCell>Designation</TableCell>
-//                         <TableCell>Status</TableCell>
-//                         <TableCell>Add</TableCell>
-//                       </TableRow>
-//                     </TableHead>
-//                     <TableBody>
-//                       {filteredDepartmentData.map((employee) => (
-//                         <TableRow key={employee.EmployeeID}>
-//                           <TableCell>{employee.EmployeeID}</TableCell>
-//                           <TableCell>
-//                             {employee.FirstName} {employee.LastName}
-//                           </TableCell>
-//                           <TableCell>{employee.DesignationName}</TableCell>
-//                           <TableCell>{employee.EmploymentStatus}</TableCell>
-//                           <TableCell
-//                             sx={{
-//                               fontSize: "18px",
-//                               color: "green",
-//                               cursor: "pointer",
-//                             }}
-//                             onClick={() => handleAddToTeam(employee.EmployeeID)}
-//                           >
-//                             <AddCircleOutlineIcon />
-//                           </TableCell>
-//                         </TableRow>
-//                       ))}
-//                     </TableBody>
-//                   </Table>
-//                 </TableContainer>
-//               </div>
-//             </div>
-//           </Box>
-//         </Box>
-//         <AddTeams
-//           sdata={item}
-//           updateAssignedEmployees={updateAssignedEmployees}
-//         />
-//       </Box>
-//     </Box>
-//   );
-// };
-
-// export default Create;
 import React, { useEffect, useState } from "react";
-import {
-  CardActionArea,
-  CardActions,
-  CardContent,
-  CardMedia,
-} from "@mui/material";
-import profile from "./profilenn.png";
-import { Card } from "react-bootstrap";
+import { Card, Dropdown, DropdownButton } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import SideBar from "../../../Component/SideBar";
-import Box from "@mui/material/Box";
-import { Typography, TextField } from "@mui/material";
-import AddTeams from "./AddTeams";
-import { Dropdown, DropdownButton } from "react-bootstrap";
 import {
+  Typography,
+  Box,
+  Paper,
   Table,
   TableBody,
   TableCell,
+  TextField,
   TableContainer,
   TableHead,
   TableRow,
-  Paper,
+  TablePagination, // Add TablePagination
 } from "@mui/material";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import CheckIcon from "@mui/icons-material/Check";
+import profile from "./profilenn.png";
+import {
+  CardActionArea,
+  CardMedia,
+  CardContent,
+  CardActions,
+} from "@mui/material";
+import AddTemp from "./AddTemp";
+import AddTeams from "./AddTeams";
 
 const Create = () => {
   const { EmployeeID } = useParams();
@@ -325,72 +35,102 @@ const Create = () => {
   const [selectedDepartment, setSelectedDepartment] = useState(null);
   const [departmentData, setDepartmentData] = useState(null);
   const [assignedEmployees, setAssignedEmployees] = useState([]);
-  const [successMessage, setSuccessMessage] = useState(""); // 1. State for Success Message
+  const [selectedEmployee, setSelectedEmployee] = useState([]);
+  const [page, setPage] = useState(0); // State for current page
+  const [rowsPerPage, setRowsPerPage] = useState(3); // State for rows per page
+
+  console.log(item, "hhfhfhhf");
 
   // Function to update assignedEmployees state
   const updateAssignedEmployees = (employees) => {
     setAssignedEmployees(employees);
   };
 
-  useEffect(() => {
-    // Fetch departments from the backend when the component mounts
-    fetch("http://localhost:3306/api/department")
-      .then((response) => response.json())
-      .then((data) => setDepartments(data))
-      .catch((error) => console.error("Error fetching departments:", error));
-  }, []);
-
-  // Handle department selection
-  const handleDepartmentSelect = (department) => {
-    setSelectedDepartment(department);
-    fetch(
-      `http://localhost:3306/api/employee/dNames?department=${department.DepartmentName}`
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        const filteredData = data.filter(
-          (employee) => employee.DepartmentID === department.DepartmentID
-        );
-        setDepartmentData(filteredData);
-      })
-      .catch((error) =>
-        console.error("Error fetching department data:", error)
-      );
+  // Event handler for page change
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
   };
 
-  // Add employee to the team
-  const handleAddToTeam = async (employeeID) => {
-    const selectedEmployee = departmentData.find(
-      (item) => item.EmployeeID === employeeID
-    );
+  // Event handler for rows per page change
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
 
-    const requestData = {
-      EmployeeID_Assigner: item.map((item) => item.EmployeeID),
-      EmployeeID_AssignTo: selectedEmployee.EmployeeID,
-      DepartmentID_AssignTo: selectedEmployee.DepartmentID,
-      CreatedDate: new Date().toISOString(),
-      CreatedBy: "Admin",
-    };
-
+  const handleDepartmentSelect = async (department) => {
+    setSelectedDepartment(department);
     try {
-      const response = await fetch("http://localhost:3306/api/workGroup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(requestData),
-      });
-
+      const response = await fetch(
+        `http://localhost:3306/api/employee/dNames?department=${department.DepartmentName}`
+      );
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
-
-      setSuccessMessage("Employee added to the team successfully"); // 3. Update success message state
-      window.location.reload(); // Refresh the page
+      const data = await response.json();
+      const filteredData = data.filter(
+        (employee) => employee.DepartmentID === department.DepartmentID
+      );
+      setDepartmentData(filteredData);
     } catch (error) {
-      console.error("Error adding employee to the team:", error);
+      console.error("Error fetching department data:", error);
+      setError(error);
     }
   };
+
+  useEffect(() => {
+    fetchDepartments();
+    fetchEmployeeData(EmployeeID);
+  }, [EmployeeID]);
+
+  const fetchDepartments = async () => {
+    try {
+      const response = await fetch("http://localhost:3306/api/department");
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      const data = await response.json();
+      setDepartments(data);
+    } catch (error) {
+      console.error("Error fetching departments:", error);
+      setError(error);
+    }
+  };
+
+  const fetchEmployeeData = async (id) => {
+    try {
+      const response = await fetch(
+        `http://localhost:3306/api/employee/allData/${id}`,
+        {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      const data = await response.json();
+      setItem(data);
+    } catch (error) {
+      console.error("Error fetching employee data:", error);
+      setError(error);
+    }
+  };
+
+  const handleAddToTeam = (employeeID) => {
+    // Find the employee by ID and add it to the selectedEmployee state
+    const employee = filteredDepartmentData.find(
+      (emp) => emp.EmployeeID === employeeID
+    );
+    setSelectedEmployee([...selectedEmployee, employee]); // Append the selected employee
+  };
+
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
+
+  if (!item) {
+    return <div>Loading...</div>;
+  }
 
   // who is assign his data is not show
   const filteremployeData = departmentData
@@ -411,41 +151,10 @@ const Create = () => {
       )
     : [];
 
-  useEffect(() => {
-    // Fetch employee data based on EmployeeID from the URL parameter
-    const fetchData = async () => {
-      try {
-        const response = await fetch(
-          `http://localhost:3306/api/employee/allData/${EmployeeID}`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        setItem(data);
-      } catch (error) {
-        setError(error);
-      }
-    };
-
-    fetchData();
-  }, [EmployeeID]);
-
-  if (error) {
-    return <div>Error: {error.message}</div>;
-  }
-
-  if (!item) {
-    return <div>Loading...</div>;
-  }
+  // Pagination
+  const emptyRows =
+    rowsPerPage -
+    Math.min(rowsPerPage, filteredDepartmentData.length - page * rowsPerPage);
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -453,22 +162,57 @@ const Create = () => {
       <Box sx={{ flexGrow: 1, p: 3, marginTop: "55px" }}>
         <div
           style={{
+            height: "80px",
             display: "flex",
-            justifyContent: "space-between",
+            alignItems: "center",
+            boxShadow: "0px 0px 5px rgba(0, 0, 0, 0.2)",
+            backgroundColor: "white",
+            color: "black",
           }}
         >
-          <Typography variant="h5" sx={{ textAlign: "start" }}>
-            CREATE TEAM
-          </Typography>
-          <TextField
-            label="Search"
-            variant="outlined"
-            style={{ height: "10px" }} // Adjust the height value as needed
-          />
+          <div style={{ width: "30%" }}>
+            <Typography variant="h5" sx={{ textAlign: "start" }}>
+              CREATE TEAM
+            </Typography>
+          </div>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+              width: "70%",
+            }}
+          >
+            <DropdownButton
+              id="dropdown-basic-button"
+              title={
+                selectedDepartment
+                  ? selectedDepartment.DepartmentName
+                  : "Select Department"
+              }
+              style={{ marginLeft: "400px", padding: "10px 20px" }}
+            >
+              <div style={{ maxHeight: "300px", overflowY: "auto" }}>
+                {departments.map((department) => (
+                  <Dropdown.Item
+                    key={department.DepartmentID}
+                    onClick={() => handleDepartmentSelect(department)}
+                  >
+                    {department.DepartmentName}
+                  </Dropdown.Item>
+                ))}
+              </div>
+            </DropdownButton>
+
+            <TextField
+              sx={{ marginRight: "15px" }}
+              label="Search"
+              variant="outlined"
+            />
+          </div>
         </div>
-
-        <br></br>
-
+        <br />
         <Box
           className="createTeam-container"
           sx={{
@@ -476,37 +220,46 @@ const Create = () => {
             justifyContent: "flex-start",
             marginTop: "10px",
             padding: "10px",
+            backgroundColor: "#f9f9f9",
+            height: "400px",
           }}
         >
-          {item.map((items) => (
-            <Card
-              key={items.EmployeeID}
-              sx={{ width: 200, height: 200, margin: "10px", padding: "10px" }}
-            >
-              <CardActionArea>
-                <Box sx={{ display: "flex", justifyContent: "center" }}>
-                  <CardMedia
-                    component="img"
-                    image={profile}
-                    alt="profile"
-                    sx={{ height: "100px", width: "100px" }}
-                  />
-                </Box>
-                <CardContent sx={{ textAlign: "center" }}>
-                  <Typography gutterBottom variant="h6" component="div">
-                    {items.FirstName} {items.LastName}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    {items.EmployeeID}
-                  </Typography>
-                </CardContent>
-              </CardActionArea>
-              <CardActions
-                sx={{ display: "flex", justifyContent: "center" }}
-              ></CardActions>
-            </Card>
-          ))}
-          <Box sx={{ marginLeft: "10px" }}>
+          <div>
+            {item.map((items) => (
+              <Card
+                key={items.EmployeeID}
+                sx={{
+                  width: 200,
+                  height: 200,
+                  margin: "10px",
+                  padding: "10px",
+                }}
+              >
+                <CardActionArea>
+                  <Box sx={{ display: "flex", justifyContent: "center" }}>
+                    <CardMedia
+                      component="img"
+                      image={profile}
+                      alt="profile"
+                      sx={{ height: "100px", width: "100px" }}
+                    />
+                  </Box>
+                  <CardContent sx={{ textAlign: "center" }}>
+                    <Typography gutterBottom variant="h6" component="div">
+                      {items.FirstName} {items.LastName}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      {items.EmployeeID}
+                    </Typography>
+                  </CardContent>
+                </CardActionArea>
+                <CardActions
+                  sx={{ display: "flex", justifyContent: "center" }}
+                ></CardActions>
+              </Card>
+            ))}
+          </div>
+          <Box sx={{ marginLeft: "50px" }}>
             <div
               style={{
                 display: "flex",
@@ -514,72 +267,118 @@ const Create = () => {
                 alignItems: "flex-start",
               }}
             >
-              <div style={{ width: "30%", } }>
-                <DropdownButton
-                  id="dropdown-basic-button"
-                  title={
-                    selectedDepartment
-                      ? selectedDepartment.DepartmentName
-                      : "Select Department"
-                  }
-                >
-                  <div style={{ maxHeight: "300px", overflowY: "auto" ,  }}>
-                    {departments.map((department) => (
-                      <Dropdown.Item
-                        key={department.DepartmentID}
-                        onClick={() => handleDepartmentSelect(department)}
-                      >
-                        {department.DepartmentName}
-                      </Dropdown.Item>
-                    ))}
-                  </div>
-                </DropdownButton>
-              </div>
-              <div style={{ width: "700px" }}>
+              <div style={{ width: "900px" }}>
                 <TableContainer component={Paper}>
                   <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                    <TableHead >
-                      <TableRow >
-                        <TableCell>Employee ID</TableCell>
-                        <TableCell>Name</TableCell>
-                        <TableCell>Designation</TableCell>
-                        <TableCell>Status</TableCell>
-                        <TableCell>Add</TableCell>
+                    <TableHead>
+                      <TableRow style={{ backgroundColor: "#303F9F" }}>
+                        <TableCell
+                          style={{ fontWeight: "bold", color: "white" }}
+                        >
+                          Employee ID
+                        </TableCell>
+                        <TableCell
+                          style={{ fontWeight: "bold", color: "white" }}
+                        >
+                          Name
+                        </TableCell>
+                        <TableCell
+                          style={{ fontWeight: "bold", color: "white" }}
+                        >
+                          Designation
+                        </TableCell>
+                        <TableCell
+                          style={{ fontWeight: "bold", color: "white" }}
+                        >
+                          Status
+                        </TableCell>
+                        <TableCell
+                          style={{ fontWeight: "bold", color: "white" }}
+                        >
+                          Add
+                        </TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {filteredDepartmentData.map((employee) => (
+                      {(rowsPerPage > 0
+                        ? filteredDepartmentData.slice(
+                            page * rowsPerPage,
+                            page * rowsPerPage + rowsPerPage
+                          )
+                        : filteredDepartmentData
+                      ).map((employee) => (
                         <TableRow key={employee.EmployeeID}>
                           <TableCell>{employee.EmployeeID}</TableCell>
                           <TableCell>
                             {employee.FirstName} {employee.LastName}
                           </TableCell>
                           <TableCell>{employee.DesignationName}</TableCell>
-                          <TableCell>{employee.EmploymentStatus}</TableCell>
                           <TableCell
-                            sx={{
-                              fontSize: "18px",
-                              color: "green",
-                              cursor: "pointer",
+                            style={{
+                              color:
+                                employee.EmploymentStatus === "Active"
+                                  ? "green"
+                                  : "black",
                             }}
-                            onClick={() => handleAddToTeam(employee.EmployeeID)}
                           >
-                            <AddCircleOutlineIcon />
+                            {employee.EmploymentStatus}
                           </TableCell>
+                          {/* Render Add or Check icon based on whether the employee is selected */}
+                          {selectedEmployee.some(
+                            (emp) => emp.EmployeeID === employee.EmployeeID
+                          ) ? (
+                            <TableCell>
+                              <CheckIcon />
+                            </TableCell>
+                          ) : (
+                            <TableCell
+                              sx={{
+                                fontSize: "18px",
+                                color: "green",
+                                cursor: "pointer",
+                              }}
+                              onClick={() =>
+                                handleAddToTeam(employee.EmployeeID)
+                              }
+                            >
+                              <AddCircleOutlineIcon />
+                            </TableCell>
+                          )}
+                          {emptyRows > 0 && (
+                            <TableRow style={{ height: 53 * emptyRows }}>
+                              <TableCell colSpan={6} />
+                            </TableRow>
+                          )}
                         </TableRow>
                       ))}
                     </TableBody>
                   </Table>
                 </TableContainer>
+                <TablePagination
+                  rowsPerPageOptions={[5, 10, 25]}
+                  component="div"
+                  count={filteredDepartmentData.length}
+                  rowsPerPage={rowsPerPage}
+                  page={page}
+                  onPageChange={handleChangePage}
+                  onRowsPerPageChange={handleChangeRowsPerPage}
+                />
               </div>
             </div>
           </Box>
         </Box>
-        <AddTeams
-          sdata={item}
-          updateAssignedEmployees={updateAssignedEmployees}
-        />
-        {successMessage && <div>{successMessage}</div>} {/* 2. Display Success Message */}
+        <br />
+        <br />
+        <div style={{ backgroundColor: "#f9f9f9", height: "300px" }}>
+          <AddTemp selectedEmployee={selectedEmployee} currentEmpolyee={item} />
+        </div>
+
+        <div style={{ backgroundColor: "#303F9F" }}>
+          <AddTeams
+            sdata={item}
+            updateAssignedEmployees={updateAssignedEmployees}
+          />
+        </div>
       </Box>
     </Box>
   );
