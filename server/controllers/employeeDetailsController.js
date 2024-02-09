@@ -18,7 +18,13 @@ exports.getAllEmployees = (req, res) => {
 
 exports.getAllDataOfEmployees = (req, res) => {
   const query =
-    "SELECT tb_employee.*, tb_userdetails.Role, tb_userdetails.Username FROM tb_employee INNER JOIN tb_userdetails ON tb_employee.EmployeeID = tb_userdetails.EmployeeID";
+    `SELECT
+    e.*, u.Role, u.Username , d.DepartmentName, d2.DesignationName
+    FROM
+    tb_employee as e INNER JOIN tb_userdetails as u ON e.EmployeeID = u.EmployeeID INNER JOIN 
+    tb_department as d ON e.DepartmentID = d.DepartmentID 
+    INNER JOIN 
+    tb_designation as d2 ON e.DesignationID = d2.DesignationID; `;
   db.query(query, (err, results) => {
     if (err) {
       console.error("Error executing query:", err);
