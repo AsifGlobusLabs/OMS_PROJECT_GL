@@ -247,8 +247,8 @@ useEffect(() => {
       return tableData.filter((item) => item.AssignmentStatus === 'Pending');
     } else if (activeTab === 'Progress') {
       return tableData.filter((item) => item.AssignmentStatus === 'Progress');
-    } else if (activeTab === 'Complete') {
-      return tableData.filter((item) => item.AssignmentStatus === 'Complete');
+    } else if (activeTab === 'Completed') {
+      return tableData.filter((item) => item.AssignmentStatus === 'Completed');
     }
     return [];
   };
@@ -288,7 +288,7 @@ useEffect(() => {
           <Tab eventKey="Progress" title="Progress">
             <TableComponent data={currentItems} />
           </Tab>
-          <Tab eventKey="Complete" title="Complete">
+          <Tab eventKey="Completed" title="Completed">
             <TableComponent data={currentItems} />
           </Tab>
         </Tabs>
@@ -346,7 +346,19 @@ const TableComponent = ({ data }) => {
               </td>
               <td>{format(new Date(item.AssignDate), 'dd/MM/yyyy')}</td>
               <td>{format(new Date(item.DeadlineDate), 'dd/MM/yyyy')}</td>
-              <td>{item.AssignmentStatus}</td>
+              <td>
+                {item.AssignmentStatus === "Pending" ? (
+                  <span style={{ color: "red" }}>{item.AssignmentStatus}</span>
+                ) : item.AssignmentStatus === "Progress" ? (
+                  <span style={{ color: "orange" }}>
+                    {item.AssignmentStatus}
+                  </span>
+                ) : (
+                  <span style={{ color: "green" }}>
+                    {item.AssignmentStatus}
+                  </span>
+                )}
+              </td>
               <td>{item.AssignmentPriority}</td>
               <td>{item.Type}</td>
             </tr>

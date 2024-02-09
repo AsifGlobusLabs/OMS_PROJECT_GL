@@ -17,7 +17,7 @@ export const menuItems = [
   { text: "New Designation", icon: <ViewListIcon/>, path: "/newdesignation"},
   { text: "Team", icon: <GroupsIcon/>, path: "/team" },
   { text: "New Assignment", icon: <AssignmentIcon />, path: "/assignment" },
-  { text: "View Assignment", icon: <AssignmentIcon />, path: "/view-assignment" },
+  { text: "My Assignment", icon: <AssignmentIcon />, path: "/view-assignment" },
   { text: "New Task", icon: <AddCircleIcon />, path: "/Newtask" },
   { text: "Settings", icon: <SettingsIcon />, path: "/settings" },
 
