@@ -85,10 +85,26 @@ exports.getDataOfEmployeesWithTheirDNames = (req, res) => {
 // Inserting employees data
 
 exports.addEmployee = (req, res) => {
-  const newEmployee = req.body;
+  const {
+    EmployeeID,
+    FirstName,
+    LastName,
+    DateOfBirth,
+    Gender,
+    ContactNumber,
+    Email,
+    Address,
+    JoinDate,
+    EmploymentStatus,
+    DepartmentID,
+    DesignationID
+  } = req.body;
+  const employeeProfile = req.file.filename;
 
-  const query = "INSERT INTO tb_employee SET ?";
-  db.query(query, newEmployee, (err, results) => {
+  const query = `INSERT INTO tb_employee 
+  (EmployeeID, FirstName, LastName, DateOfBirth, Gender, ContactNumber, Email, Address, JoinDate, Employee_Profile, EmploymentStatus, DepartmentID, DesignationID)
+  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+  db.query(query, [EmployeeID, FirstName, LastName, DateOfBirth, Gender, ContactNumber, Email, Address, JoinDate, employeeProfile, EmploymentStatus, DepartmentID, DesignationID], (err, result) => {
     if (err) {
       console.error("Error executing query:", err);
       res.status(500).json({ error: "Internal Server Error" });

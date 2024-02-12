@@ -2,6 +2,21 @@ const express = require("express");
 const router = express.Router();
 const auth = require("../midderware/auth");
 const employeeController = require("../controllers/employeeDetailsController");
+const path = require("path");
+const multer = require("multer");
+router.use(express.static('public'));
+
+// for saving image using registration form 
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    return cb(null, path.join(__dirname,'../public'))
+  },
+  filename: function (req, file, cb) {
+    const name = Date.now() + '-' + file.originalname;
+    return cb(null, name)
+  }
+})  
+const upload = multer({ storage: storage });
 
 // Define routes related to employees
 
@@ -25,7 +40,7 @@ router.get(
 router.get("/dNames", employeeController.getDataOfEmployeesWithTheirDNames);
 
 // Add a new employee
-router.post("/", employeeController.addEmployee);
+router.post("/",upload.single('Employee_Profile'),employeeController.addEmployee);
 
 // Get latest employee id
 router.get("/lastEmployeeId", employeeController.getLastEmployeeId);
