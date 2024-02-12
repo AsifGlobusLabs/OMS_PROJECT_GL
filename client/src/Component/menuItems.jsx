@@ -14,7 +14,7 @@ const userData = JSON.parse(sessionStorage.getItem("userData"));
 
 export const menuItems = [
   { text: "Home", icon: <HomeIcon />, path: "/"},
-  { text: "New Employee", icon: <AppRegistrationIcon/>, path: "/newEmployee"},
+  { text: "New Employee", icon: <AppRegistrationIcon/>, path: "/registeration"},
   { text: "View Employee", icon: <TableRowsIcon/>, path: "/viewEmployee"},
   { text: "New Department", icon: <ViewListIcon/>, path: "/Department"},
   { text: "New Designation", icon: <ViewListIcon/>, path: "/newdesignation"},

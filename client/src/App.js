@@ -40,9 +40,10 @@ export default function App() {
           <Route path="/view-assignment" element={<ViewAssignment/>}></Route>
           <Route path="/task" element={<NewTask/>}></Route>
           <Route path="/settings" element={<Settings />}></Route>
-          <Route path="/newEmployee" element={<RegisterPage />}></Route>
+          {/* <Route path="/newEmployee" element={<RegisterPage />}></Route> */}
           <Route path="/createteam/:EmployeeID" element={<Create />}></Route>
           <Route path="/Newtask" element={<NewTask/>}></Route>
+          <Route path="/registeration" element={<RegisterPage/>}></Route>
         </Route>
         
       </Routes>
