@@ -78,7 +78,7 @@ const ViewRegistrationData = ({ employeeData, deleteEmployee }) => {
                 {item.DesignationID}
               </TableCell>
               <TableCell className={classes.name}>
-                {item.DepartmentID}--{item.DepartmentID}
+                {item.DepartmentID}
               </TableCell>
               <TableCell
                 className={classes.status}

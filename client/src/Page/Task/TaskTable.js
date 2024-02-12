@@ -92,7 +92,7 @@ const TaskTable = () => {
   return (
     <div className="assignment-table">
       <Typography variant="h5" style={{ fontWeight: "500" }}>
-        Assignment Data
+        Task Data
       </Typography>
 
       <div className="p-2">

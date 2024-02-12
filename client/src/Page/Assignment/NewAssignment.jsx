@@ -16,7 +16,7 @@ export default function NewAssignment() {
     AssignmentID: "",
     EmployeeID: "",
     EmployeeID_AssignTo: "",
-    AssignDate: "",
+    AssignDate: new Date().toISOString().split("T")[0],
     DeadlineDate: "",
     AssignmentPriority: "",
     Assignment_Description: "",

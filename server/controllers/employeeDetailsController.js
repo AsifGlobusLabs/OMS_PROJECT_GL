@@ -85,10 +85,26 @@ exports.getDataOfEmployeesWithTheirDNames = (req, res) => {
 // Inserting employees data
 
 exports.addEmployee = (req, res) => {
-  const newEmployee = req.body;
+  const {
+    EmployeeID,
+    FirstName,
+    LastName,
+    DateOfBirth,
+    Gender,
+    ContactNumber,
+    Email,
+    Address,
+    JoinDate,
+    EmploymentStatus,
+    DepartmentID,
+    DesignationID
+  } = req.body;
+  const employeeProfile = req.file.filename;
 
-  const query = "INSERT INTO tb_employee SET ?";
-  db.query(query, newEmployee, (err, results) => {
+  const query = `INSERT INTO tb_employee 
+  (EmployeeID, FirstName, LastName, DateOfBirth, Gender, ContactNumber, Email, Address, JoinDate, Employee_Profile, EmploymentStatus, DepartmentID, DesignationID)
+  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+  db.query(query, [EmployeeID, FirstName, LastName, DateOfBirth, Gender, ContactNumber, Email, Address, JoinDate, employeeProfile, EmploymentStatus, DepartmentID, DesignationID], (err, result) => {
     if (err) {
       console.error("Error executing query:", err);
       res.status(500).json({ error: "Internal Server Error" });
@@ -97,6 +113,44 @@ exports.addEmployee = (req, res) => {
     }
   });
 };
+
+
+// exports.addEmployee = (req, res) => {
+//   const {
+//     EmployeeID,
+//     FirstName,
+//     LastName,
+//     DateOfBirth,
+//     Gender,
+//     ContactNumber,
+//     Email,
+//     Address,
+//     JoinDate,
+//     EmploymentStatus,
+//     DepartmentID,
+//     DesignationID
+//   } = req.body;
+  
+//   // Ensure that a file was uploaded
+//   if (!req.file) {
+//     return res.status(400).json({ error: 'No file uploaded' });
+//   }
+
+//   const employeeProfile = req.file.filename;
+
+//   const query = `INSERT INTO tb_employee 
+//   (EmployeeID, FirstName, LastName, DateOfBirth, Gender, ContactNumber, Email, Address, JoinDate, Employee_Profile, EmploymentStatus, DepartmentID, DesignationID)
+//   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+//   db.query(query, [EmployeeID, FirstName, LastName, DateOfBirth, Gender, ContactNumber, Email, Address, JoinDate, employeeProfile, EmploymentStatus, DepartmentID, DesignationID], (err, result) => {
+//     if (err) {
+//       console.error("Error executing query:", err);
+//       res.status(500).json({ error: "Internal Server Error" });
+//     } else {
+//       res.status(201).json({ message: "Employee added successfully" });
+//     }
+//   });
+// };
+
 
 // getting latest or last employee id
 
