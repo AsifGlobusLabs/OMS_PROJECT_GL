@@ -49,13 +49,10 @@ const TaskTable = () => {
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = assignedEmployees.slice(
-    indexOfFirstItem,
-    indexOfLastItem
-  );
+  const currentItems = assignedEmployees.slice(indexOfFirstItem, indexOfLastItem);
   // Change page
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
+  
 
 
   // delete btn
