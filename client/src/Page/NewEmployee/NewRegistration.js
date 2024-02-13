@@ -94,9 +94,13 @@ function NewRegistration({ addEmployee }) {
   }, []);
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    if (name === "Employee_Profile") {
-      setFormData((prevData) => ({ ...prevData, [name]: e.target.files[0] }));
+    const { name, value, files } = e.target;
+    if (name === "Employee_Profile" && files.length > 0) {
+      // Set file in state if selected
+      setFormData((prevData) => ({
+        ...prevData,
+        Employee_Profile: files[0],
+      }));
     } else {
       setFormData((prevData) => ({ ...prevData, [name]: value }));
     }
@@ -132,12 +136,12 @@ function NewRegistration({ addEmployee }) {
     }
   };
 
-  // const [Employee_Profile , setEmployee_Profile] = useState();
 
-  // const onInputChange =(e)=>{
-  //   console.log(e.target.files[0]);
-  //   setEmployee_Profile(e.target.files[0]);
-  // }
+
+
+
+
+
 
   return (
     <div className="Employee-container">
@@ -317,18 +321,19 @@ function NewRegistration({ addEmployee }) {
                 </Select>
               </FormControl>
             </Grid>
+
             <Grid item xs={12} md={4}>
               <TextField
                 variant="outlined"
                 name="Employee_Profile"
                 type="file"
                 accept="image/*"
-                value={formData.Employee_Profile}
                 onChange={handleInputChange}
                 fullWidth
                 size="medium"
               />
             </Grid>
+
             <Container
               sx={{
                 marginTop: "10px",
@@ -878,3 +883,7 @@ export default NewRegistration;
 // }
 
 // export default NewRegistration;
+
+
+
+

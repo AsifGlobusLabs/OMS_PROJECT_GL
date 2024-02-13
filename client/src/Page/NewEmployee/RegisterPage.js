@@ -39,23 +39,53 @@ const RegisterPage = () => {
 
 
 
+  // const addEmployee = async (formData) => {
+  //   setLoading(true);
+  //   try {
+  //     const response = await fetch('http://localhost:3306/api/employee', {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify(formData),
+  //     });
+  //     if (!response.ok) {
+  //       throw new Error('Failed to add employee');
+  //     }
+  //     // Handle success response
+  //     setSuccessMessage("Registration successful!");
+       
+
+  //     // Clear the success message after 2 seconds
+  //     setTimeout(() => {
+  //       setSuccessMessage("");
+  //     }, 2000);
+  //     fetchEmployee();
+  //   } catch (error) {
+  //     console.error('Error adding employee', error);
+  //     setError('Error adding employee');
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // 
+
   const addEmployee = async (formData) => {
     setLoading(true);
     try {
+      const formDataWithImage = new FormData();
+      for (const key in formData) {
+        formDataWithImage.append(key, formData[key]);
+      }
       const response = await fetch('http://localhost:3306/api/employee', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
+        body: formDataWithImage,
       });
       if (!response.ok) {
         throw new Error('Failed to add employee');
       }
       // Handle success response
       setSuccessMessage("Registration successful!");
-       
-
+  
       // Clear the success message after 2 seconds
       setTimeout(() => {
         setSuccessMessage("");
@@ -68,6 +98,7 @@ const RegisterPage = () => {
       setLoading(false);
     }
   };
+  
 
 
 
