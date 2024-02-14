@@ -180,6 +180,51 @@ exports.completedAssignmentStatus = (req, res) => {
   });
 };
 
+// number of progress assignments
+
+exports.numberOfProgressAssignments = (req, res) => {
+  const query = 'SELECT COUNT(*) AS num_progress_assignments FROM tb_assignment WHERE AssignmentStatus = "Progress"';
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error("Error executing query:", err);
+      res.status(500).json({ error: "Internal Server Error" });
+    } else {
+      const numProgressAssignments = results[0].num_progress_assignments;
+      res.status(200).json(numProgressAssignments);
+    }
+  });
+}
+
+// number of pending assignments 
+
+exports.numberOfPendingAssignments = (req, res) => {
+  const query = 'SELECT COUNT(*) AS num_pending_assignments FROM tb_assignment WHERE AssignmentStatus = "Pending"';
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error("Error executing query:", err);
+      res.status(500).json({ error: "Internal Server Error" });
+    } else {
+      const numPendingAssignments = results[0].num_pending_assignments;
+      res.status(200).json(numPendingAssignments);
+    }
+  });
+}
+
+// number of completed assignments 
+
+exports.numberOfCompletedAssignments = (req, res) => {
+  const query = 'SELECT COUNT(*) AS num_completed_assignments FROM tb_assignment WHERE AssignmentStatus = "Completed"';
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error("Error executing query:", err);
+      res.status(500).json({ error: "Internal Server Error" });
+    } else {
+      const numCompletedAssignments = results[0].num_completed_assignments;
+      res.status(200).json(numCompletedAssignments);
+    }
+  });
+}
+
 // Deleting Assignment's data
 
 exports.deleteAssignment = (req, res) => {

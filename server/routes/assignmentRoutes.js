@@ -26,6 +26,15 @@ router.patch("/:AssignmentID/progress", assignmentController.progressAssignmentS
 // update assignment status to completed
 router.patch("/:AssignmentID/completed", assignmentController.completedAssignmentStatus);
 
+// number of progress assignments
+router.get("/progress-assignments", assignmentController.numberOfProgressAssignments);
+
+// number of pending assignments
+router.get("/pending-assignments", assignmentController.numberOfPendingAssignments);
+
+// number of completed assignments
+router.get("/completed-assignments", assignmentController.numberOfCompletedAssignments);
+
 // delete assignment
 router.delete("/delete/:AssignmentID", assignmentController.deleteAssignment);
 
