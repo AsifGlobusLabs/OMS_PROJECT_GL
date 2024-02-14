@@ -1,5 +1,6 @@
 const db = require("../db");
 
+
 // Getting all tasks
 
 exports.getAllTasks = (req, res) => {
@@ -13,6 +14,7 @@ exports.getAllTasks = (req, res) => {
     }
   });
 };
+
 
 // Inserting task
 
@@ -34,8 +36,7 @@ exports.addTask = (req, res) => {
 };
 
 
-
-// // getting latest or last task id
+// getting latest or last task id
 
 exports.getLastTaskId = (req, res) => {
   const query =
@@ -56,6 +57,7 @@ exports.getLastTaskId = (req, res) => {
     res.status(200).json({ lastTaskId: lastTaskId });
   });
 };
+
 
 // updating task's data
 
@@ -81,6 +83,7 @@ exports.updateTask = (req, res) => {
     }
   });
 };
+
 
 // Deleting Task's data
 

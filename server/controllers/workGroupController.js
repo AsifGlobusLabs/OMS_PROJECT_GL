@@ -1,8 +1,8 @@
 const db = require("../db");
 
-// Inserting multiple work group with auto generated workGroupID
 
 // Function to get the highest work group ID from the database
+
 function getHighestWorkGroupID(callback) {
   const sql = 'SELECT MAX(CAST(SUBSTRING(WorkGroupID, 3) AS SIGNED)) AS maxID FROM tb_workGroup';
 
@@ -18,10 +18,14 @@ function getHighestWorkGroupID(callback) {
 }
 
 // Function to generate workGroup IDs like WG001, WG002, ...
+
 function generateWorkGroupID(index) {
   const paddedIndex = String(index).padStart(3, '0'); // Ensure three-digit padding
   return `WG${paddedIndex}`;
 }
+
+
+// Inserting multiple work group with auto generated workGroupID
 
 exports.insertMultipleWorkGroup = (req, res) => {
   const newWorkGroups = req.body; 
@@ -56,7 +60,6 @@ exports.insertMultipleWorkGroup = (req, res) => {
     });
   });
 }
-
 
 
 // inserting work group data
@@ -96,7 +99,6 @@ exports.addWorkGroup = (req, res) => {
     });
   });
 };
-
 
 
 //get all data form employees table
@@ -145,6 +147,7 @@ exports.getAllWorkGroups = (req, res) => {
   });
 };
 
+
 // Getting all data of a particular group
 
 exports.getAllDataOfGroup = (req, res) => {
@@ -159,6 +162,8 @@ exports.getAllDataOfGroup = (req, res) => {
     res.status(200).json(results);
   });
 };
+
+
 // updating work group's data
 
 exports.updateWorkGroup = (req, res) => {
@@ -182,6 +187,7 @@ exports.updateWorkGroup = (req, res) => {
     }
   });
 };
+
 
 // Deleting work group's data
 

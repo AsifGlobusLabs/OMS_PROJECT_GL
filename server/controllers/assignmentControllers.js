@@ -1,5 +1,6 @@
 const db = require("../db");
 
+
 // Getting all assignment
 
 exports.getAllAssignments = (req, res) => {
@@ -13,6 +14,7 @@ exports.getAllAssignments = (req, res) => {
     }
   });
 };
+
 
 // get all data with name
 
@@ -43,6 +45,7 @@ FROM
   });
 };
 
+
 // Inserting assignment
 
 exports.addAssignment = (req, res) => {
@@ -63,6 +66,7 @@ exports.addAssignment = (req, res) => {
   });
 };
 
+
 // Inserting assignment
 
 exports.addAssignmentData = (req, res) => {
@@ -81,6 +85,7 @@ exports.addAssignmentData = (req, res) => {
     }
   });
 };
+
 
 // // getting latest or last assignment id
 
@@ -102,6 +107,7 @@ exports.getLastAssignmentId = (req, res) => {
     res.status(200).json({ lastAssignmentId: lastAssignmentId });
   });
 };
+
 
 // updating assignment's data
 
@@ -127,6 +133,7 @@ exports.updateAssignment = (req, res) => {
     }
   });
 };
+
 
 // updating assignment status from pending to progress
 
@@ -154,6 +161,7 @@ exports.progressAssignmentStatus = (req, res) => {
   });
 };
 
+
 // updating assignment status from progress to completed
 
 exports.completedAssignmentStatus = (req, res) => {
@@ -180,6 +188,7 @@ exports.completedAssignmentStatus = (req, res) => {
   });
 };
 
+
 // number of progress assignments
 
 exports.numberOfProgressAssignments = (req, res) => {
@@ -194,6 +203,7 @@ exports.numberOfProgressAssignments = (req, res) => {
     }
   });
 }
+
 
 // number of pending assignments 
 
@@ -210,6 +220,7 @@ exports.numberOfPendingAssignments = (req, res) => {
   });
 }
 
+
 // number of completed assignments 
 
 exports.numberOfCompletedAssignments = (req, res) => {
@@ -224,6 +235,7 @@ exports.numberOfCompletedAssignments = (req, res) => {
     }
   });
 }
+
 
 // Deleting Assignment's data
 

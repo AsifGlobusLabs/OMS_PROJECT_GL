@@ -1,5 +1,6 @@
 const db = require("../db");
 
+
 // Getting all Department
 
 exports.getAllDepartments = (req, res) => {
@@ -13,6 +14,7 @@ exports.getAllDepartments = (req, res) => {
     }
   });
 };
+
 
 // Inserting Department
 
@@ -53,6 +55,7 @@ exports.getLastDepartmentId = (req, res) => {
   });
 };
 
+
 // updating Department's data
 
 exports.updateDepartment = (req, res) => {
@@ -77,6 +80,7 @@ exports.updateDepartment = (req, res) => {
     }
   });
 };
+
 
 // Deleting Department's data
 

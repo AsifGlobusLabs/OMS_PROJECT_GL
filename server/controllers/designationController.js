@@ -1,5 +1,6 @@
 const db = require("../db");
 
+
 // Getting all designations
 
 exports.getAllDesignations = (req, res) => {
@@ -13,6 +14,7 @@ exports.getAllDesignations = (req, res) => {
     }
   });
 };
+
 
 // Inserting designation
 
@@ -29,6 +31,7 @@ exports.addDesignation = (req, res) => {
     }
   });
 };
+
 
 // getting latest or last designation id
 
@@ -50,6 +53,7 @@ exports.getLastDesignationId = (req, res) => {
     res.status(200).json({ lastDesignationId: lastDesignationId });
   });
 };
+
 
 // updating designation's data
 
@@ -75,6 +79,7 @@ exports.updateDesignation = (req, res) => {
     }
   });
 };
+
 
 // Deleting designation's data
 
