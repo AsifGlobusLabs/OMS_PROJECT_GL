@@ -43,8 +43,9 @@ exports.getLastDepartmentId = (req, res) => {
       res.status(500).json({ error: "Internal Server Error" });
       return;
     }
-    if (results.length === 0) {
-      res.status(404).json({ error: "There is not any department found" });
+    if (results[0].maxID === null) {
+      const DepartmentId = (results[0].maxID = "DEPT000");
+      res.status(200).json({ lastDepartmentId: DepartmentId });
       return;
     }
     const lastDepartmentId = results[0].maxID;
