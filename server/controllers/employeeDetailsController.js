@@ -117,8 +117,7 @@ exports.addEmployee = (req, res) => {
 // getting latest or last employee id
 
 exports.getLastEmployeeId = (req, res) => {
-  const query =
-    "SELECT EmployeeID FROM tb_employee ORDER BY EmployeeID DESC LIMIT 1";
+  const query = "SELECT MAX(EmployeeID) AS maxID FROM tb_employee ";
 
   db.query(query, (error, results) => {
     if (error) {
@@ -126,11 +125,12 @@ exports.getLastEmployeeId = (req, res) => {
       res.status(500).json({ error: "Internal Server Error" });
       return;
     }
-    if (results.length === 0) {
-      res.status(404).json({ error: "No employees found" });
+    if (results[0].maxID === null) {
+      const EmployeeId = (results[0].maxID = "EMP000");
+      res.status(200).json({ lastEmployeeId: EmployeeId });
       return;
     }
-    const lastEmployeeId = results[0].EmployeeID;
+    const lastEmployeeId = results[0].maxID;
     res.status(200).json({ lastEmployeeId: lastEmployeeId });
   });
 };
