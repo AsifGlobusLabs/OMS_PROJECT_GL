@@ -180,7 +180,8 @@ exports.completedAssignmentStatus = (req, res) => {
   });
 };
 
-// number of progress assignments 
+// number of progress assignments
+
 exports.numberOfProgressAssignments = (req, res) => {
   const query = 'SELECT COUNT(*) AS num_progress_assignments FROM tb_assignment WHERE AssignmentStatus = "Progress"';
   db.query(query, (err, results) => {
@@ -195,6 +196,7 @@ exports.numberOfProgressAssignments = (req, res) => {
 }
 
 // number of pending assignments 
+
 exports.numberOfPendingAssignments = (req, res) => {
   const query = 'SELECT COUNT(*) AS num_pending_assignments FROM tb_assignment WHERE AssignmentStatus = "Pending"';
   db.query(query, (err, results) => {
@@ -209,6 +211,7 @@ exports.numberOfPendingAssignments = (req, res) => {
 }
 
 // number of completed assignments 
+
 exports.numberOfCompletedAssignments = (req, res) => {
   const query = 'SELECT COUNT(*) AS num_completed_assignments FROM tb_assignment WHERE AssignmentStatus = "Completed"';
   db.query(query, (err, results) => {
