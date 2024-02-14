@@ -20,8 +20,8 @@ export const menuItems = [
   { text: "New Designation", icon: <ViewListIcon/>, path: "/newdesignation"},
   { text: "Team", icon: <GroupsIcon/>, path: "/team" },
   { text: "New Assignment", icon: <AssignmentIcon />, path: "/assignment" },
-  { text: "My Assignment", icon: <AssignmentIcon />, path: "/view-assignment" },
-  { text: "New Task", icon: <AddCircleIcon />, path: "/Newtask" },
+  { text: "MY Assignment", icon: <AssignmentIcon />, path: "/view-assignment" },
+  { text: "Task", icon: <AddCircleIcon />, path: "/Newtask" },
   { text: "Settings", icon: <SettingsIcon />, path: "/settings" },
 
 ];
@@ -30,11 +30,8 @@ export const menuItems = [
 
 
 
-
-
-
 // // menuItems.js
-// import React, { useEffect, useState } from "react";
+// import React from "react";
 // import HomeIcon from '@mui/icons-material/Home';
 // import GroupsIcon from '@mui/icons-material/Groups';
 // import AssignmentIcon from '@mui/icons-material/Assignment';
@@ -60,10 +57,10 @@ export const menuItems = [
 //   { text: "Settings", icon: <SettingsIcon />, path: "/settings" },
 // ];
 
-// if (userRole === "Admin") {
-//   // If user is not an admin, filter out the items they shouldn't see
+// // Filter menu items based on user role
+// if (userRole !== "Admin") {
 //   menuItems = menuItems.filter(item => {
-//     return item.text === "Home" || item.text === "My Assignment" || item.text === "New Task" ;
+//     return item.text === "Home" || item.text === "My Assignment" || item.text === "New Task";
 //   });
 // }
 

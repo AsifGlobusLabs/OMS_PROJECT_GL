@@ -18,8 +18,11 @@ import Header from "./header/Header";
 import { useNavigate, useLocation } from "react-router-dom";
 import { menuItems } from "./menuItems"; // Import the menuItems
 
+ import logo from "../assets/images/Gl-Logo.png";
+// import logo from "../assets/images/OWM_Finalpng";
 
-import logo from "../assets/images/Gl-Logo.png";
+
+
 
 const drawerWidth = 240;
 
