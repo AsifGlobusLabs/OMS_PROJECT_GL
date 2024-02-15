@@ -65,6 +65,7 @@ const Department = () => {
           console.log("Received data:", data); // Log received data for debugging
           const numericPart = parseInt(data.lastDepartmentId.slice(4), 10);
           console.log("Parsed numeric part:", numericPart); // Log parsed numeric part
+          
           if (!isNaN(numericPart)) {
             const nextJobNo = numericPart + 1;
             setFormData({
