@@ -1,5 +1,6 @@
 const db = require("../db");
 
+
 // Getting all designations
 
 exports.getAllDesignations = (req, res) => {
@@ -13,6 +14,7 @@ exports.getAllDesignations = (req, res) => {
     }
   });
 };
+
 
 // Inserting designation
 
@@ -30,6 +32,7 @@ exports.addDesignation = (req, res) => {
   });
 };
 
+
 // getting latest or last designation id
 
 exports.getLastDesignationId = (req, res) => {
@@ -41,14 +44,16 @@ exports.getLastDesignationId = (req, res) => {
       res.status(500).json({ error: "Internal Server Error" });
       return;
     }
-    if (results.length === 0) {
-      res.status(404).json({ error: "There is not any designation found" });
+    if (results[0].maxID === null) {
+      const DesignationId = (results[0].maxID = "DESIG000");
+      res.status(200).json({ lastDesignationId: DesignationId });
       return;
     }
     const lastDesignationId = results[0].maxID;
     res.status(200).json({ lastDesignationId: lastDesignationId });
   });
 };
+
 
 // updating designation's data
 
@@ -74,6 +79,7 @@ exports.updateDesignation = (req, res) => {
     }
   });
 };
+
 
 // Deleting designation's data
 

@@ -22,13 +22,13 @@ const useStyles = makeStyles((theme) => ({
 
   tableHeaderCell: {
     fontWeight: "bold",
-    backgroundColor: theme.palette.primary.dark,
+    backgroundColor: '#44756d',
     color: theme.palette.getContrastText(theme.palette.primary.dark),
     // color: theme.palette.getContrastText('white'),
   },
 
   name: {
-    fontSize: "1rem",
+    fontSize: "0.9rem",
   },
 }));
 
@@ -129,7 +129,15 @@ export default ViewRegistrationData;
 
 
 
-
+   /* <TableCell className={classes.name}>
+              {item.Employee_Profile && (
+                        <img
+                          src={`http://localhost:3306/api/employee/${item.Employee_Profile}`}
+                          alt="Employee Profile"
+                          style={{height:"100px"}}
+                        />
+                      )}
+              </TableCell> */
 
 
 

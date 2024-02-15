@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const {generateToken} = require("../midderware/auth");
 const {sendEmail} = require("../emailServices");
 
+
 // inserting user details
 
 exports.addUserDetails = async (req, res) => {
@@ -35,6 +36,7 @@ exports.addUserDetails = async (req, res) => {
   }
 };
 
+
 // getting all user details
 
 exports.getAllUserDetails = (req, res) => {
@@ -48,6 +50,7 @@ exports.getAllUserDetails = (req, res) => {
     }
   });
 };
+
 
 // updating user details
 
@@ -86,6 +89,7 @@ exports.updateUserDetails = async (req, res) => {
     }
   });
 };
+
 
 // Deleting user details
 
@@ -176,6 +180,8 @@ exports.deleteUserDetails = (req, res) => {
 // };
 
 
+// login user
+
 exports.loginUser = async (req, res) => {
   const { EmployeeID, Password } = req.body;
 
@@ -234,6 +240,9 @@ exports.loginUser = async (req, res) => {
   });
 };
 
+
+// logout user
+
 exports.logoutUser = (req, res) => {
   try {
     res.clearCookie("token");
@@ -245,6 +254,7 @@ exports.logoutUser = (req, res) => {
 };
 
 
+// forget password
 
 exports.forgetPassword = (req, res) => {
   const email = req.body.email;
@@ -270,6 +280,8 @@ exports.forgetPassword = (req, res) => {
   });
 };
 
+
+// reset password
 
 exports.resetPassword = async (req, res) => {
   try {

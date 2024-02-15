@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Card, Dropdown, DropdownButton } from "react-bootstrap";
+import { Card} from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import SideBar from "../../../Component/SideBar";
 import {
@@ -15,13 +15,7 @@ import {
   TableRow,
   TablePagination, // Add TablePagination
 } from "@mui/material";
-import {
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  OutlinedInput,
-} from "@mui/material";
+
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import CheckIcon from "@mui/icons-material/Check";
 import profile from "./profilenn.png";
@@ -30,6 +24,7 @@ import {
   CardMedia,
   CardContent,
   CardActions,
+  Autocomplete,
 } from "@mui/material";
 import AddTemp from "./AddTemp";
 import AddTeams from "./AddTeams";
@@ -189,7 +184,14 @@ const Create = () => {
               width: "70%",
             }}
           >
-            <FormControl sx={{ m: 1, width: 300, marginLeft:'380px', backgroundColor:'whitesmoke' }}>
+            {/* <FormControl
+              sx={{
+                m: 1,
+                width: 300,
+                marginLeft: "380px",
+                backgroundColor: "whitesmoke",
+              }}
+            >
               <Select
                 labelId="demo-multiple-name-label"
                 id="demo-multiple-name"
@@ -204,7 +206,6 @@ const Create = () => {
                   handleDepartmentSelect(selectedDept); // Fetch data for the selected department
                 }}
                 input={<OutlinedInput label="Select Department" />}
-                
               >
                 {departments.map((department) => (
                   <MenuItem
@@ -215,27 +216,30 @@ const Create = () => {
                   </MenuItem>
                 ))}
               </Select>
-            </FormControl>
-            {/* <DropdownButton
-              id="dropdown-basic-button"
-              title={
-                selectedDepartment
-                  ? selectedDepartment.DepartmentName
-                  : "Select Department"
-              }
-              style={{ marginLeft: "400px", padding: "10px 20px" }}
-            >
-              <div style={{ maxHeight: "300px", overflowY: "auto" }}>
-                {departments.map((department) => (
-                  <Dropdown.Item
-                    key={department.DepartmentID}
-                    onClick={() => handleDepartmentSelect(department)}
-                  >
-                    {department.DepartmentName}
-                  </Dropdown.Item>
-                ))}
-              </div>
-            </DropdownButton> */}
+            </FormControl> */}
+
+            <Autocomplete
+              sx={{
+                m: 1,
+                width: 400,
+                marginLeft: "380px",
+                backgroundColor: "whitesmoke",
+              }}
+              value={selectedDepartment}
+              onChange={(event, newValue) => {
+                setSelectedDepartment(newValue);
+                handleDepartmentSelect(newValue); // Fetch data for the selected department
+              }}
+              options={departments}
+              getOptionLabel={(option) => option.DepartmentName}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Select Employee"
+                  variant="outlined"
+                />
+              )}
+            />
 
             <TextField
               sx={{ marginRight: "15px" }}
@@ -303,7 +307,7 @@ const Create = () => {
                 <TableContainer component={Paper}>
                   <Table sx={{ minWidth: 650 }} aria-label="simple table">
                     <TableHead>
-                      <TableRow style={{ backgroundColor: "#303F9F" }}>
+                      <TableRow style={{ backgroundColor: "#44756d" }}>
                         <TableCell
                           style={{ fontWeight: "bold", color: "white" }}
                         >
@@ -405,7 +409,7 @@ const Create = () => {
           <AddTemp selectedEmployee={selectedEmployee} currentEmpolyee={item} />
         </div>
 
-        <div style={{ backgroundColor: "#303F9F" }}>
+        <div style={{  }}>
           <AddTeams
             sdata={item}
             updateAssignedEmployees={updateAssignedEmployees}

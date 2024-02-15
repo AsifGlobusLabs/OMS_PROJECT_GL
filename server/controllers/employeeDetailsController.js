@@ -1,5 +1,6 @@
 const db = require("../db");
 
+
 // Getting all employees data
 
 exports.getAllEmployees = (req, res) => {
@@ -13,6 +14,7 @@ exports.getAllEmployees = (req, res) => {
     res.status(200).json(results);
   });
 };
+
 
 // Getting all data of employees
 
@@ -35,6 +37,7 @@ exports.getAllDataOfEmployees = (req, res) => {
     res.status(200).json(userEmployees);
   });
 };
+
 
 // Getting all data of employees by their employee id
 
@@ -67,6 +70,7 @@ exports.getAllDataOfEmployeesByEmployeeId = (req, res) => {
 //   });
 // };
 
+
 // Getting data of employees with their department and designation name
 
 exports.getDataOfEmployeesWithTheirDNames = (req, res) => {
@@ -81,6 +85,7 @@ exports.getDataOfEmployeesWithTheirDNames = (req, res) => {
     res.status(200).json(results);
   });
 };
+
 
 // Inserting employees data
 
@@ -173,6 +178,7 @@ exports.getLastEmployeeId = (req, res) => {
   });
 };
 
+
 // updating employee's data
 
 exports.updateEmployee = (req, res) => {
@@ -197,6 +203,7 @@ exports.updateEmployee = (req, res) => {
     }
   });
 };
+
 
 // Deleting employee's data
 
