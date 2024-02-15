@@ -3,9 +3,6 @@ tb_employee's Api
 // Get all data of employees
 http://localhost:3306/api/employee/allData
 
-// Get all data of employees by their employee id
-http://localhost:3306/api/employee/allData/:EmployeeID
-
 // Get all data of employees with their department and designation names
 http://localhost:3306/api/employee/dNames
 
