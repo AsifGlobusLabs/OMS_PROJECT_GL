@@ -21,6 +21,8 @@ export default function AllTeamMembers() {
   const [departments, setDepartments] = useState([]);
   const [selectedDepartment, setSelectedDepartment] = useState(null);
 
+  
+
   useEffect(() => {
     // Fetch department data when the component mounts
     fetchDepartmentData();

@@ -213,7 +213,7 @@ function AddTemp({ selectedEmployee, currentEmpolyee }) {
       >
         <Table aria-label="employee table">
           <TableHead>
-            <TableRow style={{ backgroundColor: "#303F9F" }}>
+            <TableRow style={{ backgroundColor: "#44756d" }}>
               <TableCell style={{ fontWeight: "bold", color: "white" }}>
                 Employee ID
               </TableCell>
