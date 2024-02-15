@@ -29,11 +29,20 @@ router.patch("/:AssignmentID/completed", assignmentController.completedAssignmen
 // number of progress assignments
 router.get("/progress-assignments", assignmentController.numberOfProgressAssignments);
 
+// number of progress assignments of an employee
+router.get("/:EmployeeID_AssignTo/progress-assignments", assignmentController.numberOfProgressAssignmentsOfAnEmployee);
+
 // number of pending assignments
 router.get("/pending-assignments", assignmentController.numberOfPendingAssignments);
 
+// number of pending assignments of an employee
+router.get("/:EmployeeID_AssignTo/pending-assignments", assignmentController.numberOfPendingAssignmentsOfAnEmployee);
+
 // number of completed assignments
 router.get("/completed-assignments", assignmentController.numberOfCompletedAssignments);
+
+// number of completed assignments of an employee
+router.get("/:EmployeeID_AssignTo/completed-assignments", assignmentController.numberOfCompletedAssignmentsOfAnEmployee);
 
 // delete assignment
 router.delete("/delete/:AssignmentID", assignmentController.deleteAssignment);

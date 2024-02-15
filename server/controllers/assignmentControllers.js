@@ -205,6 +205,23 @@ exports.numberOfProgressAssignments = (req, res) => {
 }
 
 
+// number of progress assignments of an individual employee
+
+exports.numberOfProgressAssignmentsOfAnEmployee = (req, res) => {
+  const employeeId = req.params.EmployeeID_AssignTo;
+  const query = 'SELECT COUNT(*) AS num_progress_assignments FROM tb_assignment WHERE EmployeeID_AssignTo = ? AND AssignmentStatus = "Progress"';
+  db.query(query, employeeId ,(err, results) => {
+    if (err) {
+      console.error("Error executing query:", err);
+      res.status(500).json({ error: "Internal Server Error" });
+    } else {
+      const numProgressAssignments = results[0].num_progress_assignments;
+      res.status(200).json(numProgressAssignments);
+    }
+  });
+}
+
+
 // number of pending assignments 
 
 exports.numberOfPendingAssignments = (req, res) => {
@@ -221,11 +238,45 @@ exports.numberOfPendingAssignments = (req, res) => {
 }
 
 
+// number of pending assignments of an individual employee 
+
+exports.numberOfPendingAssignmentsOfAnEmployee = (req, res) => {
+  const employeeId = req.params.EmployeeID_AssignTo;
+  const query = 'SELECT COUNT(*) AS num_pending_assignments FROM tb_assignment WHERE  EmployeeID_AssignTo = ? AND AssignmentStatus = "Pending"';
+  db.query(query, employeeId, (err, results) => {
+    if (err) {
+      console.error("Error executing query:", err);
+      res.status(500).json({ error: "Internal Server Error" });
+    } else {
+      const numPendingAssignments = results[0].num_pending_assignments;
+      res.status(200).json(numPendingAssignments);
+    }
+  });
+}
+
+
 // number of completed assignments 
 
 exports.numberOfCompletedAssignments = (req, res) => {
   const query = 'SELECT COUNT(*) AS num_completed_assignments FROM tb_assignment WHERE AssignmentStatus = "Completed"';
   db.query(query, (err, results) => {
+    if (err) {
+      console.error("Error executing query:", err);
+      res.status(500).json({ error: "Internal Server Error" });
+    } else {
+      const numCompletedAssignments = results[0].num_completed_assignments;
+      res.status(200).json(numCompletedAssignments);
+    }
+  });
+}
+
+
+// number of completed assignments of an employee 
+
+exports.numberOfCompletedAssignmentsOfAnEmployee = (req, res) => {
+  const employeeId = req.params.EmployeeID_AssignTo;
+  const query = 'SELECT COUNT(*) AS num_completed_assignments FROM tb_assignment WHERE EmployeeID_AssignTo = ? AND AssignmentStatus = "Completed"';
+  db.query(query, employeeId, (err, results) => {
     if (err) {
       console.error("Error executing query:", err);
       res.status(500).json({ error: "Internal Server Error" });
