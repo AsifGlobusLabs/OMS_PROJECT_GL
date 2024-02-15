@@ -148,9 +148,9 @@ exports.getAllWorkGroups = (req, res) => {
 };
 
 
-// Getting all data of a particular group
+// Getting all data of a particular employee's group
 
-exports.getAllDataOfGroup = (req, res) => {
+exports.getAllDataOfOneGroup = (req, res) => {
   const employeeIdAssigner = req.params.EmployeeID_Assigner;
   const query = "SELECT * FROM tb_workGroup WHERE EmployeeID_Assigner = ?";
   db.query(query, employeeIdAssigner, (err, results) => {

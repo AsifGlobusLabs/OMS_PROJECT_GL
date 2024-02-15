@@ -2,19 +2,19 @@ const express = require("express");
 const router = express.Router();
 const taskController = require("../controllers/taskControllers");
 
-// get all user details
+// get all task details
 router.get("/", taskController.getAllTasks);
 
-// add user details
+// add task details
 router.post("/", taskController.addTask);
 
-// get all user details
+// get all task details
 router.get("/lastTaskId", taskController.getLastTaskId);
 
-// update user details
+// update task details
 router.patch("/update/:TaskID", taskController.updateTask);
 
-// delete user details
+// delete task details
 router.delete("/delete/:TaskID", taskController.deleteTask);
 
 
