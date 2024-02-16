@@ -4,9 +4,9 @@ const db = require("../db");
 // Function to get the highest work group ID from the database
 
 function getHighestWorkGroupID(callback) {
-  const sql = 'SELECT MAX(CAST(SUBSTRING(WorkGroupID, 3) AS SIGNED)) AS maxID FROM tb_workGroup';
+  const query = 'SELECT MAX(CAST(SUBSTRING(WorkGroupID, 3) AS SIGNED)) AS maxID FROM tb_workGroup';
 
-  db.query(sql, (error, results) => {
+  db.query(query, (error, results) => {
     if (error) {
       console.error('Error getting highest work group ID:', error);
       callback(error, null);
@@ -38,7 +38,7 @@ exports.insertMultipleWorkGroup = (req, res) => {
     }
 
     // Define the SQL query
-    const sql = 'INSERT INTO tb_workGroup (WorkGroupID, EmployeeID_Assigner,EmployeeID_AssignTo,DepartmentID_AssignTo,CreatedDate,CreatedBy) VALUES ?';
+    const query = 'INSERT INTO tb_workGroup (WorkGroupID, EmployeeID_Assigner,EmployeeID_AssignTo,DepartmentID_AssignTo,CreatedDate,CreatedBy) VALUES ?';
 
     const values = newWorkGroups.map((workGroup, index) => [
       generateWorkGroupID(maxID + index + 1), 
@@ -50,7 +50,7 @@ exports.insertMultipleWorkGroup = (req, res) => {
     ]);
 
     // Execute the query
-    db.query(sql, [values], (error, results) => {
+    db.query(query, [values], (error, results) => {
       if (error) {
         console.error('Error inserting work groups:', error);
         res.status(500).json({ error: 'Internal Server Error' });
@@ -67,10 +67,10 @@ exports.insertMultipleWorkGroup = (req, res) => {
 exports.addWorkGroup = (req, res) => {
   const newWorkGroup = req.body;
 
-  const getMaxWorkGroupIDQuery =
+  const query =
     "SELECT MAX(SUBSTRING(WorkGroupID, 3)) AS maxID FROM tb_workGroup";
 
-  db.query(getMaxWorkGroupIDQuery, (err, results) => {
+  db.query(query, (err, results) => {
     if (err) {
       console.error("Error getting max WorkGroupID: ", err);
       res.status(500).json({ error: "Internal server error" });
@@ -87,9 +87,9 @@ exports.addWorkGroup = (req, res) => {
 
     newWorkGroup.WorkGroupID = formattedID;
 
-    const insertQuery = "INSERT INTO tb_workGroup SET ?";
+    const query = "INSERT INTO tb_workGroup SET ?";
 
-    db.query(insertQuery, newWorkGroup, (err, results) => {
+    db.query(query, newWorkGroup, (err, results) => {
       if (err) {
         console.error("Error executing query: ", err);
         res.status(500).json({ error: "Internal server error" });

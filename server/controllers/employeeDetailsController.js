@@ -179,6 +179,32 @@ exports.getLastEmployeeId = (req, res) => {
 };
 
 
+// getting next employee id 
+
+exports.getNextEmployeeId = (req, res) => {
+  const query = "SELECT MAX(EmployeeID) AS maxID FROM tb_employee ";
+
+  db.query(query, (error, results) => {
+    if (error) {
+      console.error("Error executing query:", error);
+      res.status(500).json({ error: "Internal Server Error" });
+      return;
+    }
+
+    let nextEmployeeId;
+    if (results.length === 0 || results[0].maxID === null) {
+      nextEmployeeId = "EMP001";
+    } else {
+      const lastEmployeeId = results[0].maxID;
+      const numericPart = parseInt(lastEmployeeId.substr(3), 10) + 1;
+      nextEmployeeId = "EMP" + numericPart.toString().padStart(3, '0');
+    }
+
+    res.status(200).json({ nextEmployeeId: nextEmployeeId });
+  });
+};
+
+
 // updating employee's data
 
 exports.updateEmployee = (req, res) => {

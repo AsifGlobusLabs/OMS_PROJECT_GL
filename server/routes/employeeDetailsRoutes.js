@@ -42,8 +42,11 @@ router.get("/dNames", employeeController.getDataOfEmployeesWithTheirDNames);
 // Add a new employee
 router.post("/",upload.single('Employee_Profile'),employeeController.addEmployee);
 
-// Get latest employee id
+// Getting latest employee id
 router.get("/lastEmployeeId", employeeController.getLastEmployeeId);
+
+// Getting next employee id
+router.get("/nextEmployeeId", employeeController.getNextEmployeeId);
 
 // Update employee's data
 router.patch("/update/:EmployeeID", employeeController.updateEmployee);

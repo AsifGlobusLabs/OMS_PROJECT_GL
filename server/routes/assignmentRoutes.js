@@ -17,6 +17,9 @@ router.get('/allData', assignmentController.getAssigmentEmployeesData);
 // get last assignment id
 router.get("/lastAssignmentId", assignmentController.getLastAssignmentId);
 
+// get next assignment id
+router.get("/nextAssignmentId", assignmentController.getNextAssignmentId);
+
 // update assignment
 router.patch("/update/:AssignmentID", assignmentController.updateAssignment);
 

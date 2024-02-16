@@ -109,6 +109,32 @@ exports.getLastAssignmentId = (req, res) => {
 };
 
 
+// getting next assignment id 
+
+exports.getNextAssignmentId = (req, res) => {
+  const query = "SELECT MAX(AssignmentID) AS maxID FROM tb_assignment ";
+
+  db.query(query, (error, results) => {
+    if (error) {
+      console.error("Error executing query:", error);
+      res.status(500).json({ error: "Internal Server Error" });
+      return;
+    }
+
+    let nextAssignmentId;
+    if (results.length === 0 || results[0].maxID === null) {
+      nextAssignmentId = "AS001";
+    } else {
+      const lastAssignmentId = results[0].maxID;
+      const numericPart = parseInt(lastAssignmentId.substr(2), 10) + 1;
+      nextAssignmentId = "AS" + numericPart.toString().padStart(3, '0');
+    }
+
+    res.status(200).json({ nextAssignmentId: nextAssignmentId });
+  });
+};
+
+
 // updating assignment's data
 
 exports.updateAssignment = (req, res) => {

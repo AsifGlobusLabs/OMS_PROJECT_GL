@@ -12,6 +12,9 @@ http://localhost:3306/api/employee
 // Get latest or last employee id
 http://localhost:3306/api/employee/lastEmployeeId
 
+// Getting next employee id
+http://localhost:3306/api/employee/nextEmployeeId
+
 // Update employee's data
 http://localhost:3306/api/employee/update/:EmployeeID
 
@@ -57,6 +60,9 @@ http://localhost:3306/api/department
 // Get last department id
 http://localhost:3306/api/department/lastDepartmentId
 
+// Getting next department id
+http://localhost:3306/api/designation/nextDepartmentId
+
 // Updating department's data
 http://localhost:3306/api/department/update/:DepartmentID
 
@@ -74,6 +80,9 @@ http://localhost:3306/api/designation
 
 // Get last designation id
 http://localhost:3306/api/designation/lastDesignationId
+
+// Getting next designation id
+http://localhost:3306/api/designation/nextDesignationId
 
 // Updating designation's data
 http://localhost:3306/api/designation/update/:DesignationID
@@ -123,6 +132,9 @@ http://localhost:3306/api/assignmentDetails/allData
 // get last assignment id
 http://localhost:3306/api/assignmentDetails/lastAssignmentId
 
+// Getting next assignment id
+http://localhost:3306/api/assignmentDetails/nextAssignmentId
+
 // update assignment
 http://localhost:3306/api/assignmentDetails/update/:AssignmentID
 
@@ -164,6 +176,9 @@ http://localhost:3306/api/taskDetails
 
 // get all task details
 http://localhost:3306/api/taskDetails/lastTaskId
+
+// Getting next task id
+http://localhost:3306/api/taskDetails/nextTaskId
 
 // update task details
 http://localhost:3306/api/taskDetails/update/:TaskID
