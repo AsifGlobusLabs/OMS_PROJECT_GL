@@ -11,6 +11,9 @@ router.post("/", departmentController.addDepartment);
 // Get last department id
 router.get("/lastDepartmentId", departmentController.getLastDepartmentId);
 
+// Get next department id
+router.get("/nextDepartmentId", departmentController.getNextDepartmentId);
+
 // Updating department's data
 router.patch("/update/:DepartmentID", departmentController.updateDepartment);
 

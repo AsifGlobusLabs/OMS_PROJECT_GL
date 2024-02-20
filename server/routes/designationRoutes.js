@@ -11,6 +11,9 @@ router.post("/", designationController.addDesignation);
 // Get last designation Id
 router.get("/lastDesignationId", designationController.getLastDesignationId);
 
+// Get next designation Id
+router.get("/nextDesignationId", designationController.getNextDesignationId);
+
 // Update designation's data
 router.patch("/update/:DesignationID", designationController.updateDesignation);
 

@@ -56,6 +56,32 @@ exports.getLastDepartmentId = (req, res) => {
 };
 
 
+// getting next department id 
+
+exports.getNextDepartmentId = (req, res) => {
+  const query = "SELECT MAX(DepartmentID) AS maxID FROM tb_department ";
+
+  db.query(query, (error, results) => {
+    if (error) {
+      console.error("Error executing query:", error);
+      res.status(500).json({ error: "Internal Server Error" });
+      return;
+    }
+
+    let nextDepartmentId;
+    if (results.length === 0 || results[0].maxID === null) {
+      nextDepartmentId = "DEPT001";
+    } else {
+      const lastDepartmentId = results[0].maxID;
+      const numericPart = parseInt(lastDepartmentId.substr(4), 10) + 1;
+      nextDepartmentId = "DEPT" + numericPart.toString().padStart(3, '0');
+    }
+
+    res.status(200).json({ nextDepartmentId: nextDepartmentId });
+  });
+};
+
+
 // updating Department's data
 
 exports.updateDepartment = (req, res) => {

@@ -59,6 +59,33 @@ exports.getLastTaskId = (req, res) => {
 };
 
 
+// getting next task id 
+
+exports.getNextTaskId = (req, res) => {
+  const query = "SELECT MAX(TaskID) AS maxID FROM tb_task ";
+
+  db.query(query, (error, results) => {
+    if (error) {
+      console.error("Error executing query:", error);
+      res.status(500).json({ error: "Internal Server Error" });
+      return;
+    }
+
+    let nextTaskId;
+    if (results.length === 0 || results[0].maxID === null) {
+      nextTaskId = "T001";
+    } else {
+      const lastTaskId = results[0].maxID;
+      const numericPart = parseInt(lastTaskId.substr(1), 10) + 1;
+      nextTaskId = "T" + numericPart.toString().padStart(3, '0');
+    }
+
+    res.status(200).json({ nextTaskId: nextTaskId });
+  });
+};
+
+
+
 // updating task's data
 
 exports.updateTask = (req, res) => {
