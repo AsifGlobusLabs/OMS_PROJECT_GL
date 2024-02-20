@@ -154,6 +154,26 @@ const Department = () => {
 
 
 
+  const handleEdit = async (DepartmentID) => {
+    try {
+      const apiUrl = `http://localhost:3306/api/department/update/${DepartmentID}`;
+      const response = await fetch(apiUrl, {
+        method: "GET",
+      });
+  
+      if (response.ok) {
+        const departmentDetails = await response.json();
+        // Now you can use departmentDetails to populate your form or modal for editing
+        console.log("Department Details:", departmentDetails);
+      } else {
+        console.error("Error fetching department details:", response.status);
+      }
+    } catch (error) {
+      console.error("Error fetching department details:", error);
+    }
+  };
+  
+
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -246,7 +266,10 @@ const Department = () => {
 
                         cursor: "pointer",
                       }}
-                      onClick={handleShow}
+                      onClick={() => {
+                        handleShow();
+                        handleEdit(item.DepartmentID);
+                      }}
                     >
                       <EditNoteIcon />
                     </td>

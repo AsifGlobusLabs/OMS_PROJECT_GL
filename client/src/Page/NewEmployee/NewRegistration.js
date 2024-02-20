@@ -32,6 +32,7 @@ function NewRegistration({ addEmployee }) {
   const [isLoading, setIsLoading] = useState(false);
   const [departmentData, setDepartmentData] = useState([]);
   const [deginationData, setDeginationData] = useState([]);
+  const [errors, setErrors] = useState({});
 
   // const [Employee_Profile , setEmployee_Profile] = useState();
 
@@ -104,15 +105,38 @@ function NewRegistration({ addEmployee }) {
     } else {
       setFormData((prevData) => ({ ...prevData, [name]: value }));
     }
+
+    // Check if the input field is ContactNumber and if the value matches the desired format
+    if (name === "ContactNumber" && /^\d{0,10}$/.test(value)) {
+      // Update the state only if the value matches the format
+      setFormData({
+        ...formData,
+        [name]: value,
+      });
+    }
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    setIsLoading(true);
+  const validate = () => {
+    let isValid = true;
+    const newErrors = {};
 
+    // Check if ContactNumber has exactly 10 digits
+    if (formData.ContactNumber.trim().length !== 10) {
+      newErrors.ContactNumber = 'Contact number must be 10 digits';
+      isValid = false;
+    }
+
+    setErrors(newErrors);
+    return isValid;
+  };
+  
+
+    const handleSubmit = async (event) => {
+  event.preventDefault();
+  setIsLoading(true);
+  if (validate()) {
     try {
       await addEmployee(formData);
-
       console.log(formData);
       setFormData({
         EmployeeID: "",
@@ -134,14 +158,12 @@ function NewRegistration({ addEmployee }) {
     } finally {
       setIsLoading(false);
     }
-  };
-
-
-
-
-
-
-
+  } else {
+    // Form validation failed
+    console.error('Form validation failed');
+    setIsLoading(false);
+  }
+};
 
   return (
     <div className="Employee-container">
@@ -163,6 +185,9 @@ function NewRegistration({ addEmployee }) {
                 required
                 fullWidth
                 size="medium"
+                InputProps={{
+                  readOnly: true,
+                }}
               />
             </Grid>
             <Grid item xs={12} md={4}>
@@ -174,6 +199,7 @@ function NewRegistration({ addEmployee }) {
                 onChange={handleInputChange}
                 fullWidth
                 size="medium"
+                required
               />
             </Grid>
             <Grid item xs={12} md={4}>
@@ -185,6 +211,7 @@ function NewRegistration({ addEmployee }) {
                 onChange={handleInputChange}
                 fullWidth
                 size="medium"
+                required
               />
             </Grid>
             <Grid item xs={12} md={4}>
@@ -197,8 +224,10 @@ function NewRegistration({ addEmployee }) {
                 onChange={handleInputChange}
                 fullWidth
                 size="medium"
+                required
               />
             </Grid>
+           
             <Grid item xs={12} md={4}>
               <TextField
                 label="Phone Number"
@@ -209,6 +238,9 @@ function NewRegistration({ addEmployee }) {
                 onChange={handleInputChange}
                 fullWidth
                 size="medium"
+                error={!!errors.ContactNumber}
+                helperText={errors.ContactNumber}
+                required
               />
             </Grid>
 
@@ -221,6 +253,7 @@ function NewRegistration({ addEmployee }) {
                   name="Gender"
                   label="Gender"
                   size="medium"
+                  required
                 >
                   <MenuItem value="M">Male</MenuItem>
                   <MenuItem value="F">Female</MenuItem>
@@ -236,6 +269,7 @@ function NewRegistration({ addEmployee }) {
                 onChange={handleInputChange}
                 fullWidth
                 size="medium"
+                required
               />
             </Grid>
             <Grid item xs={4} md={4}>
@@ -246,6 +280,7 @@ function NewRegistration({ addEmployee }) {
                 name="JoinDate"
                 value={formData.JoinDate}
                 size="medium"
+                required
                 onChange={handleInputChange}
                 fullWidth
                 InputLabelProps={{
@@ -253,9 +288,9 @@ function NewRegistration({ addEmployee }) {
                 }}
               />
             </Grid>
-            <Grid item xs={4}>
+            <Grid item xs={4} md={4}>
               <TextField
-                // label="Date of Birth"
+                label="Date of Birth"
                 type="date"
                 variant="outlined"
                 name="DateOfBirth"
@@ -264,16 +299,20 @@ function NewRegistration({ addEmployee }) {
                 required
                 fullWidth
                 size="medium"
+                InputLabelProps={{
+                  shrink: true,
+                }}
               />
             </Grid>
             <Grid item xs={4} md={4}>
               <FormControl fullWidth variant="outlined">
-                <InputLabel>Employment Status</InputLabel>
+                <InputLabel>Employment Status *</InputLabel>
                 <Select
                   value={formData.EmploymentStatus}
                   onChange={handleInputChange}
                   label="Employment Status"
                   name="EmploymentStatus"
+                  required
                 >
                   <MenuItem value="Active">Active</MenuItem>
                   <MenuItem value="Inactive">Inactive</MenuItem>
@@ -282,12 +321,13 @@ function NewRegistration({ addEmployee }) {
             </Grid>
             <Grid item xs={12} md={4}>
               <FormControl fullWidth variant="outlined">
-                <InputLabel>Department ID</InputLabel>
+                <InputLabel>Department ID *</InputLabel>
                 <Select
                   value={formData.DepartmentID}
                   onChange={handleInputChange}
                   label="Department ID"
                   name="DepartmentID"
+                  required
                 >
                   {departmentData.map((department) => (
                     <MenuItem
@@ -302,12 +342,13 @@ function NewRegistration({ addEmployee }) {
             </Grid>
             <Grid item xs={12} md={4}>
               <FormControl fullWidth variant="outlined">
-                <InputLabel>Designation ID</InputLabel>
+                <InputLabel>Designation ID *</InputLabel>
                 <Select
                   value={formData.DesignationID}
                   onChange={handleInputChange}
                   label="Designation ID"
                   name="DesignationID"
+                  required
                 >
                   {deginationData.map((designation) => (
                     <MenuItem
@@ -331,6 +372,7 @@ function NewRegistration({ addEmployee }) {
                 onChange={handleInputChange}
                 fullWidth
                 size="medium"
+                required
               />
             </Grid>
 
@@ -883,7 +925,3 @@ export default NewRegistration;
 // }
 
 // export default NewRegistration;
-
-
-
-

@@ -21,6 +21,7 @@ const RegisterPage = () => {
         throw new Error('Failed to fetch employee data');
       }
       const data = await response.json();
+      console.log(data, "skjcbv");
       const reversedData = data.reverse(); // Reverse the order of data
       setEmployee(reversedData);
       setError(null); // Reset error state if data fetch is successful
