@@ -23,6 +23,7 @@ exports.addTask = (req, res) => {
 
   // Set default values if not provided
   newTask.TaskStatus = newTask.TaskStatus || "Pending";
+  newTask.Type = newTask.Type || "T";
 
   const query = "INSERT INTO tb_task SET ?";
   db.query(query, newTask, (err, results) => {
