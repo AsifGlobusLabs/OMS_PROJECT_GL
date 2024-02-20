@@ -8,8 +8,8 @@ router.get("/", assignmentController.getAllAssignments);
 // add Assignment
 router.post("/", assignmentController.addAssignment);
 
-// add Assignment Data (Mitesh)
-router.post("/data", assignmentController.addAssignmentData );
+// // add Assignment Data (Mitesh)
+// router.post("/data", assignmentController.addAssignmentData );
 
 // all data show with name(Mitesh)
 router.get('/allData', assignmentController.getAssigmentEmployeesData);

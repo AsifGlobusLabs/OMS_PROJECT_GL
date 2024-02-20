@@ -16,6 +16,22 @@ exports.getAllDepartments = (req, res) => {
 };
 
 
+// Getting particular department's data by id
+
+exports.getDepartmentById = (req, res) => {
+  const departmentId = req.params.DepartmentID;
+  const query = "SELECT * FROM tb_department WHERE DepartmentID = ?";
+  db.query(query, departmentId , (err, results) => {
+    if (err) {
+      console.error("Error executing query:", err);
+      res.status(500).json({ error: "Internal Server Error" });
+    } else {
+      res.status(200).json(results);
+    }
+  });
+};
+
+
 // Inserting Department
 
 exports.addDepartment = (req, res) => {
