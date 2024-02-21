@@ -208,7 +208,7 @@ export default function NewAssignment() {
 
 
               <Row className="mb-3">
-                <Form.Group as={Col} md="3" controlId="validationCustom03">
+                <Form.Group as={Col} md="4" controlId="validationCustom03">
                   <Form.Label>Assign Date</Form.Label>
                   <Form.Control
                     type="date"
@@ -222,7 +222,7 @@ export default function NewAssignment() {
                     Please provide Assign Date
                   </Form.Control.Feedback>
                 </Form.Group>
-                <Form.Group as={Col} md="3" controlId="validationCustom04">
+                <Form.Group as={Col} md="4" controlId="validationCustom04">
                   <Form.Label>Deadline Date</Form.Label>
                   <Form.Control
                     type="date"
@@ -236,7 +236,7 @@ export default function NewAssignment() {
                     Please provide Deadline Date
                   </Form.Control.Feedback>
                 </Form.Group>
-                <Form.Group as={Col} md="3" controlId="validationCustom05">
+                <Form.Group as={Col} md="4" controlId="validationCustom05">
                   <Form.Label>Priority</Form.Label>
                   <Form.Select
                     required
@@ -253,23 +253,7 @@ export default function NewAssignment() {
                     Please provide a priority.
                   </Form.Control.Feedback>
                 </Form.Group>
-                <Form.Group as={Col} md="3" controlId="validationCustom05">
-                  <Form.Label>Type</Form.Label>
-                  <Form.Select
-                    required
-                    name="Type"
-                    value={assignmentData.Type}
-                    onChange={handleInputChange}
-                  >
-                    <option value="">Select Type</option>
-                    <option value="A">A</option>
-                    <option value="T">T</option>
-                    
-                  </Form.Select>
-                  <Form.Control.Feedback type="invalid">
-                    Please provide a priority.
-                  </Form.Control.Feedback>
-                </Form.Group>
+             
               </Row>
 
 

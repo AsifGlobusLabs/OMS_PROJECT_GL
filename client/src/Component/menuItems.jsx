@@ -3,11 +3,15 @@ import React, { useEffect, useState } from "react";
 import HomeIcon from '@mui/icons-material/Home';
 import GroupsIcon from '@mui/icons-material/Groups';
 import AssignmentIcon from '@mui/icons-material/Assignment';
-import AddCircleIcon from "@mui/icons-material/AddCircle";
+// import AddCircleIcon from "@mui/icons-material/AddCircle";
 import SettingsIcon from "@mui/icons-material/Settings";
 import TableRowsIcon from '@mui/icons-material/TableRows';
 import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
-import ViewListIcon from '@mui/icons-material/ViewList';
+// import ViewListIcon from '@mui/icons-material/ViewList';
+// import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
+import TaskIcon from '@mui/icons-material/Task';
+import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
+import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
 
 const userData = JSON.parse(sessionStorage.getItem("userData"));
 
@@ -16,12 +20,13 @@ export const menuItems = [
   { text: "Home", icon: <HomeIcon />, path: "/"},
   { text: "New Employee", icon: <AppRegistrationIcon/>, path: "/registeration"},
   { text: "View Employee", icon: <TableRowsIcon/>, path: "/viewEmployee"},
-  { text: "New Department", icon: <ViewListIcon/>, path: "/Department"},
-  { text: "New Designation", icon: <ViewListIcon/>, path: "/newdesignation"},
+  { text: "New Department", icon: <PlaylistAddIcon/>, path: "/Department"},
+  { text: "New Designation", icon: <PlaylistAddIcon/>, path: "/newdesignation"},
   { text: "Team", icon: <GroupsIcon/>, path: "/team" },
-  { text: "New Assignment", icon: <AssignmentIcon />, path: "/assignment" },
-  { text: "MY Assignment", icon: <AssignmentIcon />, path: "/view-assignment" },
-  { text: "Task", icon: <AddCircleIcon />, path: "/Newtask" },
+  { text: "My Team", icon: <GroupsIcon/>, path: "/myteam" },
+  { text: "New Assignment", icon: <AssignmentIcon   />, path: "/assignment" },
+  { text: "View Assignment", icon: <AssignmentTurnedInIcon />, path: "/view-assignment" },
+  { text: "Task", icon: <TaskIcon />, path: "/Newtask" },
   { text: "Settings", icon: <SettingsIcon />, path: "/settings" },
 
 ];
