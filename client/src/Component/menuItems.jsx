@@ -23,6 +23,7 @@ export const menuItems = [
   { text: "New Department", icon: <PlaylistAddIcon/>, path: "/Department"},
   { text: "New Designation", icon: <PlaylistAddIcon/>, path: "/newdesignation"},
   { text: "Team", icon: <GroupsIcon/>, path: "/team" },
+  { text: "My Team", icon: <GroupsIcon/>, path: "/myteam" },
   { text: "New Assignment", icon: <AssignmentIcon   />, path: "/assignment" },
   { text: "View Assignment", icon: <AssignmentTurnedInIcon />, path: "/view-assignment" },
   { text: "Task", icon: <TaskIcon />, path: "/Newtask" },

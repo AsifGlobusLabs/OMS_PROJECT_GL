@@ -20,6 +20,7 @@ import NewDesignation from "./Page/Designation/NewDesignation";
 import NewAssignment from "./Page/Assignment/NewAssignment";
 import ViewAssignment from './Page/ViewAssignment/ViewAssignment'
 import PrivateRoute from "./PrivateRoute/PrivateRoute";
+import MyTeam from "./Page/MyTeam/MyTeam";
 
 export default function App() {
   return (
@@ -36,6 +37,7 @@ export default function App() {
           <Route path= '/newdesignation' element ={<NewDesignation/>}/>
           <Route path="/newdesignation" element={<NewDesignation/>}></Route>
           <Route path="/team" element={<TeamMember />}></Route>
+          <Route path="/myteam" element={<MyTeam/>}></Route>
           <Route path="/assignment" element={<NewAssignment />}></Route>
           <Route path="/view-assignment" element={<ViewAssignment/>}></Route>
           <Route path="/task" element={<NewTask/>}></Route>

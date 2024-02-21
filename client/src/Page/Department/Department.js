@@ -153,10 +153,12 @@ const Department = () => {
   const handleShow = () => setShow(true);
 
 
+  const [edit, setEdit] = useState();
+  console.log(edit, "heldvio");
 
   const handleEdit = async (DepartmentID) => {
     try {
-      const apiUrl = `http://localhost:3306/api/department/update/${DepartmentID}`;
+      const apiUrl = `http://localhost:3306/api/department/${DepartmentID}`;
       const response = await fetch(apiUrl, {
         method: "GET",
       });
@@ -164,7 +166,9 @@ const Department = () => {
       if (response.ok) {
         const departmentDetails = await response.json();
         // Now you can use departmentDetails to populate your form or modal for editing
-        console.log("Department Details:", departmentDetails);
+       console.log(departmentDetails, "jidaguoi");
+        setEdit(departmentDetails);
+       
       } else {
         console.error("Error fetching department details:", response.status);
       }
@@ -295,6 +299,7 @@ const Department = () => {
             </Modal.Header>
             <Modal.Body>
             <Form>
+        
             <Row className="mb-3">
               <Form.Group as={Col} md="6">
                 <Form.Label>Department ID</Form.Label>
@@ -305,7 +310,7 @@ const Department = () => {
                     placeholder="Department ID"
                     aria-describedby="inputGroupPrepend"
                     name="DeparmentID"
-                    
+                 
                     required
                   />
                   <Form.Control.Feedback type="invalid">
@@ -326,6 +331,7 @@ const Department = () => {
                 <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
               </Form.Group>
             </Row>
+      
             </Form>
             </Modal.Body>
             <Modal.Footer>
