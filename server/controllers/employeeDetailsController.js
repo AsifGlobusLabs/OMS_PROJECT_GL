@@ -91,7 +91,6 @@ exports.getDataOfEmployeesWithTheirDNames = (req, res) => {
 
 exports.addEmployee = (req, res) => {
   const {
-    EmployeeID,
     FirstName,
     LastName,
     DateOfBirth,
@@ -106,6 +105,27 @@ exports.addEmployee = (req, res) => {
   } = req.body;
   const employeeProfile = req.file.filename;
 
+  const query =
+    "SELECT MAX(SUBSTRING(EmployeeID, 4)) AS maxID FROM tb_employee";
+
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error("Error getting max EmployeeID: ", err);
+      res.status(500).json({ error: "Internal server error" });
+      return;
+    }
+
+    let nextID = 1;
+
+    if (results && results[0].maxID !== null) {
+      nextID = parseInt(results[0].maxID, 10) + 1;
+    }
+
+    const formattedID = `EMP${nextID.toString().padStart(3, "0")}`;
+
+    EmployeeID = req.body.EmployeeID
+    EmployeeID = formattedID;
+
   const query = `INSERT INTO tb_employee 
   (EmployeeID, FirstName, LastName, DateOfBirth, Gender, ContactNumber, Email, Address, JoinDate, Employee_Profile, EmploymentStatus, DepartmentID, DesignationID)
   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
@@ -117,6 +137,7 @@ exports.addEmployee = (req, res) => {
       res.status(201).json({ message: "Employee added successfully" });
     }
   });
+})
 };
 
 

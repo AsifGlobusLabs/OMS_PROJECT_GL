@@ -12,7 +12,7 @@ router.post("/", assignmentController.addAssignment);
 // router.post("/data", assignmentController.addAssignmentData );
 
 // all data show with name(Mitesh)
-router.get('/allData', assignmentController.getAssigmentEmployeesData);
+router.get('/myTask', assignmentController.getAssigmentsAndTasksData);
 
 // get last assignment id
 router.get("/lastAssignmentId", assignmentController.getLastAssignmentId);
