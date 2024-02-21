@@ -8,6 +8,9 @@ router.get("/", taskController.getAllTasks);
 // add task details
 router.post("/", taskController.addTask);
 
+// add task details with auto generated id
+router.post("/withID", taskController.addTaskWithId);
+
 // get last task id
 router.get("/lastTaskId", taskController.getLastTaskId);
 

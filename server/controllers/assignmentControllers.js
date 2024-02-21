@@ -16,6 +16,63 @@ exports.getAllAssignments = (req, res) => {
 };
 
 
+// get all data with name and tasks is added here too
+
+exports.getAssigmentsAndTasksData = (req, res) => {
+  const query = `
+  SELECT 
+  w.*,
+  e1.FirstName AS Assigner_FirstName, 
+  e1.LastName AS Assigner_LastName,
+  e2.FirstName AS Assignee_FirstName,
+  e2.LastName AS Assignee_LastName,
+  NULL AS TaskID,
+  NULL AS TaskDescription,
+  NULL AS StartDate,
+  NULL AS EndDate,
+  NULL AS CreatedAt,
+  NULL AS TaskStatus,
+  NULL AS TaskType,
+  NULL AS TaskEmployeeID
+FROM 
+  tb_assignment AS w
+  INNER JOIN 
+  tb_employee AS e1 ON w.EmployeeID = e1.EmployeeID
+  INNER JOIN
+  tb_employee AS e2 ON w.EmployeeID_AssignTo = e2.EmployeeID
+
+UNION ALL
+
+SELECT 
+  NULL AS AssignmentID,
+  NULL AS EmployeeID,
+  NULL AS EmployeeID_AssignTo,
+  NULL AS Assignment_Description,
+  NULL AS AssignDate,
+  NULL AS DeadlineDate,
+  NULL AS AssignmentStatus,
+  NULL AS AssignmentPriority,
+  NULL AS AssignmentType,
+  NULL AS Assigner_FirstName,
+  NULL AS Assigner_LastName,
+  NULL AS Assignee_FirstName,
+  NULL AS Assignee_LastName,
+  t.*  
+FROM 
+  tb_task AS t;
+  `;
+
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error("Error executing query:", err);
+      return res.status(500).json({ error: "Internal Server Error" });
+    }
+    res.status(200).json(results);
+    // console.log(results);
+  });
+};
+
+
 // get all data with name
 
 exports.getAssigmentEmployeesData = (req, res) => {
@@ -64,6 +121,48 @@ exports.addAssignment = (req, res) => {
       res.status(200).json({ message: "Assignment added successfully" });
     }
   });
+};
+
+
+// Inserting assignment with auto generated id from backend
+
+exports.addAssignmentWithId = (req, res) => {
+  const newAssignment = req.body;
+
+  // Set default values if not provided
+  newAssignment.AssignmentStatus = newAssignment.AssignmentStatus || "Pending";
+  newAssignment.Type = newAssignment.Type || "A";
+
+  const query =
+    "SELECT MAX(SUBSTRING(AssignmentID, 3)) AS maxID FROM tb_assignment";
+
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error("Error getting max AssignmentID: ", err);
+      res.status(500).json({ error: "Internal server error" });
+      return;
+    }
+
+    let nextID = 1;
+
+    if (results && results[0].maxID !== null) {
+      nextID = parseInt(results[0].maxID, 10) + 1;
+    }
+
+    const formattedID = `AS${nextID.toString().padStart(3, "0")}`;
+
+    newAssignment.AssignmentID = formattedID;
+
+  const query = "INSERT INTO tb_assignment SET ?";
+  db.query(query, newAssignment, (err, results) => {
+    if (err) {
+      console.error("Error executing query:", err);
+      res.status(500).json({ error: "Internal Server Error" });
+    } else {
+      res.status(200).json({ message: "Assignment added successfully" });
+    }
+  });
+})
 };
 
 

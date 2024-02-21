@@ -123,6 +123,9 @@ http://localhost:3306/api/assignmentDetails
 // Post or add Assignment
 http://localhost:3306/api/assignmentDetails
 
+// Post or add Assignment with auto generated id
+http://localhost:3306/api/assignmentDetails/withID
+
 // add Assignment Data (Mitesh)
 http://localhost:3306/api/assignmentDetails/data
 
@@ -173,6 +176,9 @@ http://localhost:3306/api/taskDetails
 
 // add task details
 http://localhost:3306/api/taskDetails
+
+// add task with auto generated id
+http://localhost:3306/api/taskDetails/withID
 
 // get all task details
 http://localhost:3306/api/taskDetails/lastTaskId
