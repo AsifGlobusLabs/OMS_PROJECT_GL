@@ -5,6 +5,9 @@ const assignmentController = require("../controllers/assignmentControllers");
 // get all Assignment
 router.get("/", assignmentController.getAllAssignments); 
 
+// get particular Assignment by their id
+router.get("/:AssignmentID", assignmentController.getAssignmentById); 
+
 // add Assignment
 router.post("/", assignmentController.addAssignment);
 
@@ -15,6 +18,9 @@ router.post("/withID", assignmentController.addAssignmentWithId);
 // router.post("/data", assignmentController.addAssignmentData );
 
 // all data show with name(Mitesh)
+router.get('/allData', assignmentController.getAssigmentEmployeesData);
+
+// all data of assignment and tasks are clubbed together
 router.get('/myTask', assignmentController.getAssigmentsAndTasksData);
 
 // get last assignment id
