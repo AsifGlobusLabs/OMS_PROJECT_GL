@@ -8,6 +8,9 @@ router.get("/", assignmentController.getAllAssignments);
 // add Assignment
 router.post("/", assignmentController.addAssignment);
 
+// add Assignment with auto generated id
+router.post("/withID", assignmentController.addAssignmentWithId);
+
 // // add Assignment Data (Mitesh)
 // router.post("/data", assignmentController.addAssignmentData );
 
