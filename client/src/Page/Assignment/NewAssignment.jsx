@@ -169,6 +169,7 @@ export default function NewAssignment() {
                     name="AssignmentID"
                     value={assignmentData.AssignmentID}
                     onChange={handleInputChange}
+                    readOnly
                   />
                   <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                 </Form.Group>

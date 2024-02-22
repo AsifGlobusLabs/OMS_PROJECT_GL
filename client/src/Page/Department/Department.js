@@ -299,7 +299,7 @@ const Department = () => {
             </Modal.Header>
             <Modal.Body>
             <Form>
-        
+            {/* {edit.map((item) => ( */}
             <Row className="mb-3">
               <Form.Group as={Col} md="6">
                 <Form.Label>Department ID</Form.Label>
@@ -310,7 +310,7 @@ const Department = () => {
                     placeholder="Department ID"
                     aria-describedby="inputGroupPrepend"
                     name="DeparmentID"
-                 
+                //  value={item.DepartmentID}
                     required
                   />
                   <Form.Control.Feedback type="invalid">
@@ -325,13 +325,13 @@ const Department = () => {
                   type="text"
                   placeholder="Department Name"
                   name="DepartmentName"
-                  
+                  // value={item.DepartmentName}
                   required
                 />
                 <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
               </Form.Group>
             </Row>
-      
+             {/* ))} */}
             </Form>
             </Modal.Body>
             <Modal.Footer>
