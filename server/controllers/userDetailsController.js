@@ -222,7 +222,8 @@ exports.loginUser = async (req, res) => {
               Username: user.Username,
               Role: user.Role,
               FirstName:user.FirstName,
-              LastName:user.LastName
+              LastName:user.LastName,
+              Employee_Profile:user.Employee_Profile
             },
             token,
           });
