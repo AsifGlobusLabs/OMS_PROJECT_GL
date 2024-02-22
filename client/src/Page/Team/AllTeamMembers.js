@@ -21,8 +21,6 @@ export default function AllTeamMembers() {
   const [departments, setDepartments] = useState([]);
   const [selectedDepartment, setSelectedDepartment] = useState(null);
 
-  
-
   useEffect(() => {
     // Fetch department data when the component mounts
     fetchDepartmentData();
@@ -73,13 +71,12 @@ export default function AllTeamMembers() {
         component="main"
         sx={{ flexGrow: 1, marginTop: "55px", padding: "20px" }}
       >
-
         {/* page uper header work */}
         <div
           style={{
             height: "80px",
             display: "flex",
-            justifyContent:'space-between',
+            justifyContent: "space-between",
             alignItems: "center",
             boxShadow: "0px 0px 5px rgba(0, 0, 0, 0.2)",
             backgroundColor: "white",
@@ -107,9 +104,8 @@ export default function AllTeamMembers() {
               <TextField {...params} label="Department" />
             )}
           />
-
         </div>
-         {/* employee profile */}
+        {/* employee profile */}
         <div className="card-container">
           {filteredEmployees.map((item) => (
             <Card
@@ -130,9 +126,13 @@ export default function AllTeamMembers() {
                 >
                   <CardMedia
                     component="img"
-                    image={profile}
-                    alt="profile"
                     sx={{ height: 140, width: 140, borderRadius: "50%" }}
+                    src={
+                      item.Employee_Profile
+                        ? `http://localhost:3306/api/employee/${item.Employee_Profile}`
+                        : ""
+                    }
+                    alt="Employee Profile"
                   />
                 </div>
                 <CardContent>
