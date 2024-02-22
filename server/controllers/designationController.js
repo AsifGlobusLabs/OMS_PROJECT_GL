@@ -16,6 +16,22 @@ exports.getAllDesignations = (req, res) => {
 };
 
 
+// Getting particular designation's data by id
+
+exports.getDesignationById = (req, res) => {
+  const designationId = req.params.DesignationID;
+  const query = "SELECT * FROM tb_designation WHERE DesignationID = ?";
+  db.query(query, designationId , (err, results) => {
+    if (err) {
+      console.error("Error executing query:", err);
+      res.status(500).json({ error: "Internal Server Error" });
+    } else {
+      res.status(200).json(results);
+    }
+  });
+};
+
+
 // Inserting designation
 
 exports.addDesignation = (req, res) => {

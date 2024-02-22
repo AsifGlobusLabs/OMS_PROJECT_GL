@@ -16,6 +16,22 @@ exports.getAllTasks = (req, res) => {
 };
 
 
+// Getting particular task's data by id
+
+exports.getTaskById = (req, res) => {
+  const taskId = req.params.TaskID;
+  const query = "SELECT * FROM tb_task WHERE TaskID = ?";
+  db.query(query, taskId , (err, results) => {
+    if (err) {
+      console.error("Error executing query:", err);
+      res.status(500).json({ error: "Internal Server Error" });
+    } else {
+      res.status(200).json(results);
+    }
+  });
+};
+
+
 // Inserting task
 
 exports.addTask = (req, res) => {

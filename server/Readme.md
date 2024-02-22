@@ -54,6 +54,9 @@ tb_department's Api
 // Get all departments
 http://localhost:3306/api/department
 
+// Get particular department by id
+http://localhost:3306/api/department/:DepartmentID
+
 // Insert department's data
 http://localhost:3306/api/department
 
@@ -74,6 +77,9 @@ tb_designation's Api
 
 // Get all designations
 http://localhost:3306/api/designation
+
+// Get particular designation by id
+http://localhost:3306/api/designation/:DesignationID
 
 // Insert designation's data
 http://localhost:3306/api/designation
@@ -119,6 +125,9 @@ tb_assignment's Api
 
 // get all Assignment
 http://localhost:3306/api/assignmentDetails
+
+// get particular Assignment by id
+http://localhost:3306/api/assignmentDetails/:AssignmentID
 
 // Post or add Assignment
 http://localhost:3306/api/assignmentDetails
@@ -173,6 +182,9 @@ tb_task's Api
 
 // get all task details
 http://localhost:3306/api/taskDetails
+
+// get particular task details by id
+http://localhost:3306/api/taskDetails/:TaskID
 
 // add task details
 http://localhost:3306/api/taskDetails
