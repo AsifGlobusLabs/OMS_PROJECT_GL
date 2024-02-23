@@ -459,6 +459,34 @@ exports.numberOfAssignmentsByStatus = (req, res) => {
 };
 
 
+// number of pending progress and completed assignments 
+
+exports.numberOfAssignmentsOfAllEmployees = (req, res) => {
+  const query = `
+    SELECT
+      COUNT(CASE WHEN AssignmentStatus = 'Pending' THEN 1 END) AS num_pending_assignments,
+      COUNT(CASE WHEN AssignmentStatus = 'Progress' THEN 1 END) AS num_progress_assignments,
+      COUNT(CASE WHEN AssignmentStatus = 'Completed' THEN 1 END) AS num_completed_assignments
+    FROM tb_assignment
+  `;
+
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error("Error executing query:", err);
+      res.status(500).json({ error: "Internal Server Error" });
+    } else {
+      const assignmentCounts = {
+        num_pending_assignments: results[0].num_pending_assignments,
+        num_progress_assignments: results[0].num_progress_assignments,
+        num_completed_assignments: results[0].num_completed_assignments,
+      };
+
+      res.status(200).json(assignmentCounts);
+    }
+  });
+};
+
+
 // Deleting Assignment's data
 
 exports.deleteAssignment = (req, res) => {
