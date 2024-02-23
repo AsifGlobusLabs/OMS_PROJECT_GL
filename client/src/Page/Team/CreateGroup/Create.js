@@ -57,6 +57,7 @@ const Create = () => {
     setPage(0);
   };
 
+  
   const handleDepartmentSelect = async (department) => {
     setSelectedDepartment(department);
     try {
@@ -359,7 +360,8 @@ const Create = () => {
                           >
                             {employee.EmploymentStatus}
                           </TableCell>
-                          {/* Render Add or Check icon based on whether the employee is selected */}
+                          {/* Render Add or Check icon based on whether the employee is selected */};
+
                           {selectedEmployee.some(
                             (emp) => emp.EmployeeID === employee.EmployeeID
                           ) ? (
@@ -380,6 +382,7 @@ const Create = () => {
                               <AddCircleOutlineIcon />
                             </TableCell>
                           )}
+                          
                           {emptyRows > 0 && (
                             <TableRow style={{ height: 53 * emptyRows }}>
                               <TableCell colSpan={6} />
