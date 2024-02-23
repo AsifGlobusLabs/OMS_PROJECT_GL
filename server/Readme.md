@@ -174,6 +174,12 @@ http://localhost:3306/api/assignmentDetails/completed-assignments
 // number of completed assignments of an employee
 http://localhost:3306/api/assignmentDetails/:EmployeeID_AssignTo/completed-assignments
 
+// number of pending progress and completed assignments of all employees
+http://localhost:3306/api/assignmentDetails/assignments/counts
+
+// number of pending progress and completed assignments of a particular employee
+http://localhost:3306/api/assignmentDetails/:EmployeeID_AssignTo/assignmentCounts
+
 // delete assignment
 http://localhost:3306/api/assignmentDetails/delete/:AssignmentID
 
