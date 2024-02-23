@@ -144,10 +144,17 @@ export default function MyTeam() {
                 >
                   <CardMedia
                     component="img"
-                    image={profile}
-                    alt="profile"
+              
                     sx={{ height: 140, width: 140, borderRadius: "50%" }}
-                  />
+                  > 
+                   {item.Employee_Profile && (
+                        <img
+                          src={`http://localhost:3306/api/employee/${item.Employee_Profile}`}
+                          alt="Employee Profile"
+                          style={{ height: "100px" }}
+                        />
+                      )}
+                  </CardMedia>
                 </div>
                 <CardContent>
                   <Typography

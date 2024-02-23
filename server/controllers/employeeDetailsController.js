@@ -53,6 +53,9 @@ exports.getAllDataOfEmployeesByEmployeeId = (req, res) => {
   });
 };
 
+
+
+
 // // Getting data of employees with their department and designation name
 
 // exports.getDataOfEmployeesWithTheirDNames = (req, res) => {
@@ -70,9 +73,12 @@ exports.getAllDataOfEmployeesByEmployeeId = (req, res) => {
 
 // Getting data of employees with their department and designation name
 
+
+
+
 exports.getDataOfEmployeesWithTheirDNames = (req, res) => {
   const query =
-    "SELECT tb_employee.EmployeeID,tb_employee.FirstName,tb_employee.LastName,tb_employee.EmploymentStatus,tb_employee.DepartmentID,tb_department.DepartmentName,tb_employee.DesignationID,tb_designation.DesignationName FROM tb_employee JOIN tb_department ON tb_employee.DepartmentID = tb_department.DepartmentID JOIN tb_designation ON tb_employee.DesignationID = tb_designation.DesignationID";
+    "SELECT tb_employee.EmployeeID,tb_employee.FirstName,tb_employee.LastName,tb_employee.EmploymentStatus,tb_employee.Employee_Profile,tb_employee.DepartmentID,tb_department.DepartmentName,tb_employee.DesignationID,tb_designation.DesignationName FROM tb_employee JOIN tb_department ON tb_employee.DepartmentID = tb_department.DepartmentID JOIN tb_designation ON tb_employee.DesignationID = tb_designation.DesignationID";
   db.query(query, (err, results) => {
     if (err) {
       console.error("Error executing query:", err);
