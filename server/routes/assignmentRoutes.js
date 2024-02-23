@@ -11,6 +11,9 @@ router.post("/", assignmentController.addAssignment);
 // get last assignment id
 router.get("/lastAssignmentId", assignmentController.getLastAssignmentId);
 
+// all data show with name(Mitesh)
+router.get('/allData', assignmentController.getAssigmentEmployeesData);
+
 // get particular Assignment by their id
 router.get("/:AssignmentID", assignmentController.getAssignmentById); 
 
@@ -19,9 +22,6 @@ router.post("/withID", assignmentController.addAssignmentWithId);
 
 // // add Assignment Data (Mitesh)
 // router.post("/data", assignmentController.addAssignmentData );
-
-// all data show with name(Mitesh)
-router.get('/allData', assignmentController.getAssigmentEmployeesData);
 
 // all data of assignment and tasks are clubbed together
 router.get('/myTask', assignmentController.getAssigmentsAndTasksData);
