@@ -213,8 +213,6 @@ useEffect(() => {
 }, [userData]);
 
 
-
-
   // useEffect(() => {
   //   const fetchData = async () => {
   //     try {
@@ -243,15 +241,18 @@ useEffect(() => {
   };
 
   const filterDataByTab = () => {
-    if (activeTab === 'Pending') {
+    if (activeTab === 'All') {
+      return tableData;
+    } else if (activeTab === 'Pending') {
       return tableData.filter((item) => item.AssignmentStatus === 'Pending');
-    } else if (activeTab === 'Progress') {
+    }  else if (activeTab === 'Progress') {
       return tableData.filter((item) => item.AssignmentStatus === 'Progress');
-    } else if (activeTab === 'Completed') {
+    }else if (activeTab === 'Completed') {
       return tableData.filter((item) => item.AssignmentStatus === 'Completed');
     }
     return [];
   };
+
 
   const filteredItems = filterDataByTab();
 
@@ -277,11 +278,14 @@ useEffect(() => {
 
       <div className="p-2">
         <Tabs
-          defaultActiveKey="Pending"
+          defaultActiveKey="All"
           id="uncontrolled-tab-example"
           className="mb-3 mt-2"
           onSelect={(tab) => handleTabChange(tab)}
         >
+          <Tab eventKey="All" title="All">
+            <TableComponent data={currentItems} />
+          </Tab>
           <Tab eventKey="Pending" title="Pending">
             <TableComponent data={currentItems} />
           </Tab>
@@ -336,13 +340,12 @@ const TableComponent = ({ data }) => {
           {data.map((item, index) => (
             <tr key={index}>
               <td>{item.AssignmentID}</td>
-              {/* <td>{item.EmployeeID}</td> */}
               <td>{item.EmployeeID_AssignTo} - {item.Assignee_FirstName}</td>
               <td
                 onClick={() => handleDescriptionClick(item.Assignment_Description)}
                 style={{ cursor: 'pointer' }}
               >
-                {item.Assignment_Description.slice(0, 50)} {/* Show first 50 characters */}
+                {item.Assignment_Description.slice(0, 50)}
               </td>
               <td>{format(new Date(item.AssignDate), 'dd/MM/yyyy')}</td>
               <td>{format(new Date(item.DeadlineDate), 'dd/MM/yyyy')}</td>

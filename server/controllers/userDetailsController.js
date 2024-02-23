@@ -186,7 +186,7 @@ exports.loginUser = async (req, res) => {
   const { EmployeeID, Password } = req.body;
 
   // Fetch user from the database based on the email
-  const query = "SELECT tb_userdetails.*, tb_employee.FirstName, tb_employee.LastName FROM tb_userdetails INNER JOIN tb_employee ON tb_userdetails.EmployeeID = tb_employee.EmployeeID WHERE tb_userdetails.EmployeeID = ?";
+  const query = "SELECT tb_userdetails.*, tb_employee.FirstName, tb_employee.LastName, tb_employee.Employee_Profile FROM tb_userdetails INNER JOIN tb_employee ON tb_userdetails.EmployeeID = tb_employee.EmployeeID WHERE tb_userdetails.EmployeeID = ?";
 
   db.query(query, [EmployeeID], async (err, results) => {
     if (err) {
@@ -222,7 +222,8 @@ exports.loginUser = async (req, res) => {
               Username: user.Username,
               Role: user.Role,
               FirstName:user.FirstName,
-              LastName:user.LastName
+              LastName:user.LastName,
+              Employee_Profile:user.Employee_Profile
             },
             token,
           });

@@ -65,6 +65,7 @@ const Department = () => {
           console.log("Received data:", data); // Log received data for debugging
           const numericPart = parseInt(data.lastDepartmentId.slice(4), 10);
           console.log("Parsed numeric part:", numericPart); // Log parsed numeric part
+          
           if (!isNaN(numericPart)) {
             const nextJobNo = numericPart + 1;
             setFormData({
@@ -152,6 +153,30 @@ const Department = () => {
   const handleShow = () => setShow(true);
 
 
+  const [edit, setEdit] = useState();
+  console.log(edit, "heldvio");
+
+  const handleEdit = async (DepartmentID) => {
+    try {
+      const apiUrl = `http://localhost:3306/api/department/${DepartmentID}`;
+      const response = await fetch(apiUrl, {
+        method: "GET",
+      });
+  
+      if (response.ok) {
+        const departmentDetails = await response.json();
+        // Now you can use departmentDetails to populate your form or modal for editing
+       console.log(departmentDetails, "jidaguoi");
+        setEdit(departmentDetails);
+       
+      } else {
+        console.error("Error fetching department details:", response.status);
+      }
+    } catch (error) {
+      console.error("Error fetching department details:", error);
+    }
+  };
+  
 
 
   return (
@@ -245,7 +270,10 @@ const Department = () => {
 
                         cursor: "pointer",
                       }}
-                      onClick={handleShow}
+                      onClick={() => {
+                        handleShow();
+                        handleEdit(item.DepartmentID);
+                      }}
                     >
                       <EditNoteIcon />
                     </td>
@@ -271,6 +299,7 @@ const Department = () => {
             </Modal.Header>
             <Modal.Body>
             <Form>
+            {/* {edit.map((item) => ( */}
             <Row className="mb-3">
               <Form.Group as={Col} md="6">
                 <Form.Label>Department ID</Form.Label>
@@ -281,7 +310,7 @@ const Department = () => {
                     placeholder="Department ID"
                     aria-describedby="inputGroupPrepend"
                     name="DeparmentID"
-                    
+                //  value={item.DepartmentID}
                     required
                   />
                   <Form.Control.Feedback type="invalid">
@@ -296,12 +325,13 @@ const Department = () => {
                   type="text"
                   placeholder="Department Name"
                   name="DepartmentName"
-                  
+                  // value={item.DepartmentName}
                   required
                 />
                 <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
               </Form.Group>
             </Row>
+             {/* ))} */}
             </Form>
             </Modal.Body>
             <Modal.Footer>

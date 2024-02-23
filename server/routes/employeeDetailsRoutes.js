@@ -49,7 +49,7 @@ router.get("/lastEmployeeId", employeeController.getLastEmployeeId);
 router.get("/nextEmployeeId", employeeController.getNextEmployeeId);
 
 // Update employee's data
-router.patch("/update/:EmployeeID", employeeController.updateEmployee);
+router.patch("/update/:EmployeeID",upload.single('Employee_Profile'), employeeController.updateEmployee);
 
 // Deleting employee's data
 router.delete("/delete/:EmployeeID", employeeController.deleteEmployee);

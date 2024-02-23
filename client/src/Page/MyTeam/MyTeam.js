@@ -12,37 +12,53 @@ import {
   TextField,
 } from "@mui/material";
 import { Link } from "react-router-dom";
-import "./Team.css";
+
 import profile from "./images.png";
 import SideBar from "../../Component/SideBar"; // Assuming you have a SideBar component
 
-export default function AllTeamMembers() {
+export default function MyTeam() {
   const [data, setData] = useState([]);
   const [departments, setDepartments] = useState([]);
   const [selectedDepartment, setSelectedDepartment] = useState(null);
+  const [assignedEmployees, setAssignedEmployees] = useState([]);
+  const [userData, setUserData] = useState(null);
+
+  console.log(assignedEmployees, "asif");
+
+  useEffect(() => {
+    const userDataFromSession = JSON.parse(sessionStorage.getItem("userData"));
+    setUserData(userDataFromSession);
+  }, []);
 
   useEffect(() => {
     // Fetch department data when the component mounts
     fetchDepartmentData();
-    fetchEmployeeData();
+    // fetchEmployeeData();
   }, []);
 
-  // GET ALL EMPLOYEE DATA USING THIS APIs
-  const fetchEmployeeData = async () => {
-    try {
-      const apiUrl = "http://localhost:3306/api/employee/allData";
-      const response = await fetch(apiUrl, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      const result = await response.json();
-      setData(result);
-    } catch (error) {
-      console.error("Error fetching data:", error);
+  useEffect(() => {
+    const fetchAssignedEmployees = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:3306/api/workGroup/allData"
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch data");
+        }
+        const data = await response.json();
+        const assigned = data.filter(
+          (employee) => userData.EmployeeID === employee.EmployeeID_Assigner
+        );
+        setAssignedEmployees(assigned);
+      } catch (error) {
+        console.error("Error fetching assigned employees:", error);
+      }
+    };
+
+    if (userData) {
+      fetchAssignedEmployees();
     }
-  };
+  }, [userData]);
 
   // GET DEPARTMENT id and name FETCH
   const fetchDepartmentData = async () => {
@@ -58,11 +74,12 @@ export default function AllTeamMembers() {
   };
 
   // Filter employee data based on selected department
-  const filteredEmployees = selectedDepartment
-    ? data.filter(
-        (employee) => employee.DepartmentID === selectedDepartment.DepartmentID
+  const filteredAssignedEmployees = selectedDepartment
+    ? assignedEmployees.filter(
+        (employee) =>
+          selectedDepartment.DepartmentID === employee.DepartmentID_AssignTo
       )
-    : data;
+    : assignedEmployees;
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -81,10 +98,11 @@ export default function AllTeamMembers() {
             boxShadow: "0px 0px 5px rgba(0, 0, 0, 0.2)",
             backgroundColor: "white",
             color: "black",
+            padding:"0px 10px"
           }}
         >
           <Typography variant="h5" sx={{ textAlign: "start" }}>
-            Create Team
+            {userData && `${userData.FirstName} ${userData.LastName}`}'s Team
           </Typography>
 
           <Autocomplete
@@ -107,9 +125,9 @@ export default function AllTeamMembers() {
         </div>
         {/* employee profile */}
         <div className="card-container">
-          {filteredEmployees.map((item) => (
+          {filteredAssignedEmployees.map((item) => (
             <Card
-              key={item.EmployeeID}
+              key={item.EmployeeID_AssignTo}
               sx={{
                 maxWidth: 300,
                 margin: "10px",
@@ -126,14 +144,17 @@ export default function AllTeamMembers() {
                 >
                   <CardMedia
                     component="img"
+              
                     sx={{ height: 140, width: 140, borderRadius: "50%" }}
-                    src={
-                      item.Employee_Profile
-                        ? `http://localhost:3306/api/employee/${item.Employee_Profile}`
-                        : ""
-                    }
-                    alt="Employee Profile"
-                  />
+                  > 
+                   {item.Employee_Profile && (
+                        <img
+                          src={`http://localhost:3306/api/employee/${item.Employee_Profile}`}
+                          alt="Employee Profile"
+                          style={{ height: "100px" }}
+                        />
+                      )}
+                  </CardMedia>
                 </div>
                 <CardContent>
                   <Typography
@@ -142,28 +163,17 @@ export default function AllTeamMembers() {
                     component="div"
                     align="center"
                   >
-                    {item.FirstName} {item.LastName}
+                    {item.Assignee_FirstName} {item.Assignee_LastName}
                   </Typography>
                   <Typography
                     variant="body2"
                     color="text.secondary"
                     align="center"
                   >
-                    ID: {item.EmployeeID}
+                    ID: {item.EmployeeID_AssignTo}
                   </Typography>
                 </CardContent>
               </CardActionArea>
-              <CardActions sx={{ justifyContent: "center" }}>
-                <Link
-                  to={`/createteam/${item.EmployeeID}`}
-                  key={item.EmployeeID}
-                  style={{ textDecoration: "none" }}
-                >
-                  <Button size="small" variant="contained" color="primary">
-                    Create Team
-                  </Button>
-                </Link>
-              </CardActions>
             </Card>
           ))}
         </div>

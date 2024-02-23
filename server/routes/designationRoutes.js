@@ -5,6 +5,9 @@ const designationController = require("../controllers/designationController");
 // Get all designation
 router.get("/", designationController.getAllDesignations);
 
+// Get particular designation by their id
+router.get("/:DesignationID", designationController.getDesignationById);
+
 // Add a new designation
 router.post("/", designationController.addDesignation);
 

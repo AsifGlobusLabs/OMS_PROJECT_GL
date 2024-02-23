@@ -53,7 +53,9 @@ const ViewAssignment = () => {
   };
 
   const filterDataByTab = () => {
-    if (activeTab === "Pending") {
+    if (activeTab === "All") {
+      return tableData;
+    } else if (activeTab === "Pending") {
       return tableData.filter((item) => item.AssignmentStatus === "Pending");
     } else if (activeTab === "Progress") {
       return tableData.filter((item) => item.AssignmentStatus === "Progress");
@@ -83,11 +85,14 @@ const ViewAssignment = () => {
           </Typography>
           <div className="p-2">
             <Tabs
-              defaultActiveKey="Pending"
+              defaultActiveKey="All"
               id="uncontrolled-tab-example"
               className="mb-3 mt-2"
               onSelect={(tab) => handleTabChange(tab)}
             >
+              <Tab eventKey="All" title="All">
+                <TableComponent data={currentItems} />
+              </Tab>
               <Tab eventKey="Pending" title="Pending">
                 <TableComponent data={currentItems} />
               </Tab>

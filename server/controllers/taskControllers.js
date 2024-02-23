@@ -16,6 +16,22 @@ exports.getAllTasks = (req, res) => {
 };
 
 
+// Getting particular task's data by id
+
+exports.getTaskById = (req, res) => {
+  const taskId = req.params.TaskID;
+  const query = "SELECT * FROM tb_task WHERE TaskID = ?";
+  db.query(query, taskId , (err, results) => {
+    if (err) {
+      console.error("Error executing query:", err);
+      res.status(500).json({ error: "Internal Server Error" });
+    } else {
+      res.status(200).json(results);
+    }
+  });
+};
+
+
 // Inserting task
 
 exports.addTask = (req, res) => {
@@ -34,6 +50,48 @@ exports.addTask = (req, res) => {
       res.status(200).json({ message: "Task added successfully" });
     }
   });
+};
+
+
+// task id generated from backend
+
+exports.addTaskWithId = (req, res) => {
+  const newTask = req.body;
+
+  // Set default values if not provided
+  newTask.TaskStatus = newTask.TaskStatus || "Pending";
+  newTask.Type = newTask.Type || "T";
+
+  const query =
+    "SELECT MAX(SUBSTRING(TaskID, 2)) AS maxID FROM tb_task";
+
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error("Error getting max TaskID: ", err);
+      res.status(500).json({ error: "Internal server error" });
+      return;
+    }
+
+    let nextID = 1;
+
+    if (results && results[0].maxID !== null) {
+      nextID = parseInt(results[0].maxID, 10) + 1;
+    }
+
+    const formattedID = `T${nextID.toString().padStart(3, "0")}`;
+
+    newTask.TaskID = formattedID;
+
+  const query = "INSERT INTO tb_task SET ?";
+  db.query(query, newTask, (err, results) => {
+    if (err) {
+      console.error("Error executing query:", err);
+      res.status(500).json({ error: "Internal Server Error" });
+    } else {
+      res.status(200).json({ message: "Task added successfully" });
+    }
+  });
+})
 };
 
 

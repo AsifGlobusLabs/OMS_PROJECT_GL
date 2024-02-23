@@ -1,6 +1,5 @@
 const db = require("../db");
 
-
 // Getting all employees data
 
 exports.getAllEmployees = (req, res) => {
@@ -15,12 +14,10 @@ exports.getAllEmployees = (req, res) => {
   });
 };
 
-
 // Getting all data of employees
 
 exports.getAllDataOfEmployees = (req, res) => {
-  const query =
-    `SELECT
+  const query = `SELECT
     e.*, u.Role, u.Username , d.DepartmentName, d2.DesignationName
     FROM
     tb_employee as e INNER JOIN tb_userdetails as u ON e.EmployeeID = u.EmployeeID INNER JOIN 
@@ -33,11 +30,12 @@ exports.getAllDataOfEmployees = (req, res) => {
       res.status(500).json({ error: "Internal Server Error" });
       return;
     }
-    const userEmployees = results.filter(employee => employee.Role === 'User');
+    const userEmployees = results.filter(
+      (employee) => employee.Role === "User"
+    );
     res.status(200).json(userEmployees);
   });
 };
-
 
 // Getting all data of employees by their employee id
 
@@ -73,7 +71,6 @@ exports.getAllDataOfEmployeesByEmployeeId = (req, res) => {
 //   });
 // };
 
-
 // Getting data of employees with their department and designation name
 
 
@@ -106,9 +103,9 @@ exports.addEmployee = (req, res) => {
     JoinDate,
     EmploymentStatus,
     DepartmentID,
-    DesignationID
+    DesignationID,
   } = req.body;
-  const employeeProfile = req.file.filename;
+  const employeeProfile = req.file ? req.file.filename : null;
 
   const query =
     "SELECT MAX(SUBSTRING(EmployeeID, 4)) AS maxID FROM tb_employee";
@@ -128,23 +125,40 @@ exports.addEmployee = (req, res) => {
 
     const formattedID = `EMP${nextID.toString().padStart(3, "0")}`;
 
-    EmployeeID = req.body.EmployeeID
+    EmployeeID = req.body.EmployeeID;
     EmployeeID = formattedID;
 
-  const query = `INSERT INTO tb_employee 
+    const query = `INSERT INTO tb_employee 
   (EmployeeID, FirstName, LastName, DateOfBirth, Gender, ContactNumber, Email, Address, JoinDate, Employee_Profile, EmploymentStatus, DepartmentID, DesignationID)
   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-  db.query(query, [EmployeeID, FirstName, LastName, DateOfBirth, Gender, ContactNumber, Email, Address, JoinDate, employeeProfile, EmploymentStatus, DepartmentID, DesignationID], (err, result) => {
-    if (err) {
-      console.error("Error executing query:", err);
-      res.status(500).json({ error: "Internal Server Error" });
-    } else {
-      res.status(201).json({ message: "Employee added successfully" });
-    }
+    db.query(
+      query,
+      [
+        EmployeeID,
+        FirstName,
+        LastName,
+        DateOfBirth,
+        Gender,
+        ContactNumber,
+        Email,
+        Address,
+        JoinDate,
+        employeeProfile,
+        EmploymentStatus,
+        DepartmentID,
+        DesignationID,
+      ],
+      (err, result) => {
+        if (err) {
+          console.error("Error executing query:", err);
+          res.status(500).json({ error: "Internal Server Error" });
+        } else {
+          res.status(201).json({ message: "Employee added successfully" });
+        }
+      }
+    );
   });
-})
 };
-
 
 // exports.addEmployee = (req, res) => {
 //   const {
@@ -161,7 +175,7 @@ exports.addEmployee = (req, res) => {
 //     DepartmentID,
 //     DesignationID
 //   } = req.body;
-  
+
 //   // Ensure that a file was uploaded
 //   if (!req.file) {
 //     return res.status(400).json({ error: 'No file uploaded' });
@@ -169,7 +183,7 @@ exports.addEmployee = (req, res) => {
 
 //   const employeeProfile = req.file.filename;
 
-//   const query = `INSERT INTO tb_employee 
+//   const query = `INSERT INTO tb_employee
 //   (EmployeeID, FirstName, LastName, DateOfBirth, Gender, ContactNumber, Email, Address, JoinDate, Employee_Profile, EmploymentStatus, DepartmentID, DesignationID)
 //   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 //   db.query(query, [EmployeeID, FirstName, LastName, DateOfBirth, Gender, ContactNumber, Email, Address, JoinDate, employeeProfile, EmploymentStatus, DepartmentID, DesignationID], (err, result) => {
@@ -181,7 +195,6 @@ exports.addEmployee = (req, res) => {
 //     }
 //   });
 // };
-
 
 // getting latest or last employee id
 
@@ -204,8 +217,7 @@ exports.getLastEmployeeId = (req, res) => {
   });
 };
 
-
-// getting next employee id 
+// getting next employee id
 
 exports.getNextEmployeeId = (req, res) => {
   const query = "SELECT MAX(EmployeeID) AS maxID FROM tb_employee ";
@@ -223,19 +235,22 @@ exports.getNextEmployeeId = (req, res) => {
     } else {
       const lastEmployeeId = results[0].maxID;
       const numericPart = parseInt(lastEmployeeId.substr(3), 10) + 1;
-      nextEmployeeId = "EMP" + numericPart.toString().padStart(3, '0');
+      nextEmployeeId = "EMP" + numericPart.toString().padStart(3, "0");
     }
 
     res.status(200).json({ nextEmployeeId: nextEmployeeId });
   });
 };
 
-
 // updating employee's data
 
 exports.updateEmployee = (req, res) => {
   const EmployeeID = req.params.EmployeeID;
   const updatedEmployee = req.body;
+  // Check if a file is included in the request
+  if (req.file) {
+    updatedEmployee.Employee_Profile = req.file.filename;
+  }
   const query = "UPDATE tb_employee SET ? WHERE EmployeeID = ?";
 
   db.query(query, [updatedEmployee, EmployeeID], (err, results) => {
@@ -255,7 +270,6 @@ exports.updateEmployee = (req, res) => {
     }
   });
 };
-
 
 // Deleting employee's data
 
