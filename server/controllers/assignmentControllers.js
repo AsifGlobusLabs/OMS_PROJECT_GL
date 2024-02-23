@@ -332,101 +332,131 @@ exports.completedAssignmentStatus = (req, res) => {
 
 // number of progress assignments
 
-exports.numberOfProgressAssignments = (req, res) => {
-  const query = 'SELECT COUNT(*) AS num_progress_assignments FROM tb_assignment WHERE AssignmentStatus = "Progress"';
-  db.query(query, (err, results) => {
-    if (err) {
-      console.error("Error executing query:", err);
-      res.status(500).json({ error: "Internal Server Error" });
-    } else {
-      const numProgressAssignments = results[0].num_progress_assignments;
-      res.status(200).json(numProgressAssignments);
-    }
-  });
-}
+// exports.numberOfProgressAssignments = (req, res) => {
+//   const query = 'SELECT COUNT(*) AS num_progress_assignments FROM tb_assignment WHERE AssignmentStatus = "Progress"';
+//   db.query(query, (err, results) => {
+//     if (err) {
+//       console.error("Error executing query:", err);
+//       res.status(500).json({ error: "Internal Server Error" });
+//     } else {
+//       const numProgressAssignments = results[0].num_progress_assignments;
+//       res.status(200).json(numProgressAssignments);
+//     }
+//   });
+// }
 
 
 // number of progress assignments of an individual employee
 
-exports.numberOfProgressAssignmentsOfAnEmployee = (req, res) => {
-  const employeeId = req.params.EmployeeID_AssignTo;
-  const query = 'SELECT COUNT(*) AS num_progress_assignments FROM tb_assignment WHERE EmployeeID_AssignTo = ? AND AssignmentStatus = "Progress"';
-  db.query(query, employeeId ,(err, results) => {
-    if (err) {
-      console.error("Error executing query:", err);
-      res.status(500).json({ error: "Internal Server Error" });
-    } else {
-      const numProgressAssignments = results[0].num_progress_assignments;
-      res.status(200).json(numProgressAssignments);
-    }
-  });
-}
+// exports.numberOfProgressAssignmentsOfAnEmployee = (req, res) => {
+//   const employeeId = req.params.EmployeeID_AssignTo;
+//   const query = 'SELECT COUNT(*) AS num_progress_assignments FROM tb_assignment WHERE EmployeeID_AssignTo = ? AND AssignmentStatus = "Progress"';
+//   db.query(query, employeeId ,(err, results) => {
+//     if (err) {
+//       console.error("Error executing query:", err);
+//       res.status(500).json({ error: "Internal Server Error" });
+//     } else {
+//       const numProgressAssignments = results[0].num_progress_assignments;
+//       res.status(200).json(numProgressAssignments);
+//     }
+//   });
+// }
 
 
 // number of pending assignments 
 
-exports.numberOfPendingAssignments = (req, res) => {
-  const query = 'SELECT COUNT(*) AS num_pending_assignments FROM tb_assignment WHERE AssignmentStatus = "Pending"';
-  db.query(query, (err, results) => {
-    if (err) {
-      console.error("Error executing query:", err);
-      res.status(500).json({ error: "Internal Server Error" });
-    } else {
-      const numPendingAssignments = results[0].num_pending_assignments;
-      res.status(200).json(numPendingAssignments);
-    }
-  });
-}
+// exports.numberOfPendingAssignments = (req, res) => {
+//   const query = 'SELECT COUNT(*) AS num_pending_assignments FROM tb_assignment WHERE AssignmentStatus = "Pending"';
+//   db.query(query, (err, results) => {
+//     if (err) {
+//       console.error("Error executing query:", err);
+//       res.status(500).json({ error: "Internal Server Error" });
+//     } else {
+//       const numPendingAssignments = results[0].num_pending_assignments;
+//       res.status(200).json(numPendingAssignments);
+//     }
+//   });
+// }
 
 
 // number of pending assignments of an individual employee 
 
-exports.numberOfPendingAssignmentsOfAnEmployee = (req, res) => {
-  const employeeId = req.params.EmployeeID_AssignTo;
-  const query = 'SELECT COUNT(*) AS num_pending_assignments FROM tb_assignment WHERE  EmployeeID_AssignTo = ? AND AssignmentStatus = "Pending"';
-  db.query(query, employeeId, (err, results) => {
-    if (err) {
-      console.error("Error executing query:", err);
-      res.status(500).json({ error: "Internal Server Error" });
-    } else {
-      const numPendingAssignments = results[0].num_pending_assignments;
-      res.status(200).json(numPendingAssignments);
-    }
-  });
-}
+// exports.numberOfPendingAssignmentsOfAnEmployee = (req, res) => {
+//   const employeeId = req.params.EmployeeID_AssignTo;
+//   const query = 'SELECT COUNT(*) AS num_pending_assignments FROM tb_assignment WHERE  EmployeeID_AssignTo = ? AND AssignmentStatus = "Pending"';
+//   db.query(query, employeeId, (err, results) => {
+//     if (err) {
+//       console.error("Error executing query:", err);
+//       res.status(500).json({ error: "Internal Server Error" });
+//     } else {
+//       const numPendingAssignments = results[0].num_pending_assignments;
+//       res.status(200).json(numPendingAssignments);
+//     }
+//   });
+// }
 
 
 // number of completed assignments 
 
-exports.numberOfCompletedAssignments = (req, res) => {
-  const query = 'SELECT COUNT(*) AS num_completed_assignments FROM tb_assignment WHERE AssignmentStatus = "Completed"';
-  db.query(query, (err, results) => {
-    if (err) {
-      console.error("Error executing query:", err);
-      res.status(500).json({ error: "Internal Server Error" });
-    } else {
-      const numCompletedAssignments = results[0].num_completed_assignments;
-      res.status(200).json(numCompletedAssignments);
-    }
-  });
-}
+// exports.numberOfCompletedAssignments = (req, res) => {
+//   const query = 'SELECT COUNT(*) AS num_completed_assignments FROM tb_assignment WHERE AssignmentStatus = "Completed"';
+//   db.query(query, (err, results) => {
+//     if (err) {
+//       console.error("Error executing query:", err);
+//       res.status(500).json({ error: "Internal Server Error" });
+//     } else {
+//       const numCompletedAssignments = results[0].num_completed_assignments;
+//       res.status(200).json(numCompletedAssignments);
+//     }
+//   });
+// }
 
 
 // number of completed assignments of an employee 
 
-exports.numberOfCompletedAssignmentsOfAnEmployee = (req, res) => {
+// exports.numberOfCompletedAssignmentsOfAnEmployee = (req, res) => {
+//   const employeeId = req.params.EmployeeID_AssignTo;
+//   const query = 'SELECT COUNT(*) AS num_completed_assignments FROM tb_assignment WHERE EmployeeID_AssignTo = ? AND AssignmentStatus = "Completed"';
+//   db.query(query, employeeId, (err, results) => {
+//     if (err) {
+//       console.error("Error executing query:", err);
+//       res.status(500).json({ error: "Internal Server Error" });
+//     } else {
+//       const numCompletedAssignments = results[0].num_completed_assignments;
+//       res.status(200).json(numCompletedAssignments);
+//     }
+//   });
+// }
+
+
+// number of pending progress and completed assignments of a particular employee
+
+exports.numberOfAssignmentsByStatus = (req, res) => {
   const employeeId = req.params.EmployeeID_AssignTo;
-  const query = 'SELECT COUNT(*) AS num_completed_assignments FROM tb_assignment WHERE EmployeeID_AssignTo = ? AND AssignmentStatus = "Completed"';
+  const query = `
+    SELECT
+      COUNT(CASE WHEN AssignmentStatus = 'Pending' THEN 1 END) AS num_pending_assignments,
+      COUNT(CASE WHEN AssignmentStatus = 'Progress' THEN 1 END) AS num_progress_assignments,
+      COUNT(CASE WHEN AssignmentStatus = 'Completed' THEN 1 END) AS num_completed_assignments
+    FROM tb_assignment
+    WHERE EmployeeID_AssignTo = ?;
+  `;
+
   db.query(query, employeeId, (err, results) => {
     if (err) {
       console.error("Error executing query:", err);
       res.status(500).json({ error: "Internal Server Error" });
     } else {
-      const numCompletedAssignments = results[0].num_completed_assignments;
-      res.status(200).json(numCompletedAssignments);
+      const assignmentCounts = {
+        num_pending_assignments: results[0].num_pending_assignments,
+        num_progress_assignments: results[0].num_progress_assignments,
+        num_completed_assignments: results[0].num_completed_assignments,
+      };
+
+      res.status(200).json(assignmentCounts);
     }
   });
-}
+};
 
 
 // Deleting Assignment's data

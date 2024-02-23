@@ -39,22 +39,25 @@ router.patch("/:AssignmentID/progress", assignmentController.progressAssignmentS
 router.patch("/:AssignmentID/completed", assignmentController.completedAssignmentStatus);
 
 // number of progress assignments
-router.get("/progress-assignments", assignmentController.numberOfProgressAssignments);
+// router.get("/progress-assignments", assignmentController.numberOfProgressAssignments);
 
 // number of progress assignments of an employee
-router.get("/:EmployeeID_AssignTo/progress-assignments", assignmentController.numberOfProgressAssignmentsOfAnEmployee);
+// router.get("/:EmployeeID_AssignTo/progress-assignments", assignmentController.numberOfProgressAssignmentsOfAnEmployee);
 
 // number of pending assignments
-router.get("/pending-assignments", assignmentController.numberOfPendingAssignments);
+// router.get("/pending-assignments", assignmentController.numberOfPendingAssignments);
 
 // number of pending assignments of an employee
-router.get("/:EmployeeID_AssignTo/pending-assignments", assignmentController.numberOfPendingAssignmentsOfAnEmployee);
+// router.get("/:EmployeeID_AssignTo/pending-assignments", assignmentController.numberOfPendingAssignmentsOfAnEmployee);
 
 // number of completed assignments
-router.get("/completed-assignments", assignmentController.numberOfCompletedAssignments);
+// router.get("/completed-assignments", assignmentController.numberOfCompletedAssignments);
 
 // number of completed assignments of an employee
-router.get("/:EmployeeID_AssignTo/completed-assignments", assignmentController.numberOfCompletedAssignmentsOfAnEmployee);
+// router.get("/:EmployeeID_AssignTo/completed-assignments", assignmentController.numberOfCompletedAssignmentsOfAnEmployee);
+
+// number of pending progress and completed assignments of an employee
+router.get("/:EmployeeID_AssignTo/assignmentCounts", assignmentController.numberOfAssignmentsByStatus);
 
 // delete assignment
 router.delete("/delete/:AssignmentID", assignmentController.deleteAssignment);
